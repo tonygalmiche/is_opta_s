@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_is_affaire,access_is_affaire,model_is_affaire,base.group_user,1,1,1,1
+access_is_type_intervention,access_is_type_intervention,model_is_type_intervention,base.group_user,1,1,1,1
+access_is_secteur,access_is_secteur,model_is_secteur,base.group_user,1,1,1,1
+access_is_type_offre,access_is_type_offre,model_is_type_offre,base.group_user,1,1,1,1
+access_is_cause,access_is_cause,model_is_cause,base.group_user,1,1,1,1
+access_is_affaire_vendue_par,access_is_affaire_vendue_par,model_is_affaire_vendue_par,base.group_user,1,1,1,1
+access_is_affaire_taux_journalier,access_is_affaire_taux_journalier,model_is_affaire_taux_journalier,base.group_user,1,1,1,1
+access_is_affaire_forfait_jour,access_is_affaire_forfait_jour,model_is_affaire_forfait_jour,base.group_user,1,1,1,1
+access_is_affaire_partenaire,access_is_affaire_partenaire,model_is_affaire_partenaire,base.group_user,1,1,1,1
+access_is_type_societe,access_is_type_societe,model_is_type_societe,base.group_user,1,1,1,1
+access_is_activite,access_is_activite,model_is_activite,base.group_user,1,1,1,1
+access_is_suivi_temps,access_is_suivi_temps,model_is_suivi_temps,base.group_user,1,1,1,1
+access_is_affaire_phase,access_is_affaire_phase,model_is_affaire_phase,base.group_user,1,1,1,1
+

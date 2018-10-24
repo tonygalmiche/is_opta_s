@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- is.activite -->
+    <record id="is_activite_form" model="ir.ui.view">
+        <field name="name">is.activite.form</field>
+        <field name="model">is.activite</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button
+                        name="vers_diffuse"
+                        type="object"
+                        string="vers Diffusé"
+                        class="oe_highlight"
+                        states="brouillon"
+                    />
+                    <button
+                        name="vers_valide"
+                        type="object"
+                        string="vers Validé"
+                        class="oe_highlight"
+                        states="diffuse"
+                    />
+                    <button
+                        name="vers_brouillon"
+                        type="object"
+                        string="vers Brouillon"
+                        states="diffuse"
+                    />
+                    <button 
+                        name="vers_diffuse" 
+                        type="object"
+                        string="vers Diffusé"
+                        states="valide"
+                    />
+                    <field 
+                        name="state" 
+                        widget="statusbar"
+                        clickable="True"
+                    />
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="affaire_id"/>
+                            <field name="phase_id" domain="[('affaire_id','=',affaire_id)]" />
+                            <field name="nature_activite"  default_focus="1"/>
+                            <field name="date_debut"/>
+                            <field name="dates_intervention"/>
+                            <field name="acteur_id"/>
+                            <field name="sous_traitant_id"/>
+                        </group>
+                        <group>
+                            <field name="tarification_id" domain="[('affaire_id','=',affaire_id)]" />
+                            <field name="nb_realise"/>
+                            <field name="nb_facturable"/>
+                            <field name="facture_sur_accompte"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="point_cle"/>
+                    </group>
+                    <group>
+                        <field name="suivi_temps_ids" nolabel="1">
+                            <tree editable="bottom">
+                                <field name="type_activite"/>
+                                <field name="date_activite"/>
+                                <field name="nb_stagiaires"/>
+                                <field name="nb_heures"            widget="float_time"/>
+                                <field name="realise_st"/>
+                                <field name="aller_heure_depart"   widget="float_time"/>
+                                <field name="aller_heure_arrivee"  widget="float_time"/>
+                                <field name="retour_heure_depart"  widget="float_time"/>
+                                <field name="retour_heure_arrivee" widget="float_time"/>
+                                <field name="temps_deplacement"    widget="float_time"/>
+                                <field name="detail_activite"/>
+                            </tree>
+                        </field>
+                    </group>
+                 </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="is_activite_tree" model="ir.ui.view">
+        <field name="name">is.activite.tree</field>
+        <field name="model">is.activite</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="affaire_id"/>
+                <field name="phase_id"/>
+                <field name="nature_activite"/>
+                <field name="date_debut"/>
+                <field name="dates_intervention"/>
+                <field name="acteur_id"/>
+                <field name="sous_traitant_id"/>
+                <field name="tarification_id"/>
+                <field name="nb_realise"/>
+                <field name="nb_facturable"/>
+                <field name="facture_sur_accompte"/>
+            </tree>
+        </field>
+    </record>
+    <record id="is_activite_search" model="ir.ui.view">
+        <field name="name">is.activite.search</field>
+        <field name="model">is.activite</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="affaire_id"/>
+                <field name="nature_activite"/>
+                <field name="acteur_id"/>
+                <field name="sous_traitant_id"/>
+           </search>
+        </field>
+    </record>
+    <record  id="is_activite_action" model="ir.actions.act_window">
+        <field name="name">Activités</field>
+        <field name="res_model">is.activite</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

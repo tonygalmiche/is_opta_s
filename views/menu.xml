@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="is_crm_main_menu"
+        name="CRM"
+        sequence="1"
+    />
+    <menuitem
+        id="is_client_menu"
+        name="Clients"
+        parent="is_crm_main_menu"
+        sequence="10"
+        action="is_client_action"
+    />
+    <menuitem
+        id="is_partenai_menu"
+        name="Partenaires"
+        parent="is_crm_main_menu"
+        sequence="20"
+        action="is_partenaire_action"
+    />
+
+    <menuitem
+        id="is_affaire_menu"
+        name="Affaires"
+        parent="is_crm_main_menu"
+        sequence="30"
+        action="is_affaire_action"
+    />
+
+    <menuitem
+        id="is_activite_menu"
+        name="Activités"
+        parent="is_crm_main_menu"
+        sequence="40"
+        action="is_activite_action"
+    />
+
+
+
+    <menuitem
+        id="is_suivi_temps_main_menu"
+        name="Suivi temps"
+        parent="is_crm_main_menu"
+        sequence="50"
+    />
+    <menuitem
+        id="is_suivi_temps_menu"
+        name="Suivi du temps"
+        parent="is_suivi_temps_main_menu"
+        sequence="10"
+        action="is_suivi_temps_action"
+    />
+    <menuitem
+        id="is_suivi_temps_formation_menu"
+        name="Suivi temps formation"
+        parent="is_suivi_temps_main_menu"
+        sequence="20"
+        action="is_suivi_temps_formation_action"
+    />
+    <menuitem
+        id="is_suivi_temps_back_office_menu"
+        name="Suivi temps back-office"
+        parent="is_suivi_temps_main_menu"
+        sequence="30"
+        action="is_suivi_temps_back_office_action"
+    />
+
+
+    <menuitem
+        id="is_crm_table_menu"
+        name="Tables"
+        parent="is_crm_main_menu"
+        sequence="90"
+    />
+
+
+    <menuitem
+        id="is_type_societe_menu"
+        name="Types de sociétés"
+        parent="is_crm_table_menu"
+        sequence="10"
+        action="is_type_societe_action"
+    />
+
+
+    <menuitem
+        id="is_type_intervention_menu"
+        name="Types d'interventions"
+        parent="is_crm_table_menu"
+        sequence="20"
+        action="is_type_intervention_action"
+    />
+    <menuitem
+        id="is_secteur_menu"
+        name="Secteurs"
+        parent="is_crm_table_menu"
+        sequence="30"
+        action="is_secteur_action"
+    />
+    <menuitem
+        id="is_type_offre_menu"
+        name="Types d'offres"
+        parent="is_crm_table_menu"
+        sequence="40"
+        action="is_type_offre_action"
+    />
+    <menuitem
+        id="is_cause_menu"
+        name="Causes"
+        parent="is_crm_table_menu"
+        sequence="50"
+        action="is_cause_action"
+    />
+
+
+
+</odoo>

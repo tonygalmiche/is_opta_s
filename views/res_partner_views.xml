@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record model="ir.ui.view" id="is_view_partner_form">
+        <field name="name">is_view_partner_form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="vat" position="after">
+                <field name="is_type_societe_id" attrs="{'invisible': [('is_company','=', False)]}"/>
+            </field>
+        </field>
+    </record>
+
+    <record  id="is_client_action" model="ir.actions.act_window">
+        <field name="name">Clients</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{"search_default_customer":1}</field>
+    </record>
+    <record  id="is_partenaire_action" model="ir.actions.act_window">
+        <field name="name">Partenaires</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{"search_default_supplier":1}</field>
+    </record>
+
+
+    <!-- is.type.societe -->
+    <record id="is_type_societe_form" model="ir.ui.view">
+        <field name="name">is.type.societe.form</field>
+        <field name="model">is.type.societe</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="is_type_societe_tree" model="ir.ui.view">
+        <field name="name">is.type.societe.tree</field>
+        <field name="model">is.type.societe</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="is_type_societe_search" model="ir.ui.view">
+        <field name="name">is.type.societe.search</field>
+        <field name="model">is.type.societe</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+           </search>
+        </field>
+    </record>
+    <record  id="is_type_societe_action" model="ir.actions.act_window">
+        <field name="name">Types de sociétés</field>
+        <field name="res_model">is.type.societe</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

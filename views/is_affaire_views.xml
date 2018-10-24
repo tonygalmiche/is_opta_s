@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- is.affaire -->
+    <record id="is_affaire_seq" model="ir.sequence">
+        <field name="name">Code Affaire</field>
+        <field name="code">is.affaire</field>
+        <field name="prefix"></field>
+        <field name="padding">5</field>
+        <field eval="False" name="company_id"/>
+    </record>
+    <record id="is_affaire_form" model="ir.ui.view">
+        <field name="name">is.affaire.form</field>
+        <field name="model">is.affaire</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button
+                        name="vers_affaire_gagnee"
+                        type="object"
+                        string="vers Affaire gagnée"
+                        class="oe_highlight"
+                        states="offre_en_cours"
+                    />
+                    <button
+                        name="vers_offre_en_cours"
+                        type="object"
+                        string="vers Offre en cours"
+                        states="offre_perdue"
+                    />
+                    <button
+                        name="vers_offre_perdue"
+                        type="object"
+                        string="vers Offre perdue"
+                        states="offre_en_cours"
+                    />
+                    <button 
+                        name="vers_affaire_soldee" 
+                        type="object"
+                        string="vers Affaire soldée"
+                        states="affaire_gagnee"
+                    />
+                    <button 
+                        name="creation_activite" 
+                        type="object"
+                        string="Nouvelle activité"
+                        states="affaire_gagnee"
+                    />
+                    <field 
+                        name="state" 
+                        widget="statusbar"
+                        clickable="True"
+                        statusbar_visible="offre_en_cours,affaire_gagnee,affaire_soldee" 
+                    />
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="nature_affaire"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="type_intervention_id"/>
+                            <field name="secteur_id"/>
+                            <field name="fiscal_position_id"/>
+
+                        </group>
+                        <group>
+                            <field name="date_creation"/>
+                            <field name="createur_id"/>
+                            <field name="ca_previsionnel"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="proposition_ids" widget="many2many_binary"/>
+                    </group>
+                    <group states="offre_perdue">
+                        <field name="cause_id"/>
+                        <field name="commentaire"/>
+                    </group>
+                    <group>
+                        <field name="vendue_par_ids" nolabel="1">
+                            <tree editable="bottom">
+                                <field name="user_id"/>
+                                <field name="repartition"/>
+                                <field name="commentaire"/>
+                            </tree>
+                        </field>
+                    </group>
+
+                    <notebook>
+                        <page string="Affaire" states="affaire_gagnee">
+                            <group>
+                                <group>
+                                    <field name="responsable_id"/>
+                                    <field name="nature_frais"/>
+                                </group>
+                                <group>
+                                    <field name="correspondant_id"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="taux_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="montant"/>
+                                        <field name="unite"/>
+                                        <field name="commentaire"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group>
+                                <field name="forfait_jours_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="montant"/>
+                                        <field name="nb_jours"/>
+                                        <field name="commentaire"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group>
+                                <field name="consultant_ids" widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <field name="partenaire_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="type_partenaire"/>
+                                        <field name="partenaire_id"/>
+                                        <field name="commentaire"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group>
+                                <field name="phase_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="montant_vendu"/>
+                                        <field name="nb_unites"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group>
+                                <field name="convention_ids" widget="many2many_binary"/>
+                            </group>
+                        </page>
+                        <page string="Activités">
+                            <group>
+                                <field name="activite_ids" nolabel="1">
+                                    <tree string="Activités" editable="bottom">
+                                        <button string="Activité" name="acceder_activite_action" type="object" icon="fa-search-plus"/>
+                                        <field name="nature_activite"/>
+                                        <field name="date_debut"/>
+                                        <field name="dates_intervention"/>
+                                        <field name="acteur_id"/>
+                                        <field name="sous_traitant_id"/>
+                                        <field name="tarification_id" domain="[('affaire_id','=',parent.id)]" />
+                                        <field name="nb_realise"/>
+                                        <field name="nb_facturable"/>
+                                        <field name="facture_sur_accompte"/>
+                                        <field name="point_cle"/>
+                                        <field name="state" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="is_affaire_tree" model="ir.ui.view">
+        <field name="name">is.affaire.tree</field>
+        <field name="model">is.affaire</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="nature_affaire"/>
+                <field name="partner_id"/>
+                <field name="type_intervention_id"/>
+                <field name="secteur_id"/>
+                <field name="date_creation"/>
+                <field name="createur_id"/>
+                <field name="ca_previsionnel"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="is_affaire_search" model="ir.ui.view">
+        <field name="name">is.affaire.search</field>
+        <field name="model">is.affaire</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="nature_affaire"/>
+                <field name="partner_id"/>
+                <field name="type_intervention_id"/>
+                <field name="secteur_id"/>
+           </search>
+        </field>
+    </record>
+    <record  id="is_affaire_action" model="ir.actions.act_window">
+        <field name="name">Affaires</field>
+        <field name="res_model">is.affaire</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- is.type.intervention -->
+    <record id="is_type_intervention_form" model="ir.ui.view">
+        <field name="name">is.type.intervention.form</field>
+        <field name="model">is.type.intervention</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="is_type_intervention_tree" model="ir.ui.view">
+        <field name="name">is.type.intervention.tree</field>
+        <field name="model">is.type.intervention</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="is_type_intervention_search" model="ir.ui.view">
+        <field name="name">is.type.intervention.search</field>
+        <field name="model">is.type.intervention</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+           </search>
+        </field>
+    </record>
+    <record  id="is_type_intervention_action" model="ir.actions.act_window">
+        <field name="name">Types d'interventions</field>
+        <field name="res_model">is.type.intervention</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!-- is.secteur -->
+    <record id="is_secteur_form" model="ir.ui.view">
+        <field name="name">is.secteur.form</field>
+        <field name="model">is.secteur</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="is_secteur_tree" model="ir.ui.view">
+        <field name="name">is.secteur.tree</field>
+        <field name="model">is.secteur</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="is_secteur_search" model="ir.ui.view">
+        <field name="name">is.secteur.search</field>
+        <field name="model">is.secteur</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+           </search>
+        </field>
+    </record>
+    <record  id="is_secteur_action" model="ir.actions.act_window">
+        <field name="name">Secteurs</field>
+        <field name="res_model">is.secteur</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- is.type.offre -->
+    <record id="is_type_offre_form" model="ir.ui.view">
+        <field name="name">is.type.offre.form</field>
+        <field name="model">is.type.offre</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="is_type_offre_tree" model="ir.ui.view">
+        <field name="name">is.type.offre.tree</field>
+        <field name="model">is.type.offre</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="is_type_offre_search" model="ir.ui.view">
+        <field name="name">is.type.offre.search</field>
+        <field name="model">is.type.offre</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+           </search>
+        </field>
+    </record>
+    <record  id="is_type_offre_action" model="ir.actions.act_window">
+        <field name="name">Types d'offre</field>
+        <field name="res_model">is.type.offre</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!-- is.cause -->
+    <record id="is_cause_form" model="ir.ui.view">
+        <field name="name">is.cause.form</field>
+        <field name="model">is.cause</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="is_cause_tree" model="ir.ui.view">
+        <field name="name">is.cause.tree</field>
+        <field name="model">is.cause</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="is_cause_search" model="ir.ui.view">
+        <field name="name">is.cause.search</field>
+        <field name="model">is.cause</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+           </search>
+        </field>
+    </record>
+    <record  id="is_cause_action" model="ir.actions.act_window">
+        <field name="name">Causes</field>
+        <field name="res_model">is.cause</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+
+</odoo>
