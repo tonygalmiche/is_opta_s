@@ -68,6 +68,16 @@
 
 
     <menuitem
+        id="is_frais_menu"
+        name="Frais"
+        parent="is_crm_main_menu"
+        sequence="60"
+        action="is_frais_action"
+    />
+
+
+
+    <menuitem
         id="is_crm_table_menu"
         name="Tables"
         parent="is_crm_main_menu"

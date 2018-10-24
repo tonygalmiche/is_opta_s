@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- is.frais -->
+    <record id="is_frais_seq" model="ir.sequence">
+        <field name="name">Chrono Frais</field>
+        <field name="code">is.frais</field>
+        <field name="prefix"></field>
+        <field name="padding">5</field>
+        <field eval="False" name="company_id"/>
+    </record>
+    <record id="is_frais_form" model="ir.ui.view">
+        <field name="name">is.frais.form</field>
+        <field name="model">is.frais</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="chrono"/>
+                            <field name="activite_id"/>
+                            <field name="affaire_id"/>
+                            <field name="type_activite"/>
+                            <field name="frais_forfait"/>
+                            <field name="nb_jours"        attrs="{'invisible': [('frais_forfait','!=', True)]}"/>
+                            <field name="forfait_jour_id" attrs="{'invisible': [('frais_forfait','!=', True)]}" domain="[('affaire_id','=',affaire_id)]"/>
+                            <field name="commentaire"     attrs="{'invisible': [('frais_forfait','!=', True)]}"/>
+                            <field name="parcours"/>
+                            <field name="dates"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="ligne_ids" nolabel="1">
+                            <tree editable="bottom">
+                                <field name="partner_id"/>
+                                <field name="product_id"/>
+                                <field name="effectuee_par_id"/>
+                                <field name="montant_ttc"/>
+                                <field name="montant_tva"/>
+                                <field name="refacturable"/>
+                                <field name="commentaire"/>
+                                <field name="justificatif_joint"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group>
+                        <field name="justificatif_ids" widget="many2many_binary"/>
+                    </group>
+                 </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="is_frais_tree" model="ir.ui.view">
+        <field name="name">is.frais.tree</field>
+        <field name="model">is.frais</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="chrono"/>
+                <field name="activite_id"/>
+                <field name="affaire_id"/>
+                <field name="type_activite"/>
+                <field name="frais_forfait"/>
+                <field name="nb_jours"/>
+                <field name="forfait_jour_id"/>
+                <field name="commentaire"/>
+                <field name="parcours"/>
+                <field name="dates"/>
+            </tree>
+        </field>
+    </record>
+    <record id="is_frais_search" model="ir.ui.view">
+        <field name="name">is.frais.search</field>
+        <field name="model">is.frais</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="chrono"/>
+                <field name="activite_id"/>
+                <field name="type_activite"/>
+                <field name="frais_forfait"/>
+                <field name="commentaire"/>
+                <field name="parcours"/>
+           </search>
+        </field>
+    </record>
+    <record  id="is_frais_action" model="ir.actions.act_window">
+        <field name="name">Frais</field>
+        <field name="res_model">is.frais</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

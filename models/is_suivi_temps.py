@@ -22,7 +22,7 @@ class IsSuiviTemps(models.Model):
             ('conseil'    , u'Conseil'),
             ('audit'      , u'Audit'),
             ('back-office', u'Back Office non facturable'),
-        ], u"Type d’activé", required=True)
+        ], u"Type d'activité", required=True)
     date_activite        = fields.Date("Date", index=True, required=True, default=lambda self: self._get_date_activite())
     nb_stagiaires        = fields.Integer("Nombre de stagiaires")
     nb_heures            = fields.Float("Nombre d'heures par jour", required=True)
