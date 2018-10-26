@@ -71,12 +71,36 @@
                 <field name="activite_id"/>
                 <field name="affaire_id"/>
                 <field name="type_activite"/>
-                <field name="frais_forfait"/>
-                <field name="nb_jours"/>
+                <field name="nb_jours"              sum="Total"/>
                 <field name="montant_forfait"/>
                 <field name="parcours"/>
                 <field name="dates"/>
+                <field name="total_consultant"      sum="Total"/>
+                <field name="total_refacturable"    sum="Total"/>
+                <field name="total_frais"           sum="Total"/>
+                <field name="total_tva_recuperable" sum="Total"/>
             </tree>
+        </field>
+    </record>
+    <record id="is_frais_pivot" model="ir.ui.view">
+        <field name="name">is_frais_pivot</field>
+        <field name="model">is.frais</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="date_creation"       type="row"/>
+                <field name="createur_id"         type="column"/>
+                <field name="total_frais"         type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="is_frais_graph" model="ir.ui.view">
+        <field name="name">is_frais_graph</field>
+        <field name="model">is.frais</field>
+        <field name="arch" type="xml">
+            <graph type="bar" orientation="vertical" stacked="False">
+                <field name="date_creation"       type="row"/>
+                <field name="total_frais"         type="measure"/>
+            </graph>
         </field>
     </record>
     <record id="is_frais_search" model="ir.ui.view">
@@ -98,7 +122,7 @@
         <field name="res_model">is.frais</field>
         <field name="view_type">form</field>
         <field name="limit">200</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
     </record>
 
 

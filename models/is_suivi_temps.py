@@ -11,7 +11,6 @@ class IsSuiviTemps(models.Model):
     @api.depends('aller_heure_depart','aller_heure_arrivee','retour_heure_depart','retour_heure_arrivee')
     def _compute(self):
         for obj in self:
-            print(obj.aller_heure_depart, obj.aller_heure_arrivee, obj.retour_heure_depart, obj.retour_heure_arrivee)
             tps=obj.aller_heure_arrivee-obj.aller_heure_depart+obj.retour_heure_arrivee-obj.retour_heure_depart
             obj.temps_deplacement=tps
 
@@ -23,7 +22,7 @@ class IsSuiviTemps(models.Model):
             ('audit'      , u'Audit'),
             ('back-office', u'Back Office non facturable'),
         ], u"Type d'activité", required=True)
-    date_activite        = fields.Date("Date", index=True, required=True, default=lambda self: self._get_date_activite())
+    date_activite        = fields.Date("Date", index=True, required=True) # default=lambda self: self._get_date_activite()
     nb_stagiaires        = fields.Integer("Nombre de stagiaires")
     nb_heures            = fields.Float("Nombre d'heures par jour", required=True)
     realise_st           = fields.Selection([
@@ -46,14 +45,13 @@ class IsSuiviTemps(models.Model):
         return result
 
 
-    @api.multi
-    def _get_date_activite(self):
-        print('context=',self._context)
-        for obj in self:
-            print(obj)
+#    @api.multi
+#    def _get_date_activite(self):
+#        print('context=',self._context)
+#        for obj in self:
+#            print(obj)
 
 
-#<field name='time' widget='float_time' />
 
 
 

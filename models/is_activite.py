@@ -17,7 +17,7 @@ class IsActivite(models.Model):
 
 
     affaire_id           = fields.Many2one('is.affaire', 'Affaire', required=True,index=True)
-    phase_activite_id    = fields.Many2one('is.affaire.phase.activite', 'Activité de phase',index=True)
+    phase_activite_id    = fields.Many2one('is.affaire.phase.activite', 'Sous-phase',index=True)
     nature_activite      = fields.Char("Nature de l'activité"     , required=True, index=True)
     date_debut           = fields.Date("Date de début de l'activité", required=True, index=True)
     dates_intervention   = fields.Char("Dates des jours d'intervention")
