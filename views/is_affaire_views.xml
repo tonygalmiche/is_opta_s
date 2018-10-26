@@ -46,6 +46,12 @@
                         string="Nouvelle activité"
                         states="affaire_gagnee"
                     />
+                    <button 
+                        name="creation_frais" 
+                        type="object"
+                        string="Nouvelle fiche de frais"
+                        states="affaire_gagnee"
+                    />
                     <field 
                         name="state" 
                         widget="statusbar"
@@ -149,6 +155,7 @@
                                 <field name="activite_phase_ids" nolabel="1" >
                                     <tree editable="bottom">
                                         <button string="Activités de cette phase" name="acceder_activites_action" type="object" icon="fa-list"/>
+                                        <button string="Nouvelle activité"        name="crea" type="object" icon="fa-plus"/>
                                         <field name="affaire_phase_id" domain="[('affaire_id','=',parent.id)]"/>
                                         <field name="name"/>
                                         <field name="montant_vendu" sum="Total"/>
@@ -188,10 +195,7 @@
                         </page>
                         <page string="Frais" states="affaire_gagnee">
                             <group>
-                                <field 
-                                    name="frais_ids" 
-                                    nolabel="1"
-                                >
+                                <field name="frais_ids" nolabel="1" readonly="1">
                                     <tree>
                                         <button string="Frais" name="acceder_frais_action" type="object" icon="fa-search-plus"/>
                                         <field name="chrono_long"/>

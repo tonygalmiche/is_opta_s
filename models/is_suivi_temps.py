@@ -29,7 +29,7 @@ class IsSuiviTemps(models.Model):
     realise_st           = fields.Selection([
             ('oui', u'Oui'),
             ('non', u'Non'),
-        ], u"Réalisé en sous-traitance")
+        ], u"Réalisé en sous-traitance",default='non')
     aller_heure_depart   = fields.Float("Aller - Heure de départ")
     aller_heure_arrivee  = fields.Float("Aller - Heure d'arrivée")
     retour_heure_depart  = fields.Float("Retour - Heure de départ")

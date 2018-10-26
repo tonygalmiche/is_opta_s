@@ -18,8 +18,8 @@
                     <group>
                         <group>
                             <field name="chrono_long"/>
-                            <field name="activite_id"/>
                             <field name="affaire_id"/>
+                            <field name="activite_id" domain="[('affaire_id','=',affaire_id)]" default_focus="1"/>
                             <field name="type_activite"/>
                             <field name="frais_forfait"/>
                             <field name="nb_jours"        attrs="{'invisible': [('frais_forfait','!=', True)]}"/>

@@ -34,6 +34,12 @@
                         string="vers Diffusé"
                         states="valide"
                     />
+                    <button 
+                        name="creation_frais" 
+                        type="object"
+                        string="Nouvelle fiche de frais"
+                        states="diffuse"
+                    />
                     <field 
                         name="state" 
                         widget="statusbar"
@@ -64,8 +70,12 @@
                         <field name="point_cle"/>
                     </group>
                     <group>
-                        <field name="suivi_temps_ids" nolabel="1">
-                            <tree editable="bottom">
+                        <field 
+                            name="suivi_temps_ids"
+                            nolabel="1"
+                            context="{'default_activite_id': active_id}"
+                        >
+                            <tree>
                                 <field name="type_activite"/>
                                 <field name="date_activite"/>
                                 <field name="nb_stagiaires"/>
@@ -80,6 +90,26 @@
                             </tree>
                         </field>
                     </group>
+                    <group>
+                        <field name="frais_ids" nolabel="1" readonly="1">
+                            <tree>
+                                <field name="chrono_long"/>
+                                <field name="date_creation"/>
+                                <field name="createur_id"/>
+                                <field name="activite_id"/>
+                                <field name="affaire_id"/>
+                                <field name="type_activite"/>
+                                <field name="frais_forfait"/>
+                                <field name="nb_jours"/>
+                                <field name="montant_forfait"/>
+                                <field name="parcours"/>
+                                <field name="dates"/>
+                            </tree>
+                        </field>
+                    </group>
+
+
+
                  </sheet>
             </form>
         </field>
@@ -97,9 +127,9 @@
                 <field name="acteur_id"/>
                 <field name="sous_traitant_id"/>
                 <field name="tarification_id"/>
-                <field name="nb_realise"/>
-                <field name="nb_facturable"/>
-                <field name="facture_sur_accompte"/>
+                <field name="nb_realise"       sum="Total"/>
+                <field name="nb_facturable"    sum="Total"/>
+                <field name="total_facturable" sum="Total"/>
             </tree>
         </field>
     </record>
@@ -116,12 +146,32 @@
            </search>
         </field>
     </record>
+    <record id="is_activite_pivot" model="ir.ui.view">
+        <field name="name">is_activite_pivot</field>
+        <field name="model">is.activite</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="date_debut"       type="row"/>
+                <field name="total_facturable" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="is_activite_graph" model="ir.ui.view">
+        <field name="name">is_activite_graph</field>
+        <field name="model">is.activite</field>
+        <field name="arch" type="xml">
+            <graph type="bar" orientation="vertical" stacked="False">
+                <field name="date_debut"       type="row"/>
+                <field name="total_facturable" type="measure"/>
+            </graph>
+        </field>
+    </record>
     <record  id="is_activite_action" model="ir.actions.act_window">
         <field name="name">Activités</field>
         <field name="res_model">is.activite</field>
         <field name="view_type">form</field>
         <field name="limit">200</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
     </record>
 
 </odoo>

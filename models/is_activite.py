@@ -31,6 +31,7 @@ class IsActivite(models.Model):
     facture_sur_accompte = fields.Boolean("Facture sur acompte")
     point_cle            = fields.Text("Points clés de l'activité réalisée")
     suivi_temps_ids      = fields.One2many('is.suivi.temps', 'activite_id', u'Suivi du temps')
+    frais_ids            = fields.One2many('is.frais', 'activite_id', u'Frais')
     state                = fields.Selection([
             ('brouillon', u'Brouillon'),
             ('diffuse'  , u'Diffusé'),
@@ -86,5 +87,23 @@ class IsActivite(models.Model):
                 'type': 'ir.actions.act_window',
             }
             return res
+
+
+    @api.multi
+    def creation_frais(self, vals):
+        for obj in self:
+            res= {
+                'name': 'Frais',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'res_model': 'is.frais',
+                'type': 'ir.actions.act_window',
+                'context': {
+                    'default_affaire_id' : obj.affaire_id.id,
+                    'default_activite_id': obj.id,
+                }
+            }
+            return res
+
 
 

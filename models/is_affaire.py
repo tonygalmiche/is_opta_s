@@ -135,7 +135,7 @@ class IsAffairePhase(models.Model):
 
 class IsAffairePhaseActivite(models.Model):
     _name = 'is.affaire.phase.activite'
-    _description = u"Activités des phases"
+    _description = u"Sous-Phases"
     _order='name'
 
 
@@ -157,7 +157,7 @@ class IsAffairePhaseActivite(models.Model):
 
     affaire_id       = fields.Many2one('is.affaire', 'Affaire'      , required=True, ondelete='cascade')
     affaire_phase_id = fields.Many2one('is.affaire.phase', 'Phase')
-    name             = fields.Char("Activités des phases", required=True)
+    name             = fields.Char("Sous-phase", required=True)
     montant_vendu    = fields.Float("Montant vendu unitaire" , digits=(14,2))
     nb_unites        = fields.Float("Nombre d'unités vendues", digits=(14,2))
     total_vendu      = fields.Float("Total vendu"            , digits=(14,2), compute='_compute'        , readonly=True, store=True)
@@ -177,6 +177,27 @@ class IsAffairePhaseActivite(models.Model):
                 'domain': [['phase_activite_id','=',obj.id]],
             }
             return res
+
+
+    @api.multi
+    def creation_activite_action(self, vals):
+        for obj in self:
+            res= {
+                'name': 'Activité',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'res_model': 'is.activite',
+                'type': 'ir.actions.act_window',
+                'context': {
+                    'default_affaire_id'       : obj.affaire_id.id,
+                    'default_phase_activite_id': obj.id,
+                }
+            }
+            return res
+
+
+
+
 
 
 
@@ -232,7 +253,7 @@ class IsAffaire(models.Model):
     convention_ids     = fields.Many2many('ir.attachment', 'is_affaire_convention_rel', 'doc_id', 'file_id', 'Conventions / Contrats')
     activer_phases     = fields.Boolean("Activer la gestion des phases", default=False)
     phase_ids          = fields.One2many('is.affaire.phase', 'affaire_id', u'Phases')
-    activite_phase_ids = fields.One2many('is.affaire.phase.activite', 'affaire_id', u'Activités des phases')
+    activite_phase_ids = fields.One2many('is.affaire.phase.activite', 'affaire_id', u'Sous-phases')
     activite_ids       = fields.One2many('is.activite', 'affaire_id', u'Activités')
     frais_ids          = fields.One2many('is.frais'   , 'affaire_id', u'Frais')
 
@@ -301,6 +322,18 @@ class IsAffaire(models.Model):
             return res
 
 
+    @api.multi
+    def creation_frais(self, vals):
+        for obj in self:
+            res= {
+                'name': 'Frais',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'res_model': 'is.frais',
+                'type': 'ir.actions.act_window',
+                'context': {'default_affaire_id': obj.id }
+            }
+            return res
 
 
 

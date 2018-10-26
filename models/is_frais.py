@@ -15,7 +15,7 @@ class IsFraisLigne(models.Model):
     _description = "Frais"
     _order = 'id'
 
-    frais_id           = fields.Many2one('is.frais', 'Frais', required=True)
+    frais_id           = fields.Many2one('is.frais', 'Frais', required=True, ondelete='cascade')
     partner_id         = fields.Many2one('res.partner', 'Fournisseur')
     product_id         = fields.Many2one('product.product', 'Type de dépense', required=True)
     effectuee_par_id   = fields.Many2one('is.depense.effectuee.par', 'Dépense effectuée par', required=True)
@@ -69,6 +69,11 @@ class IsFrais(models.Model):
             obj.total_tva_recuperable = total_tva_recuperable
 
 
+#    @api.onchange('activite_id')
+#    def onchange_product(self):
+#        self.affaire_id = self.active_id.affaire_id.id
+
+
     @api.onchange('forfait_jour_id')
     def onchange_product(self):
         if self.forfait_jour_id:
@@ -82,8 +87,8 @@ class IsFrais(models.Model):
     date_creation    = fields.Date("Date de création", required=True, index=True, default=fields.Date.today())
     mois_creation    = fields.Char("Mois" , compute='_compute', readonly=True, store=True)
     annee_creation   = fields.Char("Année", compute='_compute', readonly=True, store=True)
+    affaire_id       = fields.Many2one('is.affaire' , 'Affaire' , required=True)
     activite_id      = fields.Many2one('is.activite', 'Activite', required=True)
-    affaire_id       = fields.Many2one('is.affaire', 'Affaire', related='activite_id.affaire_id', readonly=True)
     type_activite    = fields.Selection([
             ('formation', u'Formation'),
             ('conseil'  , u'Conseil'),
