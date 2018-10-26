@@ -155,7 +155,7 @@
                                 <field name="activite_phase_ids" nolabel="1" >
                                     <tree editable="bottom">
                                         <button string="Activités de cette phase" name="acceder_activites_action" type="object" icon="fa-list"/>
-                                        <button string="Nouvelle activité"        name="crea" type="object" icon="fa-plus"/>
+                                        <button string="Nouvelle activité"        name="creation_activite_action" type="object" icon="fa-plus"/>
                                         <field name="affaire_phase_id" domain="[('affaire_id','=',parent.id)]"/>
                                         <field name="name"/>
                                         <field name="montant_vendu" sum="Total"/>
