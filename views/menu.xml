@@ -123,6 +123,23 @@
         action="is_cause_action"
     />
 
+    <menuitem
+        id="is_depense_effectuee_par_menu"
+        name="Dépenses éffecuées par"
+        parent="is_crm_table_menu"
+        sequence="60"
+        action="is_depense_effectuee_par_action"
+    />
+
+
+    <menuitem
+        id="is_product_template_menu"
+        name="Articles"
+        parent="is_crm_table_menu"
+        sequence="70"
+        action="is_product_template_action"
+    />
+
 
 
 </odoo>

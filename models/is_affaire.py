@@ -94,7 +94,10 @@ class IsAffaireForfaitJour(models.Model):
     def name_get(self):
         result = []
         for obj in self:
-            result.append((obj.id, '['+str(obj.montant)+'] '+str(obj.commentaire)))
+            txt=str(obj.montant)+'€'
+            if obj.commentaire:
+                txt=txt+' - '+obj.commentaire
+            result.append((obj.id, txt))
         return result
 
 
@@ -171,6 +174,7 @@ class IsAffaire(models.Model):
     convention_ids    = fields.Many2many('ir.attachment', 'is_affaire_convention_rel', 'doc_id', 'file_id', 'Conventions / Contrats')
     phase_ids         = fields.One2many('is.affaire.phase', 'affaire_id', u'Phases')
     activite_ids      = fields.One2many('is.activite', 'affaire_id', u'Activités')
+    frais_ids         = fields.One2many('is.frais'   , 'affaire_id', u'Frais')
 
 
     @api.multi

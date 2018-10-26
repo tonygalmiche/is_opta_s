@@ -63,6 +63,7 @@
                             <field name="partner_id"/>
                             <field name="type_intervention_id"/>
                             <field name="secteur_id"/>
+                            <field name="type_offre_id"/>
                             <field name="fiscal_position_id"/>
 
                         </group>
@@ -145,8 +146,12 @@
                         </page>
                         <page string="Activités">
                             <group>
-                                <field name="activite_ids" nolabel="1">
-                                    <tree string="Activités" editable="bottom">
+                                <field 
+                                    name="activite_ids"
+                                    nolabel="1"
+                                    context="{'default_affaire_id': active_id}"
+                                >
+                                    <tree>
                                         <button string="Activité" name="acceder_activite_action" type="object" icon="fa-search-plus"/>
                                         <field name="nature_activite"/>
                                         <field name="date_debut"/>
@@ -159,6 +164,29 @@
                                         <field name="facture_sur_accompte"/>
                                         <field name="point_cle"/>
                                         <field name="state" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Frais">
+                            <group>
+                                <field 
+                                    name="frais_ids" 
+                                    nolabel="1"
+                                >
+                                    <tree>
+                                        <button string="Frais" name="acceder_frais_action" type="object" icon="fa-search-plus"/>
+                                        <field name="chrono_long"/>
+                                        <field name="date_creation"/>
+                                        <field name="createur_id"/>
+                                        <field name="activite_id"/>
+                                        <field name="affaire_id"/>
+                                        <field name="type_activite"/>
+                                        <field name="frais_forfait"/>
+                                        <field name="nb_jours"/>
+                                        <field name="montant_forfait"/>
+                                        <field name="parcours"/>
+                                        <field name="dates"/>
                                     </tree>
                                 </field>
                             </group>
@@ -375,7 +403,5 @@
         <field name="limit">200</field>
         <field name="view_mode">tree,form</field>
     </record>
-
-
 
 </odoo>

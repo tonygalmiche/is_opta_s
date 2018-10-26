@@ -17,16 +17,20 @@
                 <sheet>
                     <group>
                         <group>
-                            <field name="chrono"/>
+                            <field name="chrono_long"/>
                             <field name="activite_id"/>
                             <field name="affaire_id"/>
                             <field name="type_activite"/>
                             <field name="frais_forfait"/>
                             <field name="nb_jours"        attrs="{'invisible': [('frais_forfait','!=', True)]}"/>
                             <field name="forfait_jour_id" attrs="{'invisible': [('frais_forfait','!=', True)]}" domain="[('affaire_id','=',affaire_id)]"/>
-                            <field name="commentaire"     attrs="{'invisible': [('frais_forfait','!=', True)]}"/>
+                            <field name="montant_forfait" attrs="{'invisible': [('frais_forfait','!=', True)]}"/>
                             <field name="parcours"/>
                             <field name="dates"/>
+                        </group>
+                        <group>
+                            <field name="createur_id"/>
+                            <field name="date_creation"/>
                         </group>
                     </group>
                     <group>
@@ -55,14 +59,15 @@
         <field name="model">is.frais</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="chrono"/>
+                <field name="chrono_long"/>
+                <field name="date_creation"/>
+                <field name="createur_id"/>
                 <field name="activite_id"/>
                 <field name="affaire_id"/>
                 <field name="type_activite"/>
                 <field name="frais_forfait"/>
                 <field name="nb_jours"/>
-                <field name="forfait_jour_id"/>
-                <field name="commentaire"/>
+                <field name="montant_forfait"/>
                 <field name="parcours"/>
                 <field name="dates"/>
             </tree>
@@ -73,11 +78,11 @@
         <field name="model">is.frais</field>
         <field name="arch" type="xml">
             <search>
-                <field name="chrono"/>
+                <field name="chrono_long"/>
+                <field name="mois_creation"/>
+                <field name="createur_id"/>
                 <field name="activite_id"/>
                 <field name="type_activite"/>
-                <field name="frais_forfait"/>
-                <field name="commentaire"/>
                 <field name="parcours"/>
            </search>
         </field>
@@ -89,5 +94,50 @@
         <field name="limit">200</field>
         <field name="view_mode">tree,form</field>
     </record>
+
+
+
+    <!-- is.depense.effectuee.par -->
+    <record id="is_depense_effectuee_par_form" model="ir.ui.view">
+        <field name="name">is.depense.effectuee.par.form</field>
+        <field name="model">is.depense.effectuee.par</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="is_depense_effectuee_par_tree" model="ir.ui.view">
+        <field name="name">is.depense.effectuee.par.tree</field>
+        <field name="model">is.depense.effectuee.par</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="is_depense_effectuee_par_search" model="ir.ui.view">
+        <field name="name">is.depense.effectuee.par.search</field>
+        <field name="model">is.depense.effectuee.par</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+           </search>
+        </field>
+    </record>
+    <record  id="is_depense_effectuee_par_action" model="ir.actions.act_window">
+        <field name="name">Dépenses éffecuées par</field>
+        <field name="res_model">is.depense.effectuee.par</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
 
 </odoo>
