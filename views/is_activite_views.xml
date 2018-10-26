@@ -44,7 +44,7 @@
                     <group>
                         <group>
                             <field name="affaire_id"/>
-                            <field name="phase_id" domain="[('affaire_id','=',affaire_id)]" />
+                            <field name="phase_activite_id" domain="[('affaire_id','=',affaire_id)]" />
                             <field name="nature_activite"  default_focus="1"/>
                             <field name="date_debut"/>
                             <field name="dates_intervention"/>
@@ -53,8 +53,10 @@
                         </group>
                         <group>
                             <field name="tarification_id" domain="[('affaire_id','=',affaire_id)]" />
+                            <field name="montant"/>
                             <field name="nb_realise"/>
                             <field name="nb_facturable"/>
+                            <field name="total_facturable"/>
                             <field name="facture_sur_accompte"/>
                         </group>
                     </group>
@@ -88,7 +90,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="affaire_id"/>
-                <field name="phase_id"/>
+                <field name="phase_activite_id"/>
                 <field name="nature_activite"/>
                 <field name="date_debut"/>
                 <field name="dates_intervention"/>
@@ -107,6 +109,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="affaire_id"/>
+                <field name="phase_activite_id"/>
                 <field name="nature_activite"/>
                 <field name="acteur_id"/>
                 <field name="sous_traitant_id"/>

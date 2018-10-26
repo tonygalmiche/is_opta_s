@@ -49,6 +49,26 @@ class IsFrais(models.Model):
             obj.chrono_long=(obj.login or '')+'-'+(obj.mois_creation or '')+'-'+(obj.chrono or '')
 
 
+    @api.depends('ligne_ids','nb_jours','montant_forfait')
+    def _compute_total(self):
+        for obj in self:
+            total_consultant      = 0
+            total_refacturable    = obj.nb_jours*obj.montant_forfait
+            total_frais           = 0
+            total_tva_recuperable = 0
+            for l in obj.ligne_ids:
+                if l.effectuee_par_id.name=='Consultant':
+                    total_consultant      += l.montant_ttc
+                if l.refacturable=='oui':
+                    total_refacturable    += l.montant_ttc
+                total_frais           += l.montant_ttc
+                total_tva_recuperable += l.montant_tva
+            obj.total_consultant      = total_consultant
+            obj.total_refacturable    = total_refacturable
+            obj.total_frais           = total_frais
+            obj.total_tva_recuperable = total_tva_recuperable
+
+
     @api.onchange('forfait_jour_id')
     def onchange_product(self):
         if self.forfait_jour_id:
@@ -78,6 +98,11 @@ class IsFrais(models.Model):
     ligne_ids        = fields.One2many('is.frais.lignes', 'frais_id', u'Lignes')
     justificatif_ids = fields.Many2many('ir.attachment', 'is_frais_justificatif_rel', 'doc_id', 'file_id', 'Justificatifs')
 
+    total_consultant      = fields.Float("Total TTC Consultant à rembourser", digits=(14,2), compute='_compute_total', readonly=True, store=True)
+    total_refacturable    = fields.Float("Total TTC refacturable"           , digits=(14,2), compute='_compute_total', readonly=True, store=True)
+    total_frais           = fields.Float("Total TTC de tous les frais"      , digits=(14,2), compute='_compute_total', readonly=True, store=True)
+    total_tva_recuperable = fields.Float("Total TVA récupérable"            , digits=(14,2), compute='_compute_total', readonly=True, store=True)
+
 
     @api.model
     def create(self, vals):
@@ -105,7 +130,16 @@ class IsFrais(models.Model):
         return self.browse(ids).name_get()
 
 
-
-
-
+    @api.multi
+    def acceder_frais_action(self, vals):
+        for obj in self:
+            res= {
+                'name': 'Frais',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'res_model': 'is.frais',
+                'res_id': obj.id,
+                'type': 'ir.actions.act_window',
+            }
+            return res
 

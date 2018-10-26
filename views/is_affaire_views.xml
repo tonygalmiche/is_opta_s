@@ -55,7 +55,7 @@
                 </header>
                 <sheet>
                     <group>
-                        <field name="name"/>
+                        <field name="code_long"/>
                         <field name="nature_affaire"/>
                     </group>
                     <group>
@@ -89,7 +89,9 @@
                             </tree>
                         </field>
                     </group>
-
+                    <group  states="affaire_gagnee">
+                        <field name="activer_phases"/>
+                    </group>
                     <notebook>
                         <page string="Affaire" states="affaire_gagnee">
                             <group>
@@ -132,19 +134,33 @@
                                 </field>
                             </group>
                             <group>
+                                <field name="convention_ids" widget="many2many_binary"/>
+                            </group>
+                        </page>
+                        <page string="Phases" attrs="{'invisible': [('activer_phases','!=', True)]}">
+                            <group>
                                 <field name="phase_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="name"/>
-                                        <field name="montant_vendu"/>
-                                        <field name="nb_unites"/>
                                     </tree>
                                 </field>
                             </group>
                             <group>
-                                <field name="convention_ids" widget="many2many_binary"/>
+                                <field name="activite_phase_ids" nolabel="1" >
+                                    <tree editable="bottom">
+                                        <button string="Activités de cette phase" name="acceder_activites_action" type="object" icon="fa-list"/>
+                                        <field name="affaire_phase_id" domain="[('affaire_id','=',parent.id)]"/>
+                                        <field name="name"/>
+                                        <field name="montant_vendu" sum="Total"/>
+                                        <field name="nb_unites"/>
+                                        <field name="total_vendu"/>
+                                        <field name="montant_realise" sum="Total"/>
+                                        <field name="montant_restant" sum="Total"/>
+                                    </tree>
+                                </field>
                             </group>
                         </page>
-                        <page string="Activités">
+                        <page string="Activités" states="affaire_gagnee">
                             <group>
                                 <field 
                                     name="activite_ids"
@@ -153,14 +169,16 @@
                                 >
                                     <tree>
                                         <button string="Activité" name="acceder_activite_action" type="object" icon="fa-search-plus"/>
+                                        <field name="phase_activite_id" />
                                         <field name="nature_activite"/>
                                         <field name="date_debut"/>
                                         <field name="dates_intervention"/>
                                         <field name="acteur_id"/>
                                         <field name="sous_traitant_id"/>
-                                        <field name="tarification_id" domain="[('affaire_id','=',parent.id)]" />
-                                        <field name="nb_realise"/>
-                                        <field name="nb_facturable"/>
+                                        <field name="montant" />
+                                        <field name="nb_realise"       sum="Total"/>
+                                        <field name="nb_facturable"    sum="Total"/>
+                                        <field name="total_facturable" sum="Total"/>
                                         <field name="facture_sur_accompte"/>
                                         <field name="point_cle"/>
                                         <field name="state" readonly="1"/>
@@ -168,7 +186,7 @@
                                 </field>
                             </group>
                         </page>
-                        <page string="Frais">
+                        <page string="Frais" states="affaire_gagnee">
                             <group>
                                 <field 
                                     name="frais_ids" 
@@ -201,7 +219,7 @@
         <field name="model">is.affaire</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="name"/>
+                <field name="code_long"/>
                 <field name="nature_affaire"/>
                 <field name="partner_id"/>
                 <field name="type_intervention_id"/>
@@ -218,7 +236,7 @@
         <field name="model">is.affaire</field>
         <field name="arch" type="xml">
             <search>
-                <field name="name"/>
+                <field name="code_long"/>
                 <field name="nature_affaire"/>
                 <field name="partner_id"/>
                 <field name="type_intervention_id"/>

@@ -50,6 +50,12 @@
                     <group>
                         <field name="justificatif_ids" widget="many2many_binary"/>
                     </group>
+                    <group>
+                        <field name="total_consultant"/>
+                        <field name="total_refacturable"/>
+                        <field name="total_frais"/>
+                        <field name="total_tva_recuperable"/>
+                    </group>
                  </sheet>
             </form>
         </field>

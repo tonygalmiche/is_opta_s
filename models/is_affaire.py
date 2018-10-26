@@ -65,7 +65,10 @@ class IsAffaireTauxJournalier(models.Model):
     def name_get(self):
         result = []
         for obj in self:
-            result.append((obj.id, str(obj.montant) + '€ / ' + str(obj.unite)+ ' - ' + str(obj.commentaire)))
+            x=str(obj.montant) + '€ / ' + str(obj.unite)
+            if obj.commentaire:
+                x+=' - ' + str(obj.commentaire)
+        result.append((obj.id, x))
         return result
 
 
@@ -121,16 +124,60 @@ class IsAffairePartenaire(models.Model):
     commentaire   = fields.Char("Commentaire")
 
 
-
 class IsAffairePhase(models.Model):
     _name = 'is.affaire.phase'
     _description = u"Phases des Affaires"
     _order='name'
 
     affaire_id    = fields.Many2one('is.affaire', 'Affaire', required=True, ondelete='cascade')
-    name          = fields.Char("Phases / Activités des phases")
-    montant_vendu = fields.Float("Montant vendu"          , digits=(14,2))
-    nb_unites     = fields.Float("Nombre d'unités vendues", digits=(14,2))
+    name          = fields.Char("Phases")
+
+
+class IsAffairePhaseActivite(models.Model):
+    _name = 'is.affaire.phase.activite'
+    _description = u"Activités des phases"
+    _order='name'
+
+
+    @api.depends('montant_vendu','nb_unites')
+    def _compute(self):
+        for obj in self:
+            obj.total_vendu=obj.montant_vendu*obj.nb_unites
+
+
+    def _compute_realise(self):
+        for obj in self:
+            activites=self.env['is.activite'].search([('phase_activite_id', '=', obj.id)])
+            realise=0
+            for act in activites:
+                realise+=act.total_facturable
+            obj.montant_realise=realise
+            obj.montant_restant=obj.total_vendu-realise
+
+
+    affaire_id       = fields.Many2one('is.affaire', 'Affaire'      , required=True, ondelete='cascade')
+    affaire_phase_id = fields.Many2one('is.affaire.phase', 'Phase')
+    name             = fields.Char("Activités des phases", required=True)
+    montant_vendu    = fields.Float("Montant vendu unitaire" , digits=(14,2))
+    nb_unites        = fields.Float("Nombre d'unités vendues", digits=(14,2))
+    total_vendu      = fields.Float("Total vendu"            , digits=(14,2), compute='_compute'        , readonly=True, store=True)
+    montant_realise  = fields.Float("Montant réalisé"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
+    montant_restant  = fields.Float("Montant restant"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
+
+
+    @api.multi
+    def acceder_activites_action(self, vals):
+        for obj in self:
+            res= {
+                'name': 'Activités de la phase '+str(obj.name),
+                'view_mode': 'tree,form',
+                'view_type': 'form',
+                'res_model': 'is.activite',
+                'type': 'ir.actions.act_window',
+                'domain': [['phase_activite_id','=',obj.id]],
+            }
+            return res
+
 
 
 class IsAffaire(models.Model):
@@ -138,13 +185,24 @@ class IsAffaire(models.Model):
     _description = "Affaire"
     _order = 'name desc'
 
-    name                 = fields.Char("Code affaire", readonly=True, index=True)
+
+    @api.depends('date_creation')
+    def _compute(self):
+        for obj in self:
+            if obj.date_creation:
+                obj.annee_creation = str(obj.date_creation)[:4]
+            obj.code_long=(obj.annee_creation or '')+'-'+(obj.name or '')
+
+
+    name                 = fields.Char("Code affaire court", readonly=True, index=True)
+    code_long            = fields.Char("Code affaire", compute='_compute', readonly=True, store=True)
     nature_affaire       = fields.Char("Nature de l'affaire"      , required=True)
     partner_id           = fields.Many2one('res.partner', "Client", required=True, index=True, domain=[('customer','=',True),('is_company','=',True)])
     type_intervention_id = fields.Many2one('is.type.intervention', "Type d'intervention")
     secteur_id           = fields.Many2one('is.secteur', "Secteur", help="Secteur ou Type de politique publique")
     type_offre_id        = fields.Many2one('is.type.offre', "Type d'offre")
     date_creation        = fields.Date("Date de création", default=fields.Date.today())
+    annee_creation       = fields.Char("Année", compute='_compute', readonly=True, store=True)
     createur_id          = fields.Many2one('res.users', "Créateur", default=lambda self: self.env.user)
     ca_previsionnel      = fields.Integer("CA prévisionnel")
     fiscal_position_id   = fields.Many2one('account.fiscal.position', "Position fiscale")
@@ -167,21 +225,23 @@ class IsAffaire(models.Model):
             ('affaire_soldee', u'Affaire soldée'),
             ('offre_perdue'  , u'Offre perdue')
         ], u"État", index=True, default='offre_en_cours')
-    taux_ids          = fields.One2many('is.affaire.taux.journalier', 'affaire_id', u' Taux journalier')
-    forfait_jours_ids = fields.One2many('is.affaire.forfait.jour', 'affaire_id', u' Forfait jour')
-    consultant_ids    = fields.Many2many('res.users','is_affaire_consultant_rel','affaire_id','consultant_id', string="Consultants liées à cette affaire")
-    partenaire_ids    = fields.One2many('is.affaire.partenaire', 'affaire_id', u"Partenaires liés à l'affaire")
-    convention_ids    = fields.Many2many('ir.attachment', 'is_affaire_convention_rel', 'doc_id', 'file_id', 'Conventions / Contrats')
-    phase_ids         = fields.One2many('is.affaire.phase', 'affaire_id', u'Phases')
-    activite_ids      = fields.One2many('is.activite', 'affaire_id', u'Activités')
-    frais_ids         = fields.One2many('is.frais'   , 'affaire_id', u'Frais')
+    taux_ids           = fields.One2many('is.affaire.taux.journalier', 'affaire_id', u' Taux journalier')
+    forfait_jours_ids  = fields.One2many('is.affaire.forfait.jour', 'affaire_id', u' Forfait jour')
+    consultant_ids     = fields.Many2many('res.users','is_affaire_consultant_rel','affaire_id','consultant_id', string="Consultants liées à cette affaire")
+    partenaire_ids     = fields.One2many('is.affaire.partenaire', 'affaire_id', u"Partenaires liés à l'affaire")
+    convention_ids     = fields.Many2many('ir.attachment', 'is_affaire_convention_rel', 'doc_id', 'file_id', 'Conventions / Contrats')
+    activer_phases     = fields.Boolean("Activer la gestion des phases", default=False)
+    phase_ids          = fields.One2many('is.affaire.phase', 'affaire_id', u'Phases')
+    activite_phase_ids = fields.One2many('is.affaire.phase.activite', 'affaire_id', u'Activités des phases')
+    activite_ids       = fields.One2many('is.activite', 'affaire_id', u'Activités')
+    frais_ids          = fields.One2many('is.frais'   , 'affaire_id', u'Frais')
 
 
     @api.multi
     def name_get(self):
         result = []
         for obj in self:
-            result.append((obj.id, '['+str(obj.name)+'] '+str(obj.nature_affaire)+' ('+obj.partner_id.name+')'))
+            result.append((obj.id, '['+str(obj.code_long)+'] '+str(obj.nature_affaire)+' ('+obj.partner_id.name+')'))
         return result
 
 
@@ -190,7 +250,7 @@ class IsAffaire(models.Model):
         args = args or []
         ids = []
         if name:
-            ids = self._search(['|','|',('name', 'ilike', name),('nature_affaire', 'ilike', name),('partner_id.name', 'ilike', name)] + args, limit=limit, access_rights_uid=name_get_uid)
+            ids = self._search(['|','|',('code_long', 'ilike', name),('nature_affaire', 'ilike', name),('partner_id.name', 'ilike', name)] + args, limit=limit, access_rights_uid=name_get_uid)
         else:
             ids = self._search(args, limit=limit, access_rights_uid=name_get_uid)
         return self.browse(ids).name_get()
@@ -230,8 +290,6 @@ class IsAffaire(models.Model):
     @api.multi
     def creation_activite(self, vals):
         for obj in self:
-            print(obj)
-
             res= {
                 'name': 'Activité',
                 'view_mode': 'form',

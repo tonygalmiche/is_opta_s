@@ -8,16 +8,26 @@ class IsActivite(models.Model):
     _order = 'affaire_id,nature_activite'
 
 
-    affaire_id           = fields.Many2one('is.affaire', 'Affaire', required=True)
-    phase_id             = fields.Many2one('is.affaire.phase', 'Phase')
+    @api.depends('tarification_id','nb_facturable')
+    def _compute(self):
+        for obj in self:
+            if obj.tarification_id:
+                obj.montant=obj.tarification_id.montant
+                obj.total_facturable=obj.montant*obj.nb_facturable
+
+
+    affaire_id           = fields.Many2one('is.affaire', 'Affaire', required=True,index=True)
+    phase_activite_id    = fields.Many2one('is.affaire.phase.activite', 'Activité de phase',index=True)
     nature_activite      = fields.Char("Nature de l'activité"     , required=True, index=True)
     date_debut           = fields.Date("Date de début de l'activité", required=True, index=True)
     dates_intervention   = fields.Char("Dates des jours d'intervention")
     acteur_id            = fields.Many2one('res.users', "Acteur", default=lambda self: self.env.user)
     sous_traitant_id     = fields.Many2one('res.partner', "Sous-traitant (ou co-traitant)", domain=[('supplier','=',True),('is_company','=',True)])
     tarification_id      = fields.Many2one('is.affaire.taux.journalier', "Tarification")
+    montant              = fields.Float("Montant unitaire", compute='_compute', readonly=True, store=True, digits=(14,2))
     nb_realise           = fields.Float("Nb unités réalisées"  , digits=(14,2))
     nb_facturable        = fields.Float("Nb unités facturables", digits=(14,2))
+    total_facturable     = fields.Float("Total facturable", compute='_compute', readonly=True, store=True, digits=(14,2))
     facture_sur_accompte = fields.Boolean("Facture sur acompte")
     point_cle            = fields.Text("Points clés de l'activité réalisée")
     suivi_temps_ids      = fields.One2many('is.suivi.temps', 'activite_id', u'Suivi du temps')
