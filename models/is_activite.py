@@ -21,8 +21,11 @@ class IsActivite(models.Model):
     nature_activite      = fields.Char("Nature de l'activité"     , required=True, index=True)
     date_debut           = fields.Date("Date de début de l'activité", required=True, index=True)
     dates_intervention   = fields.Char("Dates des jours d'intervention")
-    acteur_id            = fields.Many2one('res.users', "Acteur", default=lambda self: self.env.user)
-    sous_traitant_id     = fields.Many2one('res.partner', "Sous-traitant (ou co-traitant)", domain=[('supplier','=',True),('is_company','=',True)])
+
+    #acteur_id            = fields.Many2one('res.users', "Acteur", default=lambda self: self.env.user)
+    #sous_traitant_id     = fields.Many2one('res.partner', "Sous-traitant (ou co-traitant)", domain=[('supplier','=',True),('is_company','=',True)])
+    intervenant_id        = fields.Many2one('is.affaire.intervenant', "Intervenant", required=True,index=True)
+
     tarification_id      = fields.Many2one('is.affaire.taux.journalier', "Tarification")
     montant              = fields.Float("Montant unitaire", compute='_compute', readonly=True, store=True, digits=(14,2))
     nb_realise           = fields.Float("Nb unités réalisées"  , digits=(14,2))
@@ -32,11 +35,13 @@ class IsActivite(models.Model):
     point_cle            = fields.Text("Points clés de l'activité réalisée")
     suivi_temps_ids      = fields.One2many('is.suivi.temps', 'activite_id', u'Suivi du temps')
     frais_ids            = fields.One2many('is.frais', 'activite_id', u'Frais')
+    invoice_id           = fields.Many2one('account.invoice', "Facture",index=True)
     state                = fields.Selection([
             ('brouillon', u'Brouillon'),
             ('diffuse'  , u'Diffusé'),
             ('valide'   , u'Validé'),
         ], u"État", index=True, default='brouillon')
+
 
 
     @api.multi

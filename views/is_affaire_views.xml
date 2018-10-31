@@ -131,19 +131,17 @@
                                     </tree>
                                 </field>
                             </group>
-
-
                             <group string="Intervenants">
-                                <field name="consultant_ids" widget="many2many_tags"/>
-                            </group>
-                            <group>
-                                <field name="partenaire_ids" nolabel="1">
+                                <field name="intervenant_ids" nolabel="1">
                                     <tree editable="bottom">
-                                        <field name="type_partenaire"/>
-                                        <field name="partenaire_id"/>
+                                        <field name="intervenant_id"/>
+                                        <field name="type_intervenant"/>
                                         <field name="commentaire"/>
                                     </tree>
                                 </field>
+                            </group>
+                            <group>
+                                <field name="consultant_ids" widget="many2many_tags"/>
                             </group>
                             <group string="Documents">
                                 <field name="convention_ids" widget="many2many_binary"/>
@@ -189,8 +187,7 @@
                                         <field name="nature_activite"/>
                                         <field name="date_debut"/>
                                         <field name="dates_intervention"/>
-                                        <field name="acteur_id"/>
-                                        <field name="sous_traitant_id"/>
+                                        <field name="intervenant_id"/>
                                         <field name="montant" />
                                         <field name="nb_realise"       sum="Total"/>
                                         <field name="nb_facturable"    sum="Total"/>

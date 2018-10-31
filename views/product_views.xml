@@ -1,10 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="is_product_template_form_view" model="ir.ui.view">
+        <field name="name">is_product_template_form_view</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="before">
+                <field name="is_type_intervenant"/>
+                <field 
+                    name="is_consultant_id"
+                    attrs="{
+                        'invisible': [('is_type_intervenant','!=', 'consultant')],
+                        'required':  [('is_type_intervenant','=' , 'consultant')]
+                    }"
+                />
+            </xpath>
+        </field>
+    </record>
+    <record id="is_product_template_tree_view" model="ir.ui.view">
+        <field name="name">is_product_template_tree_view</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="is_type_intervenant"/>
+                <field name="is_consultant_id"/>
+                <field name="property_account_income_id"/>
+            </tree>
+        </field>
+    </record>
     <record  id="is_product_template_action" model="ir.actions.act_window">
         <field name="name">Articles</field>
         <field name="res_model">product.template</field>
         <field name="view_type">form</field>
         <field name="limit">200</field>
         <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="is_opta_s.is_product_template_tree_view"/>
     </record>
 </odoo>

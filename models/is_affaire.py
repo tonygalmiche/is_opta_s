@@ -111,17 +111,57 @@ class IsAffaireForfaitJour(models.Model):
         return self.browse(ids).name_get()
 
 
-class IsAffairePartenaire(models.Model):
-    _name = 'is.affaire.partenaire'
-    _description = u"Partenaires liés à l'affaire"
+#class IsAffairePartenaire(models.Model):
+#    _name = 'is.affaire.partenaire'
+#    _description = u"Partenaires liés à l'affaire"
+
+#    affaire_id  = fields.Many2one('is.affaire', 'Affaire', required=True, ondelete='cascade')
+#    type_partenaire = fields.Selection([
+#            ('co-traitant'  , 'Co-traitant'),
+#            ('sous-traitant', 'Sous-Traitant'),
+#        ], "Type de partenaire",)
+#    partenaire_id = fields.Many2one('res.partner', "Partenaire", domain=[('supplier','=',True)])
+#    commentaire   = fields.Char("Commentaire")
+
+
+class IsAffaireIntervenant(models.Model):
+    _name = 'is.affaire.intervenant'
+    _description = u"Intervenants liés à l'affaire"
+
+
+    @api.depends('intervenant_id')
+    def _compute(self):
+        for obj in self:
+            obj.type_intervenant=obj.intervenant_id.is_type_intervenant
+
 
     affaire_id  = fields.Many2one('is.affaire', 'Affaire', required=True, ondelete='cascade')
-    type_partenaire = fields.Selection([
+    intervenant_id = fields.Many2one('product.product', "Intervenant", domain=[('is_type_intervenant','!=',False)], required=True)
+    type_intervenant = fields.Selection([
+            ('consultant'   , 'Consultant'),
             ('co-traitant'  , 'Co-traitant'),
             ('sous-traitant', 'Sous-Traitant'),
-        ], "Type de partenaire",)
-    partenaire_id = fields.Many2one('res.partner', "Partenaire", domain=[('supplier','=',True)])
+        ], "Type d'intervenant", compute='_compute', readonly=True, store=True)
     commentaire   = fields.Char("Commentaire")
+
+
+    @api.multi
+    def name_get(self):
+        result = []
+        for obj in self:
+            name=str(obj.intervenant_id.name)
+            result.append((obj.id, name))
+        return result
+
+
+    @api.model
+    def _name_search(self, name, args=None, operator='ilike', limit=100, name_get_uid=None):
+        args = args or []
+        ids = self._search(args, limit=limit, access_rights_uid=name_get_uid)
+        return self.browse(ids).name_get()
+
+
+
 
 
 class IsAffairePhase(models.Model):
@@ -236,6 +276,26 @@ class IsAffaire(models.Model):
             obj.code_long=(obj.annee_creation or '')+'-'+(obj.name or '')
 
 
+    @api.depends('intervenant_ids')
+    def _compute_consultant_ids(self):
+        for obj in self:
+            obj.consultant_ids.unlink()
+            ids=[]
+            for row in obj.intervenant_ids:
+                x=row.intervenant_id.is_consultant_id.id or False
+                if x and x not in ids:
+                    ids.append(x)
+            print(ids)
+            obj.consultant_ids=[(6,0,ids)]
+
+
+        #'taxe_ids'          : ,
+        #self.env['is.affaire.consultant.rel'].create(vals)
+
+
+#'is_affaire_consultant_rel','affaire_id','consultant_id',
+
+
     name                 = fields.Char("Code affaire court", readonly=True, index=True)
     code_long            = fields.Char("Code affaire", compute='_compute', readonly=True, store=True)
     nature_affaire       = fields.Char("Nature de l'affaire"      , required=True)
@@ -272,8 +332,10 @@ class IsAffaire(models.Model):
         ], u"État", index=True, default='offre_en_cours')
     taux_ids           = fields.One2many('is.affaire.taux.journalier', 'affaire_id', u' Taux journalier')
 
-    consultant_ids     = fields.Many2many('res.users','is_affaire_consultant_rel','affaire_id','consultant_id', string="Consultants liées à cette affaire")
-    partenaire_ids     = fields.One2many('is.affaire.partenaire', 'affaire_id', u"Partenaires liés à l'affaire")
+
+    intervenant_ids    = fields.One2many('is.affaire.intervenant', 'affaire_id', u"Intervenants liés à l'affaire")
+    consultant_ids     = fields.Many2many('res.users','is_affaire_consultant_rel','affaire_id','consultant_id', string="Consultants liées à cette affaire", compute='_compute_consultant_ids', readonly=True, store=True)
+
     convention_ids     = fields.Many2many('ir.attachment', 'is_affaire_convention_rel', 'doc_id', 'file_id', 'Conventions / Contrats')
     activer_phases     = fields.Boolean("Activer la gestion des phases", default=False)
     phase_ids          = fields.One2many('is.affaire.phase', 'affaire_id', u'Phases')

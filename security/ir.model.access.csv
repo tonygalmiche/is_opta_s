@@ -7,7 +7,6 @@ access_is_cause,access_is_cause,model_is_cause,base.group_user,1,1,1,1
 access_is_affaire_vendue_par,access_is_affaire_vendue_par,model_is_affaire_vendue_par,base.group_user,1,1,1,1
 access_is_affaire_taux_journalier,access_is_affaire_taux_journalier,model_is_affaire_taux_journalier,base.group_user,1,1,1,1
 access_is_affaire_forfait_jour,access_is_affaire_forfait_jour,model_is_affaire_forfait_jour,base.group_user,1,1,1,1
-access_is_affaire_partenaire,access_is_affaire_partenaire,model_is_affaire_partenaire,base.group_user,1,1,1,1
 access_is_type_societe,access_is_type_societe,model_is_type_societe,base.group_user,1,1,1,1
 access_is_activite,access_is_activite,model_is_activite,base.group_user,1,1,1,1
 access_is_suivi_temps,access_is_suivi_temps,model_is_suivi_temps,base.group_user,1,1,1,1
@@ -16,4 +15,4 @@ access_is_frais,access_is_frais,model_is_frais,base.group_user,1,1,1,1
 access_is_depense_effectuee_par,access_is_depense_effectuee_par,model_is_depense_effectuee_par,base.group_user,1,1,1,1
 access_is_frais_lignes,access_is_frais_lignes,model_is_frais_lignes,base.group_user,1,1,1,1
 access_is_affaire_phase_activite,access_is_affaire_phase_activite,model_is_affaire_phase_activite,base.group_user,1,1,1,1
-
+access_is_affaire_intervenant,access_is_affaire_intervenant,model_is_affaire_intervenant,base.group_user,1,1,1,1

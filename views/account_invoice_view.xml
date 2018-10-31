@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="is_invoice_form" model="ir.ui.view">
+            <field name="name">is_invoice_form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_invoice_open']" position="before">
+                    <button
+                        name="activites_vers_lignes_action"
+                        type="object"
+                        string="Générer lignes de factures"
+                        class="oe_highlight"
+                        states="draft"
+                    />
+                </xpath>
+                <xpath expr="//page[1]" position="after" >
+                    <page string="Activités">
+                        <group>
+                            <field name="is_affaire_id" domain="[('partner_id','=',partner_id)]"/>
+                        </group>
+                        <group>
+                            <field 
+                                name="is_activites"
+                                nolabel="1" 
+                                domain="[('affaire_id','=',is_affaire_id)]"
+                                context="{'tree_view_ref': 'is_opta_s.is_activite_invoice_tree'}"
+                            /> 
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record  id="is_account_invoice_action" model="ir.actions.act_window">
+            <field name="name">Factures</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="view_id" ref="account.invoice_tree"/>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="domain">[('type','=','out_invoice')]</field>
+            <field name="context">{'type':'out_invoice', 'journal_type': 'sale'}</field>
+            <field name="limit">200</field>
+        </record>
+        <record id="is_account_invoice_action_view1" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="account.invoice_tree_with_onboarding"/>
+            <field name="act_window_id" ref="is_account_invoice_action"/>
+        </record>
+        <record id="is_account_invoice_action_view2" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="account.invoice_form"/>
+            <field name="act_window_id" ref="is_account_invoice_action"/>
+        </record>
+
+
+
+    </data>
+</odoo>

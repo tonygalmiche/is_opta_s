@@ -24,6 +24,7 @@ InfoSaône - Module Odoo 12 pour Opta-S / SGP
         'views/is_activite_views.xml',
         'views/is_suivi_temps_views.xml',
         'views/is_frais_views.xml',
+        'views/account_invoice_view.xml',
         'views/menu.xml',
     ],
     'installable': True,

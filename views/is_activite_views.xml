@@ -54,8 +54,7 @@
                             <field name="nature_activite"  default_focus="1"/>
                             <field name="date_debut"/>
                             <field name="dates_intervention"/>
-                            <field name="acteur_id"/>
-                            <field name="sous_traitant_id"/>
+                            <field name="intervenant_id" domain="[('affaire_id','=',affaire_id)]"/>
                         </group>
                         <group>
                             <field name="tarification_id" domain="[('affaire_id','=',affaire_id)]" />
@@ -108,6 +107,9 @@
                         </field>
                     </group>
 
+                    <group>
+                        <field name="invoice_id"/>
+                    </group>
 
 
                  </sheet>
@@ -124,15 +126,34 @@
                 <field name="nature_activite"/>
                 <field name="date_debut"/>
                 <field name="dates_intervention"/>
-                <field name="acteur_id"/>
-                <field name="sous_traitant_id"/>
+                <field name="intervenant_id"/>
                 <field name="tarification_id"/>
                 <field name="nb_realise"       sum="Total"/>
+                <field name="nb_facturable"    sum="Total"/>
+                <field name="total_facturable" sum="Total"/>
+                <field name="invoice_id"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="is_activite_invoice_tree" model="ir.ui.view">
+        <field name="name">is_activite_invoice_tree</field>
+        <field name="model">is.activite</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="phase_activite_id"/>
+                <field name="nature_activite"/>
+                <field name="dates_intervention"/>
+                <field name="intervenant_id"/>
                 <field name="nb_facturable"    sum="Total"/>
                 <field name="total_facturable" sum="Total"/>
             </tree>
         </field>
     </record>
+
+
+
     <record id="is_activite_search" model="ir.ui.view">
         <field name="name">is.activite.search</field>
         <field name="model">is.activite</field>
@@ -141,8 +162,7 @@
                 <field name="affaire_id"/>
                 <field name="phase_activite_id"/>
                 <field name="nature_activite"/>
-                <field name="acteur_id"/>
-                <field name="sous_traitant_id"/>
+                <field name="intervenant_id"/>
            </search>
         </field>
     </record>
