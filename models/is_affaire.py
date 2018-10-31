@@ -184,6 +184,10 @@ class IsAffairePhase(models.Model):
                 vendu+=o.total_vendu
             obj.total_vendu=vendu
             obj.montant_restant=obj.total_vendu-realise
+            avancement=0
+            if obj.montant_realise>0:
+                avancement=100*obj.total_vendu/obj.montant_realise
+            obj.avancement=avancement
 
 
     affaire_id      = fields.Many2one('is.affaire', 'Affaire', required=True, ondelete='cascade')
@@ -191,6 +195,7 @@ class IsAffairePhase(models.Model):
     total_vendu     = fields.Float("Total vendu"    , digits=(14,2), compute='_compute', readonly=True, store=False)
     montant_realise = fields.Float("Montant réalisé", digits=(14,2), compute='_compute', readonly=True, store=False)
     montant_restant = fields.Float("Montant restant", digits=(14,2), compute='_compute', readonly=True, store=False)
+    avancement      = fields.Integer("Avancement"                  , compute='_compute', readonly=True, store=False)
 
 
 

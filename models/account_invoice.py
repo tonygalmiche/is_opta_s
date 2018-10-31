@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
 
+
+
+class AccountInvoiceLine(models.Model):
+    _inherit = "account.invoice.line"
+
+    is_dates_intervention = fields.Char("Dates d'intervention")
+    is_activite_id        = fields.Many2one('is.activite', 'Activité')
+
+
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
@@ -19,22 +28,27 @@ class AccountInvoice(models.Model):
             for act in activites:
                 print(act)
                 act.invoice_id=False
-
             for act in obj.is_activites:
                 act.invoice_id=obj.id
-
                 account_id=act.intervenant_id.intervenant_id.property_account_income_id.id
 
-
-                #res=self.env['account.invoice.line'].product_id_change(product_id, uom_id, quantite, name, invoice_type, partner_id, fiscal_position)
-
                 vals={
-                    'invoice_id': obj.id,
-                    'product_id': act.intervenant_id.intervenant_id.id,
-                    'name'      : act.nature_activite,
-                    'price_unit': 12.34,
-                    'account_id': account_id,
+                    'invoice_id'           : obj.id,
+                    'product_id'           : act.intervenant_id.intervenant_id.id,
+                    'name'                 : ' ',
+                    'price_unit'           : 0,
+                    'account_id'           : account_id,
+                    'is_dates_intervention': act.dates_intervention,
+                    'is_activite_id'       : act.id,
                 }
-                print(vals)
-                self.env['account.invoice.line'].create(vals)
+                line=self.env['account.invoice.line'].create(vals)
+                line._onchange_product_id()
+                line.quantity   = act.nb_facturable
+                line.price_unit = act.montant
+                line.name       = act.nature_activite
+
+
+            obj.compute_taxes()
+
+
 

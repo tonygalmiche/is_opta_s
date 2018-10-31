@@ -11,4 +11,4 @@ class ProductTemplate(models.Model):
             ('co-traitant'  , 'Co-traitant'),
             ('sous-traitant', 'Sous-Traitant'),
         ], u"Type d'intervenant",)
-    is_consultant_id = fields.Many2one('res.users', "Consultant associé")
+    is_consultant_id = fields.Many2one('res.users', "Utilisateur associé")

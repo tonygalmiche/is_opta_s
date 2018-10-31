@@ -157,5 +157,22 @@
     />
 
 
+    <menuitem
+        id="is_account_account_menu"
+        name="Plan comptable"
+        parent="is_crm_table_menu"
+        sequence="72"
+        action="is_account_account_action"
+    />
+    <menuitem
+        id="is_account_fiscal_position_menu"
+        name="Positions fiscales"
+        parent="is_crm_table_menu"
+        sequence="74"
+        action="is_account_fiscal_position_action"
+    />
+
+
+
 
 </odoo>

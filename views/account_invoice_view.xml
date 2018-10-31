@@ -15,6 +15,16 @@
                         states="draft"
                     />
                 </xpath>
+
+                <xpath expr="//page[1]/field[@name='invoice_line_ids']/tree/field[@name='name']" position="after">
+                    <field name="is_dates_intervention"/>
+                    <field name="is_activite_id" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//page[1]/field[@name='invoice_line_ids']/tree/field[@name='discount']" position="replace">
+                    <field name="discount" invisible="1"/>
+                </xpath>
+
                 <xpath expr="//page[1]" position="after" >
                     <page string="Activités">
                         <group>
@@ -54,6 +64,21 @@
             <field name="view_mode">form</field>
             <field name="view_id" ref="account.invoice_form"/>
             <field name="act_window_id" ref="is_account_invoice_action"/>
+        </record>
+
+
+
+        <record  id="is_account_account_action" model="ir.actions.act_window">
+            <field name="name">Plan comptable</field>
+            <field name="res_model">account.account</field>
+            <field name="view_mode">tree,form</field>
+            <field name="limit">200</field>
+        </record>
+        <record  id="is_account_fiscal_position_action" model="ir.actions.act_window">
+            <field name="name">Positions fiscales</field>
+            <field name="res_model">account.fiscal.position</field>
+            <field name="view_mode">tree,form</field>
+            <field name="limit">200</field>
         </record>
 
 
