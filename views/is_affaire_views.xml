@@ -100,10 +100,9 @@
                     </group>
                     <notebook>
                         <page string="Affaire" states="affaire_gagnee">
-                            <group>
+                            <group string="Affaire">
                                 <group>
                                     <field name="responsable_id"/>
-                                    <field name="nature_frais"/>
                                 </group>
                                 <group>
                                     <field name="correspondant_id"/>
@@ -118,6 +117,11 @@
                                     </tree>
                                 </field>
                             </group>
+
+
+                            <group string="Gestion des frais">
+                                <field name="nature_frais"/>
+                            </group>
                             <group>
                                 <field name="forfait_jours_ids" nolabel="1">
                                     <tree editable="bottom">
@@ -127,7 +131,9 @@
                                     </tree>
                                 </field>
                             </group>
-                            <group>
+
+
+                            <group string="Intervenants">
                                 <field name="consultant_ids" widget="many2many_tags"/>
                             </group>
                             <group>
@@ -139,7 +145,7 @@
                                     </tree>
                                 </field>
                             </group>
-                            <group>
+                            <group string="Documents">
                                 <field name="convention_ids" widget="many2many_binary"/>
                             </group>
                         </page>
@@ -148,6 +154,9 @@
                                 <field name="phase_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="name"/>
+                                        <field name="total_vendu"     sum="Total"/>
+                                        <field name="montant_realise" sum="Total"/>
+                                        <field name="montant_restant" sum="Total"/>
                                     </tree>
                                 </field>
                             </group>
@@ -160,7 +169,7 @@
                                         <field name="name"/>
                                         <field name="montant_vendu" sum="Total"/>
                                         <field name="nb_unites"/>
-                                        <field name="total_vendu"/>
+                                        <field name="total_vendu"     sum="Total"/>
                                         <field name="montant_realise" sum="Total"/>
                                         <field name="montant_restant" sum="Total"/>
                                     </tree>

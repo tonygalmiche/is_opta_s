@@ -57,7 +57,7 @@ class IsAffaireTauxJournalier(models.Model):
             ('journee'      , 'Journée'),
             ('forfait'      , 'Forfait')
         ], u"Unité",)
-    montant = fields.Float("Montant", digits=(14,2))
+    montant = fields.Float("Montant intervention", digits=(14,2))
     commentaire = fields.Char("Commentaire")
 
 
@@ -85,10 +85,10 @@ class IsAffaireTauxJournalier(models.Model):
 
 class IsAffaireForfaitJour(models.Model):
     _name = 'is.affaire.forfait.jour'
-    _description = u"Affaire Forfait Jour"
+    _description = u"Affaire Forfait frais jour"
 
     affaire_id  = fields.Many2one('is.affaire', 'Affaire', required=True, ondelete='cascade')
-    montant     = fields.Integer("Montant du forfait jour")
+    montant     = fields.Integer("Forfait frais jour")
     nb_jours    = fields.Integer("Nombre de jours (si forfait jour)")
     commentaire = fields.Char("Commentaire")
 
@@ -129,8 +129,29 @@ class IsAffairePhase(models.Model):
     _description = u"Phases des Affaires"
     _order='name'
 
-    affaire_id    = fields.Many2one('is.affaire', 'Affaire', required=True, ondelete='cascade')
-    name          = fields.Char("Phases")
+
+    def _compute(self):
+        for obj in self:
+            activites=self.env['is.activite'].search([('phase_activite_id.affaire_phase_id', '=', obj.id)])
+            realise=0
+            for act in activites:
+                realise+=act.total_facturable
+            obj.montant_realise=realise
+
+            sous_phases=self.env['is.affaire.phase.activite'].search([('affaire_phase_id', '=', obj.id)])
+            vendu=0
+            for o in sous_phases:
+                vendu+=o.total_vendu
+            obj.total_vendu=vendu
+            obj.montant_restant=obj.total_vendu-realise
+
+
+    affaire_id      = fields.Many2one('is.affaire', 'Affaire', required=True, ondelete='cascade')
+    name            = fields.Char("Phases")
+    total_vendu     = fields.Float("Total vendu"    , digits=(14,2), compute='_compute', readonly=True, store=False)
+    montant_realise = fields.Float("Montant réalisé", digits=(14,2), compute='_compute', readonly=True, store=False)
+    montant_restant = fields.Float("Montant restant", digits=(14,2), compute='_compute', readonly=True, store=False)
+
 
 
 class IsAffairePhaseActivite(models.Model):
@@ -233,12 +254,15 @@ class IsAffaire(models.Model):
     date_signature       = fields.Date("Date de signature de l'affaire")
     vendue_par_ids       = fields.One2many('is.affaire.vendue.par', 'affaire_id', u'Affaire vendue par')
     responsable_id       = fields.Many2one('res.users', "Responsable de l'affaire")
+
     nature_frais = fields.Selection([
             ('frais_inclus' , 'Frais inclus'),
             ('forfait'      , 'Forfait'),
             ('au_reel'      , 'Au réel'),
             ('reel_plafonne', 'Réel plafonné')
         ], u"Nature des frais",)
+    forfait_jours_ids  = fields.One2many('is.affaire.forfait.jour', 'affaire_id', u' Forfait frais jour')
+
     correspondant_id = fields.Many2one('res.users', "Correspondant facturation")
     state                = fields.Selection([
             ('offre_en_cours', u'Offre en cours'),
@@ -247,7 +271,7 @@ class IsAffaire(models.Model):
             ('offre_perdue'  , u'Offre perdue')
         ], u"État", index=True, default='offre_en_cours')
     taux_ids           = fields.One2many('is.affaire.taux.journalier', 'affaire_id', u' Taux journalier')
-    forfait_jours_ids  = fields.One2many('is.affaire.forfait.jour', 'affaire_id', u' Forfait jour')
+
     consultant_ids     = fields.Many2many('res.users','is_affaire_consultant_rel','affaire_id','consultant_id', string="Consultants liées à cette affaire")
     partenaire_ids     = fields.One2many('is.affaire.partenaire', 'affaire_id', u"Partenaires liés à l'affaire")
     convention_ids     = fields.Many2many('ir.attachment', 'is_affaire_convention_rel', 'doc_id', 'file_id', 'Conventions / Contrats')
