@@ -167,7 +167,7 @@
                                         <button string="Nouvelle activité"        name="creation_activite_action" type="object" icon="fa-plus"/>
                                         <field name="affaire_phase_id" domain="[('affaire_id','=',parent.id)]"/>
                                         <field name="name"/>
-                                        <field name="montant_vendu" sum="Total"/>
+                                        <field name="montant_vendu"/>
                                         <field name="nb_unites"/>
                                         <field name="total_vendu"     sum="Total"/>
                                         <field name="montant_realise" sum="Total"/>
