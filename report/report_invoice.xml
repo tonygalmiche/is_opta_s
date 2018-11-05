@@ -49,35 +49,6 @@
                     <p t-raw="phases"/>
 
 
-                    <!--
-                    <table t-attf-class="table table-sm" name="invoice_line_table">
-                        <thead>
-                            <tr>
-                                <t t-set="colspan" t-value="6"/>
-                                <th class="text-left"><span>Description</span></th>
-                                <th class="text-right"><span>Quantité</span></th>
-                                <th class="text-right"><span>Prix unitaire</span></th>
-                                <th class="text-right"><span>Montant HT</span></th>
-                            </tr>
-                        </thead>
-                        <tbody class="invoice_tbody">
-                            <t t-foreach="o.invoice_line_ids" t-as="line">
-                                <tr class="'bg-200 font-weight-bold'">
-                                    <td><span t-field="line.name"/></td>
-                                    <td class="text-right">
-                                        <span t-field="line.quantity"/>
-                                    </td>
-                                    <td class="text-right">
-                                        <span t-field="line.price_unit"/>
-                                    </td>
-                                    <td class="text-right">
-                                        <span t-field="line.price_subtotal" />
-                                    </td>
-                                </tr>
-                            </t>
-                        </tbody>
-                    </table>
-                    -->
 
                     <div class="clearfix">
                         <div id="total" class="row">
@@ -140,6 +111,47 @@
                             </t>
                         </tbody>
                     </table>
+
+
+                    <div style="page-break-after:always;" />
+
+
+                    <h2>Justificatif des frais de déplacement de la facture <span t-field="o.number"/></h2>
+                    <table t-attf-class="table table-sm" name="invoice_line_table">
+                        <thead>
+                            <tr>
+                                <t t-set="colspan" t-value="6"/>
+                                <th class="text-left"><span>Intervenant</span></th>
+                                <th class="text-left"><span>Parcours</span></th>
+                                <th class="text-left"><span>Date</span></th>
+                                <th class="text-left"><span>Type de dépense</span></th>
+                                <th class="text-right"><span>Montant TTC</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice_tbody">
+                            <t t-foreach="o.invoice_line_ids" t-as="line">
+                                <t t-if="line.is_frais_ligne_id.id">
+                                    <tr class="'bg-200 font-weight-bold'">
+                                        <td><span t-field="line.is_frais_ligne_id.frais_id.createur_id.name"/></td>
+                                        <td class="text-left">
+                                            <span t-field="line.is_frais_ligne_id.frais_id.parcours"/>
+                                        </td>
+                                        <td class="text-left">
+                                            <span t-field="line.is_frais_ligne_id.frais_id.dates"/>
+                                        </td>
+                                        <td class="text-left">
+                                            <span t-field="line.name" />
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.price_unit"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+
+
 
 
                 </div>

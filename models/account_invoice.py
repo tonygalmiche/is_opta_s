@@ -15,6 +15,7 @@ class AccountInvoiceLine(models.Model):
 
     is_dates_intervention = fields.Char("Dates d'intervention")
     is_activite_id        = fields.Many2one('is.activite', 'Activité')
+    is_frais_ligne_id     = fields.Many2one('is.frais.lignes', 'Ligne de frais')
 
 
 class AccountInvoice(models.Model):
@@ -65,6 +66,7 @@ class AccountInvoice(models.Model):
                             'price_unit'           : 0,
                             'account_id'           : account_id,
                             'is_activite_id'       : act.id,
+                            'is_frais_ligne_id'    : ligne.id,
                         }
                         line=self.env['account.invoice.line'].create(vals)
                         line._onchange_product_id()
@@ -136,17 +138,17 @@ class AccountInvoice(models.Model):
                 #***************************************************************
                 for phase in phase_ids:
                     html+='<tr><td colspan="'+str(colspan)+'" class="bg-200">' +phase.name+'</td></tr>'
-
                     for sous_phase in sous_phase_ids:
                         if sous_phase.affaire_phase_id.id==phase.id:
                             html+='<tr><td colspan="'+str(colspan)+'" class="bg-100">' +sous_phase.name+'</td></tr>'
-
                             for line in obj.invoice_line_ids:
                                 if line.is_activite_id.phase_activite_id.id==sous_phase.id:
-                                    html+=self._add_tr(line)
+                                    if line.is_frais_ligne_id.id==False:
+                                        html+=self._add_tr(line)
             else:
                 for line in obj.invoice_line_ids:
-                    html+=self._add_tr(line)
+                    if line.is_frais_ligne_id.id==False:
+                        html+=self._add_tr(line)
 
 
 

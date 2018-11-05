@@ -16,8 +16,8 @@ class IsFraisLigne(models.Model):
     _order = 'id'
 
     frais_id           = fields.Many2one('is.frais', 'Frais', required=True, ondelete='cascade')
-    partner_id         = fields.Many2one('res.partner', 'Fournisseur')
-    product_id         = fields.Many2one('product.product', 'Type de dépense', required=True)
+    partner_id         = fields.Many2one('res.partner', 'Fournisseur', domain=[('supplier','=',True),('is_company','=',True)])
+    product_id         = fields.Many2one('product.product', 'Type de dépense', required=True, domain=[('is_type_intervenant','=',False)])
     effectuee_par_id   = fields.Many2one('is.depense.effectuee.par', 'Dépense effectuée par', required=True)
     montant_ttc        = fields.Float("Montant", digits=(14,2))
     montant_tva        = fields.Float("Montant TVA récupérable", digits=(14,2))
