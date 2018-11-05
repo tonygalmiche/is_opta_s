@@ -2,6 +2,12 @@
 from odoo import api, fields, models, _
 
 
+def f0(number):
+    return '{0:,.0f}'.format(number).replace(',', ' ').replace('.', ',')
+
+def f2(number):
+    return '{0:,.2f}'.format(number).replace(',', ' ').replace('.', ',')
+
 
 class AccountInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
@@ -49,6 +55,74 @@ class AccountInvoice(models.Model):
 
 
             obj.compute_taxes()
+
+
+
+
+    @api.multi
+    def get_invoice_line(self):
+        for obj in self:
+
+            html="""
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th class="text-left"><span>Description</span></th>
+                                <th class="text-right"><span>Quantité</span></th>
+                                <th class="text-right"><span>Prix unitaire</span></th>
+                                <th class="text-right"><span>Montant HT</span></th>
+                                <th class="text-right"><span>Montant TTC</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice_tbody">
+            """
+
+            for phase in obj.is_affaire_id.phase_ids:
+                html+='<tr><td colspan="5" class="bg-200">' +phase.name+'</td></tr>'
+
+                for sous_phase in obj.is_affaire_id.activite_phase_ids:
+                    if sous_phase.affaire_phase_id.id==phase.id:
+                        html+='<tr><td colspan="5" class="bg-100">' +sous_phase.name+'</td></tr>'
+
+                        for line in obj.invoice_line_ids:
+                            if line.is_activite_id.phase_activite_id.id==sous_phase.id:
+                                html+='<tr>'
+                                html+='<td class="text-left">' +line.name+'</td>'
+                                html+='<td class="text-right">'+f2(line.quantity)+'</td>'
+                                html+='<td class="text-right">'+f2(line.price_unit)+' €</td>'
+                                html+='<td class="text-right">'+f2(line.price_subtotal)+' €</td>'
+                                html+='<td class="text-right">'+f2(line.price_total)+' €</td>'
+                                html+='</tr>'
+            html+='</tbody>'
+            html+='</table>'
+            return html
+
+
+
+
+#            html="""
+#                    <table class="table table-sm">
+#                        <thead>
+#                            <tr>
+#                                <th class="text-left"><span>Description</span></th>
+#                                <th class="text-right"><span>Quantité</span></th>
+#                                <th class="text-right"><span>Prix unitaire</span></th>
+#                                <th class="text-right"><span>Montant HT</span></th>
+#                            </tr>
+#                        </thead>
+#                        <tbody class="invoice_tbody">
+#            """
+#            for line in obj.invoice_line_ids:
+#                html+='<tr>'
+#                html+='<td class="text-left">' +line.name+'</td>'
+#                html+='<td class="text-right">'+f2(line.quantity)+'</td>'
+#                html+='<td class="text-right">'+f2(line.price_unit)+' €</td>'
+#                html+='<td class="text-right">'+f2(line.price_subtotal)+' €</td>'
+#                html+='</tr>'
+#            html+='</tbody>'
+#            html+='</table>'
+#            return html
+
 
 
 

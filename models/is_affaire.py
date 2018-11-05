@@ -398,7 +398,6 @@ class IsAffaire(models.Model):
         for obj in self:
             obj.state='affaire_soldee'
 
-
     @api.multi
     def creation_activite(self, vals):
         for obj in self:
@@ -425,7 +424,5 @@ class IsAffaire(models.Model):
                 'context': {'default_affaire_id': obj.id }
             }
             return res
-
-
 
 

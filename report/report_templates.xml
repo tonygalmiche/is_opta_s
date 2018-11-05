@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <template id="is_external_layout_standard" name="is_external_layout_standard" inherit_id="web.external_layout_standard">
+        <xpath expr="//div[hasclass('header')]" position="replace">
+            <div class="header">
+                <div class="row">
+                    <div class="col-3 mb4">
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 30mm;" alt="Logo"/>
+                    </div>
+                    <div class="col-9 text-right">
+                    </div>
+                </div>
+            </div>
+        </xpath>
+
+
+
+        <xpath expr="//div[hasclass('o_report_layout_standard')]" position="replace">
+
+            <div class="article o_report_layout_standard"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+                <t t-raw="0"/>
+            </div>
+
+
+        </xpath>
+
+
+
+        <xpath expr="//div[hasclass('footer')]" position="replace">
+            <div class="footer o_standard_footer">
+                <div class="text-center" style="border-top: 1px solid black;font-size:10pt">
+                    <span t-field="company.name"/> - 
+                    Adresse : <span t-field="company.street"/> <span t-field="company.zip"/> <span t-field="company.city"/><br />
+                    Tél : <span t-field="company.phone"/> - 
+                    Fax : <span t-field="company.is_fax"/> - 
+                    Courriel : <span t-field="company.email"/><br />
+                    <span t-field="company.company_registry"/> - 
+                    SIRET : <span t-field="company.siret"/><br />
+                    APE : <span t-field="company.ape"/> - 
+                    TVA intracommunautaire : <span t-field="company.vat"/> - 
+                    Numéro d'activité de formation : <span t-field="company.is_num_formation"/><br />
+                    Site internet : <span t-field="company.website"/><br />
+
+                    <!--
+                    <ul class="list-inline mb4">
+                        <li t-if="company.name"    class="list-inline-item"><span t-field="company.name"/></li>
+                        <li t-if="company.street"  class="list-inline-item">
+
+                        </li>
+
+
+                        <li t-if="company.phone" class="list-inline-item">Phone: <span t-field="company.phone"/></li>
+                        <li t-if="company.email" class="list-inline-item">Email: <span t-field="company.email"/></li>
+                        <li t-if="company.website" class="list-inline-item">Web: <span t-field="company.website"/></li>
+                        <li t-if="company.vat" class="list-inline-item"><t t-esc="company.country_id.vat_label or 'Tax ID'"/>: <span t-field="company.vat"/></li>
+                    </ul>
+                    <div t-if="report_type == 'pdf'" class="text-muted">
+                        Page: <span class="page"/> / <span class="topage"/>
+                    </div>
+                    -->
+
+
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

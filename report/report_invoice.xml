@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="is_report_invoice_document" name="is_report_invoice_document" inherit_id="account.report_invoice_document">
+            <xpath expr="//div[hasclass('page')]" position="replace">
+                <div class="page">
+
+                    <style>
+                        h2{
+                            font-size:14pt;
+                            font-weight: bold;
+                        }
+
+                    </style>
+
+
+
+                    <t t-set="colclass" t-value="('col-md-5' if report_type == 'html' else 'col-5') + ' ml-auto'"/>
+                    <div class="address row">
+                        <t t-if="information_block">
+                            <t t-set="colclass" t-value="'col-5 offset-1'"/>
+                            <div name="information_block" class="col-6">
+                                <t t-raw="information_block"/>
+                            </div>
+                        </t>
+                        <div name="address" t-att-class="colclass">
+                            <t t-raw="address"/>
+                        </div>
+                    </div>
+                    <br />
+                    <h2>
+                        <span t-if="o.type == 'out_invoice' and o.state in ('open', 'in_payment', 'paid')">Facture</span>
+                        <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Facture brouillon</span>
+                        <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Facture annulée</span>
+                        <span t-if="o.type == 'out_refund'">Avoir</span>
+                        <span t-if="o.type == 'in_refund'">Avoir</span>
+                        <span t-if="o.type == 'in_invoice'">Facture fournisseur</span>
+                        <span t-field="o.number"/> du <span t-field="o.date_invoice"/>
+                    </h2>
+                    <br />
+
+                    <p><b>Affaire : </b><span t-field="o.is_affaire_id.nature_affaire"/></p>
+
+
+
+                    <t t-set="phases" t-value="o.get_invoice_line()"/>
+                    <p t-raw="phases"/>
+
+
+                    <!--
+                    <table t-attf-class="table table-sm" name="invoice_line_table">
+                        <thead>
+                            <tr>
+                                <t t-set="colspan" t-value="6"/>
+                                <th class="text-left"><span>Description</span></th>
+                                <th class="text-right"><span>Quantité</span></th>
+                                <th class="text-right"><span>Prix unitaire</span></th>
+                                <th class="text-right"><span>Montant HT</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice_tbody">
+                            <t t-foreach="o.invoice_line_ids" t-as="line">
+                                <tr class="'bg-200 font-weight-bold'">
+                                    <td><span t-field="line.name"/></td>
+                                    <td class="text-right">
+                                        <span t-field="line.quantity"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="line.price_unit"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="line.price_subtotal" />
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    -->
+
+                    <div class="clearfix">
+                        <div id="total" class="row">
+                            <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
+                                <table class="table table-sm">
+                                    <tr class="border-black" style="border-bottom:1px solid #dddddd;">
+                                        <td><strong>Total HT</strong></td>
+                                        <td class="text-right">
+                                            <span t-field="o.amount_untaxed"/>
+                                        </td>
+                                    </tr>
+                                    <t t-foreach="o.amount_by_group" t-as="amount_by_group">
+                                        <tr style="border-bottom:1px solid #dddddd;">
+                                            <t t-if="len(o.tax_line_ids) == 1 and o.amount_untaxed == amount_by_group[2]">
+                                                <td><span t-esc="amount_by_group[0]"/></td>
+                                                <td class="text-right">
+                                                    <span t-esc="amount_by_group[3]" />
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td>
+                                                    <span t-esc="amount_by_group[0]"/>
+                                                    <span>&amp;nbsp;<span>on</span>
+                                                        <t t-esc="amount_by_group[4]"/>
+                                                    </span>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="amount_by_group[3]"/>
+                                                </td>
+                                            </t>
+                                        </tr>
+                                    </t>
+                                    <tr class="border-black">
+                                        <td><strong>Total TTC</strong></td>
+                                        <td class="text-right">
+                                            <span t-field="o.amount_total"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <br />
+                    <p>En votre aimable règlement par virement sur le compte bancaire ouvert au nom de <span t-field="o.company_id.phone"/> :</p>
+                    <table t-attf-class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th class="text-left"><span>Compte bancaire</span></th>
+                                <th class="text-left"><span>Banque</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="o.company_id.is_compte_banque_ids" t-as="l">
+                                <tr>
+                                    <td><span t-field="l.name"/></td>
+                                    <td><span t-field="l.banque"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

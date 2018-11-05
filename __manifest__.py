@@ -17,6 +17,7 @@ InfoSaône - Module Odoo 12 pour Opta-S / SGP
     ],
     'data' : [
         'security/ir.model.access.csv',
+        'views/res_company_views.xml',
         'views/res_users_views.xml',
         'views/res_partner_views.xml',
         'views/product_views.xml',
@@ -26,6 +27,8 @@ InfoSaône - Module Odoo 12 pour Opta-S / SGP
         'views/is_frais_views.xml',
         'views/account_invoice_view.xml',
         'views/menu.xml',
+        'report/report_templates.xml',
+        'report/report_invoice.xml',
     ],
     'installable': True,
     'application': True,
