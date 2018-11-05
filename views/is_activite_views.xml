@@ -131,6 +131,7 @@
                 <field name="nb_realise"       sum="Total"/>
                 <field name="nb_facturable"    sum="Total"/>
                 <field name="total_facturable" sum="Total"/>
+                <field name="state"/>
                 <field name="invoice_id"/>
             </tree>
         </field>

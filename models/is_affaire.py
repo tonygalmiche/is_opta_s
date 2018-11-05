@@ -426,3 +426,24 @@ class IsAffaire(models.Model):
             return res
 
 
+    @api.multi
+    def creation_facture(self, vals):
+        for obj in self:
+            res= {
+                'name': 'Facture',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'res_model': 'account.invoice',
+                'type': 'ir.actions.act_window',
+                'view_id': self.env.ref('account.invoice_form').id,
+                'domain': [('type','=','out_invoice')],
+                'context': {
+                    'default_partner_id': obj.partner_id.id,
+                    'default_is_affaire_id': obj.id,
+                    'default_type'         : 'out_invoice',
+                    'default_journal_type' : 'sale',
+                }
+            }
+            return res
+
+

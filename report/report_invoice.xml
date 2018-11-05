@@ -10,7 +10,9 @@
                             font-size:14pt;
                             font-weight: bold;
                         }
-
+                        td,th{
+                            font-size:10pt;
+                        }
                     </style>
 
 

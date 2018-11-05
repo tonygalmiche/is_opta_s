@@ -52,6 +52,12 @@
                         string="Nouvelle fiche de frais"
                         states="affaire_gagnee"
                     />
+                    <button 
+                        name="creation_facture" 
+                        type="object"
+                        string="Nouvelle facture"
+                        states="affaire_gagnee"
+                    />
                     <field 
                         name="state" 
                         widget="statusbar"
@@ -193,9 +199,8 @@
                                         <field name="nb_realise"       sum="Total"/>
                                         <field name="nb_facturable"    sum="Total"/>
                                         <field name="total_facturable" sum="Total"/>
-                                        <field name="facture_sur_accompte"/>
-                                        <field name="point_cle"/>
                                         <field name="state" readonly="1"/>
+                                        <field name="invoice_id"/>
                                     </tree>
                                 </field>
                             </group>
