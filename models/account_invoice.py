@@ -21,12 +21,49 @@ class AccountInvoiceLine(models.Model):
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
+
+
+    state = fields.Selection([
+            ('draft','Draft'),
+            ('diffuse','Diffusé'),
+            ('open', 'Open'),
+            ('in_payment', 'In Payment'),
+            ('paid', 'Paid'),
+            ('cancel', 'Cancelled'),
+        ], string='État', index=True, readonly=True, default='draft',
+        track_visibility='onchange', copy=False)
+
+
+
+
     is_affaire_id      = fields.Many2one('is.affaire', 'Affaire')
     is_activites       = fields.Many2many('is.activite', 'is_account_invoice_activite_rel', 'invoice_id', 'activite_id')
     is_detail_activite = fields.Boolean('Afficher le détail des activités',default=True)
     is_phase           = fields.Boolean('Afficher les phases',default=True)
     is_intervenant     = fields.Boolean('Afficher les intervenants sur la facture')
     is_prix_unitaire   = fields.Boolean('Afficher les quantités et prix unitaire sur la facture')
+
+
+
+    @api.multi
+    def vers_diffuse_action(self, vals):
+        for obj in self:
+            obj.state='diffuse'
+
+
+    @api.multi
+    def vers_brouillon_action(self, vals):
+        for obj in self:
+            obj.state='draft'
+
+
+    @api.multi
+    def vers_open_action(self, vals):
+        for obj in self:
+            obj.state='draft'
+            obj.action_invoice_open()
+
+
 
 
     @api.multi
@@ -85,22 +122,23 @@ class AccountInvoice(models.Model):
                         line.price_unit = frais.montant_forfait
 
                     for ligne in frais.ligne_ids:
-                        account_id=ligne.product_id.property_account_income_id.id
-                        if account_id==False:
-                            raise Warning(u"Compte de revenu non renseigné pour l'article "+ligne.product_id.name)
-                        vals={
-                            'invoice_id'           : obj.id,
-                            'product_id'           : ligne.product_id.id,
-                            'name'                 : ligne.product_id.name,
-                            'price_unit'           : 0,
-                            'account_id'           : account_id,
-                            'is_activite_id'       : act.id,
-                            'is_frais_ligne_id'    : ligne.id,
-                        }
-                        line=self.env['account.invoice.line'].create(vals)
-                        line._onchange_product_id()
-                        line.quantity   = 1
-                        line.price_unit = ligne.montant_ttc
+                        if ligne.refacturable=='oui':
+                            account_id=ligne.product_id.property_account_income_id.id
+                            if account_id==False:
+                                raise Warning(u"Compte de revenu non renseigné pour l'article "+ligne.product_id.name)
+                            vals={
+                                'invoice_id'           : obj.id,
+                                'product_id'           : ligne.product_id.id,
+                                'name'                 : ligne.product_id.name,
+                                'price_unit'           : 0,
+                                'account_id'           : account_id,
+                                'is_activite_id'       : act.id,
+                                'is_frais_ligne_id'    : ligne.id,
+                            }
+                            line=self.env['account.invoice.line'].create(vals)
+                            line._onchange_product_id()
+                            line.quantity   = 1
+                            line.price_unit = ligne.montant_ttc
             obj.compute_taxes()
 
 

@@ -77,6 +77,7 @@
                             context="{'default_activite_id': active_id}"
                         >
                             <tree>
+                                <button string="Suivi du temps" name="acceder_suivi_temps_action" type="object" icon="fa-search-plus"/>
                                 <button string="Copie" name="copie_suivi_temps_action" type="object" icon="fa-files-o "/>
                                 <field name="type_activite"/>
                                 <field name="date_activite"/>
@@ -90,8 +91,6 @@
                                 <field name="temps_deplacement"    widget="float_time" sum="Total"/>
                                 <field name="detail_activite"/>
                             </tree>
-
-
                             <form>
                                 <sheet>
                                     <group>
@@ -126,6 +125,7 @@
                             context="{'default_activite_id': active_id}"
                         >
                             <tree>
+                                <button string="Frais" name="acceder_frais_action" type="object" icon="fa-search-plus"/>
                                 <field name="chrono_long"/>
                                 <field name="date_creation"/>
                                 <field name="createur_id"/>

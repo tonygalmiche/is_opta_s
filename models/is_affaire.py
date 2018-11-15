@@ -353,7 +353,7 @@ class IsAffaire(models.Model):
 
 
     intervenant_ids    = fields.One2many('is.affaire.intervenant', 'affaire_id', u"Intervenants liés à l'affaire")
-    consultant_ids     = fields.Many2many('res.users','is_affaire_consultant_rel','affaire_id','consultant_id', string="Consultants liées à cette affaire", compute='_compute_consultant_ids', readonly=True, store=True)
+    consultant_ids     = fields.Many2many('res.users','is_affaire_consultant_rel','affaire_id','consultant_id', string="Consultants liés à cette affaire", compute='_compute_consultant_ids', readonly=True, store=True)
 
     convention_ids     = fields.Many2many('ir.attachment', 'is_affaire_convention_rel', 'doc_id', 'file_id', 'Conventions / Contrats')
     activer_phases     = fields.Boolean("Activer la gestion des phases", default=False)

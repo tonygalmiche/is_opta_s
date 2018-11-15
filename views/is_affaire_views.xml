@@ -235,6 +235,7 @@
                             <group>
                                 <field name="suivi_temps_ids" nolabel="1" readonly="1">
                                     <tree>
+                                        <button string="Suivi du temps" name="acceder_suivi_temps_action" type="object" icon="fa-search-plus"/>
                                         <field name="activite_id"/>
                                         <field name="type_activite"/>
                                         <field name="date_activite"/>

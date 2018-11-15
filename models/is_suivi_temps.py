@@ -55,7 +55,26 @@ class IsSuiviTemps(models.Model):
     @api.multi
     def copie_suivi_temps_action(self, vals):
         for obj in self:
-            print(obj)
             obj.copy()
+
+
+
+    @api.multi
+    def acceder_suivi_temps_action(self):
+        for obj in self:
+            res= {
+                'name': 'Suivi du temps',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'res_model': 'is.suivi.temps',
+                'res_id': obj.id,
+                'type': 'ir.actions.act_window',
+            }
+            return res
+
+
+
+
+
 
 

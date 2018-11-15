@@ -6,7 +6,16 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form" />
             <field name="arch" type="xml">
-                <xpath expr="//button[@name='action_invoice_open']" position="before">
+
+
+                <xpath expr="//button[@name='preview_invoice']" position="replace"/>
+                <xpath expr="//button[@name='action_invoice_sent']" position="replace"/>
+
+
+
+
+
+                <xpath expr="//button[@name='action_invoice_open']" position="replace">
                     <button
                         name="activites_vers_lignes_action"
                         type="object"
@@ -14,6 +23,35 @@
                         class="oe_highlight"
                         states="draft"
                     />
+
+
+                    <button
+                        name="vers_diffuse_action"
+                        type="object"
+                        string="vers Diffusé"
+                        class="oe_highlight"
+                        states="draft"
+                    />
+
+                    <button
+                        name="vers_brouillon_action" 
+                        states="diffuse" 
+                        string="vers Brouillon" 
+                        type="object" 
+                        groups="account.group_account_invoice"
+                    />
+
+                    <button
+                        name="vers_open_action"
+                        type="object" 
+                        states="diffuse"
+                        string="Valider"
+                        class="oe_highlight o_invoice_validate" 
+                        groups="account.group_account_invoice"
+                    />
+
+
+
                 </xpath>
                 <field name="user_id" position="after">
                     <field name="is_detail_activite" />
@@ -30,43 +68,27 @@
                     <field name="discount" invisible="1"/>
                 </xpath>
 
-                <xpath expr="//page[1]" position="after" >
-                    <page string="Activités">
-                        <group>
-                            <field name="is_affaire_id" domain="[('partner_id','=',partner_id)]"/>
-                        </group>
-                        <group>
-                            <field 
-                                name="is_activites"
-                                nolabel="1" 
-                                domain="[('partner_id','=',partner_id),('affaire_id','=',is_affaire_id),('invoice_id','=',False),('state','=','valide')]"
-                                context="{'tree_view_ref': 'is_opta_s.is_activite_invoice_tree'}"
-                            > 
-                                <tree>
-                                    <button string="Activité" name="acceder_activite_action" type="object" icon="fa-search-plus"/>
-                                    <field name="phase_activite_id" />
-                                    <field name="nature_activite"/>
-                                    <field name="dates_intervention"/>
-                                    <field name="intervenant_id"/>
-                                    <field name="total_facturable" sum="Total"/>
-                                </tree>
-                            </field>
-
-
-                            <!--
-                            <field 
-                                name="is_activites"
-                                nolabel="1" 
-                                domain="[('affaire_id','=',is_affaire_id)]"
-                                context="{'tree_view_ref': 'is_opta_s.is_activite_invoice_tree'}"
-                            /> 
-                            -->
-
-
-
-
-                        </group>
-                    </page>
+                <xpath expr="//notebook" position="before" >
+                    <group string="Activités à facturer">
+                        <field name="is_affaire_id" domain="[('partner_id','=',partner_id)]"/>
+                    </group>
+                    <group>
+                        <field 
+                            name="is_activites"
+                            nolabel="1" 
+                            domain="[('partner_id','=',partner_id),('affaire_id','=',is_affaire_id),('invoice_id','=',False),('state','=','valide')]"
+                            context="{'tree_view_ref': 'is_opta_s.is_activite_invoice_tree'}"
+                        > 
+                            <tree>
+                                <button string="Activité" name="acceder_activite_action" type="object" icon="fa-search-plus"/>
+                                <field name="phase_activite_id" />
+                                <field name="nature_activite"/>
+                                <field name="dates_intervention"/>
+                                <field name="intervenant_id"/>
+                                <field name="total_facturable" sum="Total"/>
+                            </tree>
+                        </field>
+                    </group>
                 </xpath>
             </field>
         </record>
