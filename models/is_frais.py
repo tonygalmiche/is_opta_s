@@ -34,6 +34,7 @@ class IsFraisLigne(models.Model):
 
 class IsFrais(models.Model):
     _name = 'is.frais'
+    _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _description = "Frais"
     _order = 'chrono desc'
 
@@ -57,7 +58,7 @@ class IsFrais(models.Model):
             total_frais           = 0
             total_tva_recuperable = 0
             for l in obj.ligne_ids:
-                if l.effectuee_par_id.name=='Consultant':
+                if l.effectuee_par_id.name=='CONSULTANT':
                     total_consultant      += l.montant_ttc
                 if l.refacturable=='oui':
                     total_refacturable    += l.montant_ttc
@@ -67,11 +68,6 @@ class IsFrais(models.Model):
             obj.total_refacturable    = total_refacturable
             obj.total_frais           = total_frais
             obj.total_tva_recuperable = total_tva_recuperable
-
-
-#    @api.onchange('activite_id')
-#    def onchange_product(self):
-#        self.affaire_id = self.active_id.affaire_id.id
 
 
     @api.onchange('forfait_jour_id')
@@ -87,13 +83,13 @@ class IsFrais(models.Model):
     date_creation    = fields.Date("Date de création", required=True, index=True, default=fields.Date.today())
     mois_creation    = fields.Char("Mois" , compute='_compute', readonly=True, store=True)
     annee_creation   = fields.Char("Année", compute='_compute', readonly=True, store=True)
-    affaire_id       = fields.Many2one('is.affaire' , 'Affaire' , required=True)
+    affaire_id       = fields.Many2one('is.affaire' , 'Affaire' , required=False)
     activite_id      = fields.Many2one('is.activite', 'Activite', required=True)
     type_activite    = fields.Selection([
             ('formation', u'Formation'),
             ('conseil'  , u'Conseil'),
             ('divers'   , u'Divers'),
-        ], u"Type d'activité", index=True)
+        ], u"Type d'activité", index=True, required=True)
     frais_forfait    = fields.Boolean("Frais au forfait",default=False)
     nb_jours         = fields.Integer("Nb jours (si frais au forfait)")
     forfait_jour_id  = fields.Many2one('is.affaire.forfait.jour', "Forfait jour de l'affaire")
@@ -111,6 +107,10 @@ class IsFrais(models.Model):
 
     @api.model
     def create(self, vals):
+        if 'activite_id' in vals:
+            activite_id=vals['activite_id']
+            affaire_id=self.env['is.activite'].browse(activite_id).affaire_id.id
+            vals['affaire_id']=affaire_id
         vals['chrono'] = self.env['ir.sequence'].next_by_code('is.frais')
         res = super(IsFrais, self).create(vals)
         return res

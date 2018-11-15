@@ -26,6 +26,7 @@
                 <field name="is_type_intervenant"/>
                 <field name="is_consultant_id"/>
                 <field name="property_account_income_id"/>
+                <field name="property_account_expense_id"/>
             </tree>
         </field>
     </record>

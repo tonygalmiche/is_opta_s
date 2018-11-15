@@ -4,6 +4,7 @@ from odoo import api, fields, models, _
 
 class IsActivite(models.Model):
     _name = 'is.activite'
+    _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _description = "Activité"
     _order = 'affaire_id,nature_activite'
 

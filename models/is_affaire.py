@@ -55,7 +55,8 @@ class IsAffaireTauxJournalier(models.Model):
             ('heure'        , 'Heure'),
             ('demie_journee', '1/2 journée'),
             ('journee'      , 'Journée'),
-            ('forfait'      , 'Forfait')
+            ('forfait'      , 'Forfait'),
+            ('participant'  , 'Participant'),
         ], u"Unité",)
     montant = fields.Float("Montant intervention", digits=(14,2))
     commentaire = fields.Char("Commentaire")
@@ -68,7 +69,7 @@ class IsAffaireTauxJournalier(models.Model):
             x=str(obj.montant) + '€ / ' + str(obj.unite)
             if obj.commentaire:
                 x+=' - ' + str(obj.commentaire)
-        result.append((obj.id, x))
+            result.append((obj.id, x))
         return result
 
 
@@ -185,8 +186,8 @@ class IsAffairePhase(models.Model):
             obj.total_vendu=vendu
             obj.montant_restant=obj.total_vendu-realise
             avancement=0
-            if obj.montant_realise>0:
-                avancement=100*obj.total_vendu/obj.montant_realise
+            if vendu>0:
+                avancement=100*realise/vendu
             obj.avancement=avancement
 
 
@@ -219,6 +220,12 @@ class IsAffairePhaseActivite(models.Model):
                 realise+=act.total_facturable
             obj.montant_realise=realise
             obj.montant_restant=obj.total_vendu-realise
+            avancement=0
+            if obj.total_vendu>0:
+                avancement=100*realise/obj.total_vendu
+            obj.avancement=avancement
+
+
 
 
     affaire_id       = fields.Many2one('is.affaire', 'Affaire'      , required=True, ondelete='cascade')
@@ -229,6 +236,7 @@ class IsAffairePhaseActivite(models.Model):
     total_vendu      = fields.Float("Total vendu"            , digits=(14,2), compute='_compute'        , readonly=True, store=True)
     montant_realise  = fields.Float("Montant réalisé"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
     montant_restant  = fields.Float("Montant restant"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
+    avancement       = fields.Integer("Avancement"           , compute='_compute_realise', readonly=True, store=False)
 
 
     @api.multi
@@ -269,6 +277,7 @@ class IsAffairePhaseActivite(models.Model):
 
 class IsAffaire(models.Model):
     _name = 'is.affaire'
+    _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _description = "Affaire"
     _order = 'name desc'
 
@@ -294,11 +303,14 @@ class IsAffaire(models.Model):
             obj.consultant_ids=[(6,0,ids)]
 
 
-        #'taxe_ids'          : ,
-        #self.env['is.affaire.consultant.rel'].create(vals)
-
-
-#'is_affaire_consultant_rel','affaire_id','consultant_id',
+    def _compute_realise(self):
+        for obj in self:
+            activites=self.env['is.activite'].search([('affaire_id', '=', obj.id)])
+            realise=0
+            for act in activites:
+                realise+=act.total_facturable
+            obj.montant_realise=realise
+            obj.montant_restant=obj.ca_previsionnel-realise
 
 
     name                 = fields.Char("Code affaire court", readonly=True, index=True)
@@ -311,7 +323,9 @@ class IsAffaire(models.Model):
     date_creation        = fields.Date("Date de création", default=fields.Date.today())
     annee_creation       = fields.Char("Année", compute='_compute', readonly=True, store=True)
     createur_id          = fields.Many2one('res.users', "Créateur", default=lambda self: self.env.user)
-    ca_previsionnel      = fields.Integer("CA prévisionnel")
+    ca_previsionnel      = fields.Float("CA prévisionnel / Vendu", digits=(14,2))
+    montant_realise      = fields.Float("Montant réalisé"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
+    montant_restant      = fields.Float("Montant restant"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
     fiscal_position_id   = fields.Many2one('account.fiscal.position', "Position fiscale")
     proposition_ids      = fields.Many2many('ir.attachment', 'is_affaire_propositions_rel', 'doc_id', 'file_id', 'Propositions commerciales')
     cause_id             = fields.Many2one('is.cause', "Cause si offre perdue")

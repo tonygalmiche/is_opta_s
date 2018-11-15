@@ -87,10 +87,41 @@
                                 <field name="temps_deplacement"    widget="float_time"/>
                                 <field name="detail_activite"/>
                             </tree>
+
+
+                            <form>
+                                <sheet>
+                                    <group>
+                                        <group>
+                                            <field name="type_activite"/>
+                                            <field name="date_activite"/>
+                                            <field name="nb_stagiaires"/>
+                                            <field name="nb_heures"            widget="float_time"/>
+                                            <field name="realise_st"/>
+                                        </group>
+                                        <group>
+                                            <field name="aller_heure_depart"   widget="float_time"/>
+                                            <field name="aller_heure_arrivee"  widget="float_time"/>
+                                            <field name="retour_heure_depart"  widget="float_time"/>
+                                            <field name="retour_heure_arrivee" widget="float_time"/>
+                                            <field name="temps_deplacement"    widget="float_time"/>
+                                         </group>
+                                    </group>
+                                    <group>
+                                        <field name="detail_activite"/>
+                                    </group>
+                                 </sheet>
+                            </form>
+
+
                         </field>
                     </group>
                     <group>
-                        <field name="frais_ids" nolabel="1" readonly="1">
+                        <field 
+                            name="frais_ids"
+                            nolabel="1"
+                            context="{'default_activite_id': active_id}"
+                        >
                             <tree>
                                 <field name="chrono_long"/>
                                 <field name="date_creation"/>
@@ -104,15 +135,59 @@
                                 <field name="parcours"/>
                                 <field name="dates"/>
                             </tree>
+                            <form>
+                                <group>
+                                    <group>
+                                        <field name="chrono_long"/>
+                                        <field name="type_activite"/>
+                                        <field name="frais_forfait"/>
+                                        <field name="nb_jours"        attrs="{'invisible': [('frais_forfait','!=', True)]}"/>
+                                        <field name="forfait_jour_id" attrs="{'invisible': [('frais_forfait','!=', True)]}" domain="[('affaire_id','=',active_id.affaire_id)]"/>
+                                        <field name="montant_forfait" attrs="{'invisible': [('frais_forfait','!=', True)]}"/>
+                                        <field name="parcours"/>
+                                        <field name="dates"/>
+                                    </group>
+                                    <group>
+                                        <field name="createur_id"/>
+                                        <field name="date_creation"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="ligne_ids" nolabel="1">
+                                        <tree editable="bottom">
+                                            <field name="partner_id"/>
+                                            <field name="product_id"/>
+                                            <field name="effectuee_par_id"/>
+                                            <field name="montant_ttc"/>
+                                            <field name="montant_tva"/>
+                                            <field name="refacturable"/>
+                                            <field name="commentaire"/>
+                                            <field name="justificatif_joint"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group>
+                                    <field name="justificatif_ids" widget="many2many_binary"/>
+                                </group>
+                                <group>
+                                    <field name="total_consultant"/>
+                                    <field name="total_refacturable"/>
+                                    <field name="total_frais"/>
+                                    <field name="total_tva_recuperable"/>
+                                </group>
+                            </form>
                         </field>
                     </group>
 
                     <group>
                         <field name="invoice_id"/>
                     </group>
-
-
-                 </sheet>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
             </form>
         </field>
     </record>
