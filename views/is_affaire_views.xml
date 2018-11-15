@@ -161,7 +161,7 @@
                                         <field name="total_vendu"     sum="Total"/>
                                         <field name="montant_realise" sum="Total"/>
                                         <field name="montant_restant" sum="Total"/>
-                                        <field name="avancement"/>
+                                        <field name="avancement" widget="progressbar"/>
                                     </tree>
                                 </field>
                             </group>
@@ -177,7 +177,7 @@
                                         <field name="total_vendu"     sum="Total"/>
                                         <field name="montant_realise" sum="Total"/>
                                         <field name="montant_restant" sum="Total"/>
-                                        <field name="avancement"/>
+                                        <field name="avancement" widget="progressbar"/>
                                     </tree>
                                 </field>
                             </group>
