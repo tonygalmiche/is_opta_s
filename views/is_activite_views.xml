@@ -50,6 +50,7 @@
                     <group>
                         <group>
                             <field name="affaire_id"/>
+                            <field name="partner_id"/>
                             <field name="phase_activite_id" domain="[('affaire_id','=',affaire_id)]" />
                             <field name="nature_activite"  default_focus="1"/>
                             <field name="date_debut"/>
@@ -63,28 +64,30 @@
                             <field name="nb_facturable"/>
                             <field name="total_facturable"/>
                             <field name="facture_sur_accompte"/>
+                            <field name="nb_stagiaires" attrs="{'invisible': [('nb_stagiaires','=', 0)]}"/>
                         </group>
                     </group>
                     <group>
                         <field name="point_cle"/>
                     </group>
-                    <group>
+                    <group string="Suivi du temps">
                         <field 
                             name="suivi_temps_ids"
                             nolabel="1"
                             context="{'default_activite_id': active_id}"
                         >
                             <tree>
+                                <button string="Copie" name="copie_suivi_temps_action" type="object" icon="fa-files-o "/>
                                 <field name="type_activite"/>
                                 <field name="date_activite"/>
-                                <field name="nb_stagiaires"/>
-                                <field name="nb_heures"            widget="float_time"/>
+                                <field name="nb_stagiaires"                            sum="Total"/>
+                                <field name="nb_heures"            widget="float_time" sum="Total"/>
                                 <field name="realise_st"/>
                                 <field name="aller_heure_depart"   widget="float_time"/>
                                 <field name="aller_heure_arrivee"  widget="float_time"/>
                                 <field name="retour_heure_depart"  widget="float_time"/>
                                 <field name="retour_heure_arrivee" widget="float_time"/>
-                                <field name="temps_deplacement"    widget="float_time"/>
+                                <field name="temps_deplacement"    widget="float_time" sum="Total"/>
                                 <field name="detail_activite"/>
                             </tree>
 
@@ -116,7 +119,7 @@
 
                         </field>
                     </group>
-                    <group>
+                    <group string="Suivi des frais">
                         <field 
                             name="frais_ids"
                             nolabel="1"
@@ -197,6 +200,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="affaire_id"/>
+                <field name="partner_id"/>
                 <field name="phase_activite_id"/>
                 <field name="nature_activite"/>
                 <field name="date_debut"/>
@@ -236,6 +240,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="affaire_id"/>
+                <field name="partner_id"/>
                 <field name="phase_activite_id"/>
                 <field name="nature_activite"/>
                 <field name="intervenant_id"/>

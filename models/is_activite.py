@@ -17,21 +17,34 @@ class IsActivite(models.Model):
                 obj.total_facturable=obj.montant*obj.nb_facturable
 
 
+    def _compute_nb_stagiaires(self):
+        for obj in self:
+            nb=0
+            if obj.suivi_temps_ids:
+                for line in obj.suivi_temps_ids:
+                    nb+=line.nb_stagiaires
+                nb=nb/len(obj.suivi_temps_ids)
+            obj.nb_stagiaires=nb
+
+
+    @api.onchange('affaire_id')
+    def onchange_affaire_id(self):
+        self.partner_id = self.affaire_id.partner_id.id
+
+
     affaire_id           = fields.Many2one('is.affaire', 'Affaire', required=True,index=True)
+    partner_id           = fields.Many2one('res.partner', "Client facturable", required=True, index=True, domain=[('customer','=',True),('is_company','=',True)])
     phase_activite_id    = fields.Many2one('is.affaire.phase.activite', 'Sous-phase',index=True)
     nature_activite      = fields.Char("Nature de l'activité"     , required=True, index=True)
     date_debut           = fields.Date("Date de début de l'activité", required=True, index=True)
     dates_intervention   = fields.Char("Dates des jours d'intervention")
-
-    #acteur_id            = fields.Many2one('res.users', "Acteur", default=lambda self: self.env.user)
-    #sous_traitant_id     = fields.Many2one('res.partner', "Sous-traitant (ou co-traitant)", domain=[('supplier','=',True),('is_company','=',True)])
     intervenant_id        = fields.Many2one('is.affaire.intervenant', "Intervenant", required=True,index=True)
-
     tarification_id      = fields.Many2one('is.affaire.taux.journalier', "Tarification")
     montant              = fields.Float("Montant unitaire", compute='_compute', readonly=True, store=True, digits=(14,2))
     nb_realise           = fields.Float("Nb unités réalisées"  , digits=(14,2))
     nb_facturable        = fields.Float("Nb unités facturables", digits=(14,2))
     total_facturable     = fields.Float("Total facturable", compute='_compute', readonly=True, store=True, digits=(14,2))
+    nb_stagiaires        = fields.Float("Nombre de stagiaires calculé", compute='_compute_nb_stagiaires', readonly=True, store=False, digits=(14,1))
     facture_sur_accompte = fields.Boolean("Facture sur acompte")
     point_cle            = fields.Text("Points clés de l'activité réalisée")
     suivi_temps_ids      = fields.One2many('is.suivi.temps', 'activite_id', u'Suivi du temps')
@@ -93,6 +106,10 @@ class IsActivite(models.Model):
                 'type': 'ir.actions.act_window',
             }
             return res
+
+
+
+
 
 
     @api.multi

@@ -15,7 +15,14 @@ class IsSuiviTemps(models.Model):
             obj.temps_deplacement=tps
 
 
+    @api.depends('activite_id')
+    def _compute_affaire_id(self):
+        for obj in self:
+            obj.affaire_id=obj.activite_id.affaire_id.id
+
+
     activite_id          = fields.Many2one('is.activite', 'Activité', required=True)
+    affaire_id           = fields.Many2one('is.affaire', compute='_compute_affaire_id', readonly=True, store=True)
     type_activite        = fields.Selection([
             ('formation'  , u'Formation'),
             ('conseil'    , u'Conseil'),
@@ -45,14 +52,10 @@ class IsSuiviTemps(models.Model):
         return result
 
 
-#    @api.multi
-#    def _get_date_activite(self):
-#        print('context=',self._context)
-#        for obj in self:
-#            print(obj)
-
-
-
-
+    @api.multi
+    def copie_suivi_temps_action(self, vals):
+        for obj in self:
+            print(obj)
+            obj.copy()
 
 

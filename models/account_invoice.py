@@ -21,11 +21,12 @@ class AccountInvoiceLine(models.Model):
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
-    is_affaire_id    = fields.Many2one('is.affaire', 'Affaire')
-    is_activites     = fields.Many2many('is.activite', 'is_account_invoice_activite_rel', 'invoice_id', 'activite_id')
-    is_phase         = fields.Boolean('Afficher les phases',default=True)
-    is_intervenant   = fields.Boolean('Afficher les intervenants sur la facture')
-    is_prix_unitaire = fields.Boolean('Afficher les quantités et prix unitaire sur la facture')
+    is_affaire_id      = fields.Many2one('is.affaire', 'Affaire')
+    is_activites       = fields.Many2many('is.activite', 'is_account_invoice_activite_rel', 'invoice_id', 'activite_id')
+    is_detail_activite = fields.Boolean('Afficher le détail des activités',default=True)
+    is_phase           = fields.Boolean('Afficher les phases',default=True)
+    is_intervenant     = fields.Boolean('Afficher les intervenants sur la facture')
+    is_prix_unitaire   = fields.Boolean('Afficher les quantités et prix unitaire sur la facture')
 
 
     @api.multi
@@ -93,6 +94,30 @@ class AccountInvoice(models.Model):
 
 
     @api.multi
+    def _add_tr_total_sous_phase(self,sous_phase):
+        for obj in self:
+            colspan=1
+            if obj.is_intervenant:
+                colspan+=2
+            if obj.is_prix_unitaire:
+                colspan+=2
+            montant=0
+            for line in obj.invoice_line_ids:
+                if line.is_activite_id.phase_activite_id.id==sous_phase.id:
+                    if line.is_frais_ligne_id.id==False:
+                        montant+=line.price_subtotal
+            html='<tr>'
+            html+='<td class="text-left bg-100" colspan="'+str(colspan)+'">' +sous_phase.name+'</td>'
+            html+='<td class="text-right bg-100"">'+f2(montant)+' €</td>'
+            html+='</tr>'
+            return html
+
+
+
+
+
+
+    @api.multi
     def get_invoice_line(self):
         for obj in self:
             colspan=3
@@ -140,11 +165,19 @@ class AccountInvoice(models.Model):
                     html+='<tr><td colspan="'+str(colspan)+'" class="bg-200">' +phase.name+'</td></tr>'
                     for sous_phase in sous_phase_ids:
                         if sous_phase.affaire_phase_id.id==phase.id:
-                            html+='<tr><td colspan="'+str(colspan)+'" class="bg-100">' +sous_phase.name+'</td></tr>'
+                            html+=self._add_tr_total_sous_phase(sous_phase)
+                            #if obj.is_detail_activite:
+                            #    html+='<tr><td colspan="'+str(colspan)+'" class="bg-100">' +sous_phase.name+'</td></tr>'
                             for line in obj.invoice_line_ids:
                                 if line.is_activite_id.phase_activite_id.id==sous_phase.id:
                                     if line.is_frais_ligne_id.id==False:
-                                        html+=self._add_tr(line)
+                                        if obj.is_detail_activite:
+                                            html+=self._add_tr(line)
+                            #if obj.is_detail_activite==False:
+                            #    html+=self._add_tr_total_sous_phase(sous_phase)
+
+
+
             else:
                 for line in obj.invoice_line_ids:
                     if line.is_frais_ligne_id.id==False:

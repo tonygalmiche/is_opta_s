@@ -191,6 +191,7 @@
                                 >
                                     <tree>
                                         <button string="Activité" name="acceder_activite_action" type="object" icon="fa-search-plus"/>
+                                        <field name="partner_id"/>
                                         <field name="phase_activite_id" />
                                         <field name="nature_activite"/>
                                         <field name="date_debut"/>
@@ -226,6 +227,26 @@
                                         <field name="montant_forfait"/>
                                         <field name="parcours"/>
                                         <field name="dates"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Suivi du temps" states="affaire_gagnee">
+                            <group>
+                                <field name="suivi_temps_ids" nolabel="1" readonly="1">
+                                    <tree>
+                                        <field name="activite_id"/>
+                                        <field name="type_activite"/>
+                                        <field name="date_activite"/>
+                                        <field name="nb_stagiaires"                            sum="Total"/>
+                                        <field name="nb_heures"            widget="float_time" sum="Total"/>
+                                        <field name="realise_st"/>
+                                        <field name="aller_heure_depart"   widget="float_time"/>
+                                        <field name="aller_heure_arrivee"  widget="float_time"/>
+                                        <field name="retour_heure_depart"  widget="float_time"/>
+                                        <field name="retour_heure_arrivee" widget="float_time"/>
+                                        <field name="temps_deplacement"    widget="float_time" sum="Total"/>
+                                        <field name="detail_activite"/>
                                     </tree>
                                 </field>
                             </group>

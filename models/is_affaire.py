@@ -361,6 +361,7 @@ class IsAffaire(models.Model):
     activite_phase_ids = fields.One2many('is.affaire.phase.activite', 'affaire_id', u'Sous-phases')
     activite_ids       = fields.One2many('is.activite', 'affaire_id', u'Activités')
     frais_ids          = fields.One2many('is.frais'   , 'affaire_id', u'Frais')
+    suivi_temps_ids    = fields.One2many('is.suivi.temps', 'affaire_id', u'Suivi du temps')
 
 
     @api.multi
@@ -443,6 +444,14 @@ class IsAffaire(models.Model):
     @api.multi
     def creation_facture(self, vals):
         for obj in self:
+            #** Recherche du client facturable sur les activités ***************
+            partner_id=obj.partner_id.id
+            for act in obj.activite_ids:
+                if act.invoice_id.id==False:
+                    print(act.partner_id.name,act.invoice_id)
+                    partner_id=act.partner_id.id
+                    break
+            #*******************************************************************
             res= {
                 'name': 'Facture',
                 'view_mode': 'form',
@@ -452,7 +461,7 @@ class IsAffaire(models.Model):
                 'view_id': self.env.ref('account.invoice_form').id,
                 'domain': [('type','=','out_invoice')],
                 'context': {
-                    'default_partner_id': obj.partner_id.id,
+                    'default_partner_id': partner_id,
                     'default_is_affaire_id': obj.id,
                     'default_type'         : 'out_invoice',
                     'default_journal_type' : 'sale',

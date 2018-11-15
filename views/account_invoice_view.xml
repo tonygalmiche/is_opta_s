@@ -16,6 +16,7 @@
                     />
                 </xpath>
                 <field name="user_id" position="after">
+                    <field name="is_detail_activite" />
                     <field name="is_phase"/>
                     <field name="is_intervenant"/>
                     <field name="is_prix_unitaire"/>
@@ -38,7 +39,7 @@
                             <field 
                                 name="is_activites"
                                 nolabel="1" 
-                                domain="[('affaire_id','=',is_affaire_id),('invoice_id','=',False),('state','=','valide')]"
+                                domain="[('partner_id','=',partner_id),('affaire_id','=',is_affaire_id),('invoice_id','=',False),('state','=','valide')]"
                                 context="{'tree_view_ref': 'is_opta_s.is_activite_invoice_tree'}"
                             > 
                                 <tree>
