@@ -20,10 +20,14 @@ class IsActivite(models.Model):
     def _compute_nb_stagiaires(self):
         for obj in self:
             nb=0
+            ct=0
             if obj.suivi_temps_ids:
                 for line in obj.suivi_temps_ids:
-                    nb+=line.nb_stagiaires
-                nb=nb/len(obj.suivi_temps_ids)
+                    if line.nb_stagiaires>0:
+                        nb+=line.nb_stagiaires
+                        ct+=1
+                if ct>0:
+                    nb=nb/ct
             obj.nb_stagiaires=nb
 
 

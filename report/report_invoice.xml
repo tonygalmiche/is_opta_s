@@ -15,8 +15,7 @@
                         }
                     </style>
 
-
-
+                    <!--
                     <t t-set="colclass" t-value="('col-md-5' if report_type == 'html' else 'col-5') + ' ml-auto'"/>
                     <div class="address row">
                         <t t-if="information_block">
@@ -25,8 +24,20 @@
                                 <t t-raw="information_block"/>
                             </div>
                         </t>
+
                         <div name="address" t-att-class="colclass">
                             <t t-raw="address"/>
+                        </div>
+                    </div>
+                    -->
+
+                    <div class="address row">
+                        <div class="col-5 offset-7">
+                            <t t-if="o.partner_id.name"><span t-field="o.partner_id.name"/><br /></t>
+                            <t t-if="o.partner_id.street"><span t-field="o.partner_id.street"/><br /></t>
+                            <t t-if="o.partner_id.street2"><span t-field="o.partner_id.street2"/><br /></t>
+                            <t t-if="o.partner_id.zip"><span t-field="o.partner_id.zip"/> </t>
+                            <t t-if="o.partner_id.city"><span t-field="o.partner_id.city"/><br /></t>
                         </div>
                     </div>
                     <br />
@@ -94,7 +105,7 @@
 
 
                     <br />
-                    <p>En votre aimable règlement par virement sur le compte bancaire ouvert au nom de <span t-field="o.company_id.phone"/> :</p>
+                    <p>En votre aimable règlement par virement sur le compte bancaire ouvert au nom de <span t-field="o.company_id.name"/> :</p>
                     <table t-attf-class="table table-sm">
                         <thead>
                             <tr>
