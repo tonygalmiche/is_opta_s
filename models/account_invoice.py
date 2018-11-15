@@ -54,8 +54,36 @@ class AccountInvoice(models.Model):
                 line.price_unit = act.montant
                 line.name       = act.nature_activite
 
+
+            #** Recherche article si frais au forfait **************************
+            products=self.env['product.product'].search([('name', '=', 'Frais au forfait')])
+            product=False
+            if products:
+                product=products[0]
+            else:
+                raise Warning(u"Aucun article 'Frais au forfait' trouvé")
+            #*******************************************************************
+
+
             for act in obj.is_activites:
                 for frais in act.frais_ids:
+                    if product and frais.frais_forfait:
+                        account_id=product.property_account_income_id.id
+                        if account_id==False:
+                            raise Warning(u"Compte de revenu non renseigné pour l'article "+product.name)
+                        vals={
+                            'invoice_id'           : obj.id,
+                            'product_id'           : product.id,
+                            'name'                 : product.name,
+                            'price_unit'           : 0,
+                            'account_id'           : account_id,
+                            'is_activite_id'       : act.id,
+                        }
+                        line=self.env['account.invoice.line'].create(vals)
+                        line._onchange_product_id()
+                        line.quantity   = frais.nb_jours
+                        line.price_unit = frais.montant_forfait
+
                     for ligne in frais.ligne_ids:
                         account_id=ligne.product_id.property_account_income_id.id
                         if account_id==False:
