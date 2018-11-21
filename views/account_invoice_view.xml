@@ -89,6 +89,9 @@
                             </tree>
                         </field>
                     </group>
+                    <group>
+                        <field name="is_frais" readonly="1"/>
+                    </group>
                 </xpath>
             </field>
         </record>

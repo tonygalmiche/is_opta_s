@@ -21,8 +21,6 @@ class AccountInvoiceLine(models.Model):
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
-
-
     state = fields.Selection([
             ('draft','Draft'),
             ('diffuse','Diffusé'),
@@ -34,14 +32,13 @@ class AccountInvoice(models.Model):
         track_visibility='onchange', copy=False)
 
 
-
-
     is_affaire_id      = fields.Many2one('is.affaire', 'Affaire')
     is_activites       = fields.Many2many('is.activite', 'is_account_invoice_activite_rel', 'invoice_id', 'activite_id')
     is_detail_activite = fields.Boolean('Afficher le détail des activités',default=True)
     is_phase           = fields.Boolean('Afficher les phases',default=True)
     is_intervenant     = fields.Boolean('Afficher les intervenants sur la facture')
     is_prix_unitaire   = fields.Boolean('Afficher les quantités et prix unitaire sur la facture')
+    is_frais           = fields.Monetary('Total des frais refacturables')
 
 
     @api.multi
@@ -138,6 +135,7 @@ class AccountInvoice(models.Model):
             #*******************************************************************
 
 
+            is_frais=0
             for act in obj.is_activites:
                 for frais in act.frais_ids:
                     if product and frais.frais_forfait:
@@ -175,7 +173,9 @@ class AccountInvoice(models.Model):
                             line._onchange_product_id()
                             line.quantity   = 1
                             line.price_unit = ligne.montant_ttc
+                            is_frais+=ligne.montant_ttc
             obj.compute_taxes()
+            obj.is_frais=is_frais
 
 
     @api.multi
@@ -215,14 +215,20 @@ class AccountInvoice(models.Model):
             return html
 
 
-    @api.multi
-    def affiche_frais(self):
-        for obj in self:
-            test=False
-            for line in obj.invoice_line_ids:
-                if line.is_frais_ligne_id:
-                    test=True
-            return test
+#    @api.multi
+#    def affiche_frais(self):
+#        for obj in self:
+#            test=False
+#            for line in obj.invoice_line_ids:
+#                if line.is_frais_ligne_id:
+#                    test=True
+#            return test
+
+
+#    @api.multi
+#    def get_frais(self):
+#        for obj in self:
+#            return 123.45
 
 
     @api.multi

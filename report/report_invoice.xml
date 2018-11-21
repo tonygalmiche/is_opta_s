@@ -92,6 +92,16 @@
                                             </t>
                                         </tr>
                                     </t>
+
+                                    <t t-if="o.is_frais">
+                                        <tr class="border-black" style="border-bottom:1px solid #dddddd;">
+                                            <td><strong>Frais refacturables</strong></td>
+                                            <td class="text-right">
+                                                <span t-field="o.is_frais"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+
                                     <tr class="border-black">
                                         <td><strong>Total TTC</strong></td>
                                         <td class="text-right">
@@ -122,7 +132,7 @@
                             </t>
                         </tbody>
                     </table>
-                    <t t-if="o.affiche_frais()">
+                    <t t-if="o.is_frais">
                         <div style="page-break-after:always;" />
                         <h2>Justificatif des frais de déplacement de la facture <span t-field="o.number"/></h2>
                         <table t-attf-class="table table-sm" name="invoice_line_table">
