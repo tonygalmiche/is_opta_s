@@ -15,7 +15,9 @@ class IsCompteBanque(models.Model):
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
-
     is_fax               = fields.Char("Fax")
     is_num_formation     = fields.Char("Numéro de déclaration d'activité de formation")
     is_compte_banque_ids = fields.One2many('is.compte.banque', 'company_id', u'Comptes bancaires')
+    is_mail_facture      = fields.Char("Mail diffusion facture")
+    is_mail_frais        = fields.Char("Mail diffusion frais")
+

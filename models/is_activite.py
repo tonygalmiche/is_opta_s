@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
+from odoo.exceptions import Warning
 
 
 class IsActivite(models.Model):
@@ -62,6 +63,38 @@ class IsActivite(models.Model):
 
 
 
+
+    @api.multi
+    def write(self,vals):
+        for obj in self:
+            if obj.state=='diffuse' and 'state' not in vals:
+                #** Envoi d'un courriel a l'intervenant si modification ********
+                subject=u'[Activité] '+obj.nature_activite+u' Modifiée'
+                email_to=obj.intervenant_id.intervenant_id.is_consultant_id.email
+                if not email_to:
+                    raise Warning(u"Mail de l'intervenant non configuré")
+                user  = self.env['res.users'].browse(self._uid)
+                email_from = user.email
+                if not email_from:
+                    raise Warning(u"Votre mail n'est pas configuré")
+                nom   = user.name
+
+                print(email_from,email_to)
+
+                if email_from!=email_to:
+                    base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+                    url=base_url+u'/web#id='+str(obj.id)+u'&view_type=form&model='+self._name
+                    body_html=u"""
+                        <p>Bonjour,</p>
+                        <p>Pour information, """+nom+""" vient de modifier votre activité <a href='"""+url+"""'>"""+obj.nature_activite+"""</a>.</p>
+                    """
+                    self.envoi_mail(email_from,email_to,subject,body_html)
+                #***************************************************************
+
+        res = super(IsActivite, self).write(vals)
+        return res
+
+
     @api.multi
     def name_get(self):
         result = []
@@ -82,8 +115,46 @@ class IsActivite(models.Model):
 
 
     @api.multi
+    def envoi_mail(self, email_from,email_to,subject,body_html):
+        for obj in self:
+            vals={
+                'email_from'    : email_from, 
+                'email_to'      : email_to, 
+                #'email_cc'      : email_from,
+                'subject'       : subject,
+                'body'          : body_html, 
+                'body_html'     : body_html, 
+                'model'         : self._name,
+                'res_id'        : obj.id,
+                'notification'  : True,
+                'message_type'  : 'comment',
+            }
+            email=self.env['mail.mail'].create(vals)
+            if email:
+                self.env['mail.mail'].send(email)
+
+
+    @api.multi
     def vers_diffuse(self, vals):
         for obj in self:
+            subject=u'[Activité] '+obj.nature_activite+u' Diffusé'
+            email_to=obj.affaire_id.responsable_id.email
+            if not email_to:
+                raise Warning(u"Mail du responsable de l'affaire non configuré")
+            user  = self.env['res.users'].browse(self._uid)
+            email_from = user.email
+            if not email_from:
+                raise Warning(u"Votre mail n'est pas configuré")
+            nom   = user.name
+            if email_from!=email_to:
+                base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+                url=base_url+u'/web#id='+str(obj.id)+u'&view_type=form&model='+self._name
+                body_html=u"""
+                    <p>Bonjour,</p>
+                    <p>"""+nom+""" vient de passer l'activité <a href='"""+url+"""'>"""+obj.nature_activite+"""</a> à l'état 'Diffusé'.</p>
+                    <p>Merci d'en prendre connaissance.</p>
+                """
+                self.envoi_mail(email_from,email_to,subject,body_html)
             obj.state='diffuse'
 
 

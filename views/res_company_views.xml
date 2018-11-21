@@ -11,6 +11,8 @@
                 </field>
                 <xpath expr="//sheet" position="inside">
                     <group>
+                        <field name="is_mail_facture"/>
+                        <field name="is_mail_frais"/>
                         <field name="is_num_formation"/>
                         <field name="report_header"  widget="char"
                             placeholder="e.g. Global Business Solutions" />

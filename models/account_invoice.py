@@ -44,10 +44,46 @@ class AccountInvoice(models.Model):
     is_prix_unitaire   = fields.Boolean('Afficher les quantités et prix unitaire sur la facture')
 
 
+    @api.multi
+    def envoi_mail(self, email_from,email_to,subject,body_html):
+        for obj in self:
+            vals={
+                'email_from'    : email_from, 
+                'email_to'      : email_to, 
+                #'email_cc'      : email_from,
+                'subject'       : subject,
+                'body'          : body_html, 
+                'body_html'     : body_html, 
+                'model'         : self._name,
+                'res_id'        : obj.id,
+                'notification'  : True,
+                'message_type'  : 'comment',
+            }
+            email=self.env['mail.mail'].create(vals)
+            if email:
+                self.env['mail.mail'].send(email)
+
 
     @api.multi
     def vers_diffuse_action(self, vals):
         for obj in self:
+            subject=u'[Facture] '+obj.partner_id.name+u' Diffusé'
+            user  = self.env.user
+            email_to = user.company_id.is_mail_facture
+            if not email_to:
+                raise Warning(u"Mail diffusion facture de la société non configuré")
+            email_from = user.email
+            if not email_from:
+                raise Warning(u"Votre mail n'est pas configuré")
+            nom   = user.name
+            base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+            url=base_url+u'/web#id='+str(obj.id)+u'&view_type=form&model='+self._name
+            body_html=u"""
+                <p>Bonjour,</p>
+                <p>"""+nom+""" vient de passer la facture du client <a href='"""+url+"""'>"""+obj.partner_id.name+"""</a> à l'état 'Diffusé'.</p>
+                <p>Merci d'en prendre connaissance.</p>
+            """
+            self.envoi_mail(email_from,email_to,subject,body_html)
             obj.state='diffuse'
 
 
