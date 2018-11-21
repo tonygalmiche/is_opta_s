@@ -98,11 +98,15 @@ class IsFrais(models.Model):
     dates            = fields.Char("Dates")
     ligne_ids        = fields.One2many('is.frais.lignes', 'frais_id', u'Lignes')
     justificatif_ids = fields.Many2many('ir.attachment', 'is_frais_justificatif_rel', 'doc_id', 'file_id', 'Justificatifs')
-
     total_consultant      = fields.Float("Total TTC Consultant à rembourser", digits=(14,2), compute='_compute_total', readonly=True, store=True)
     total_refacturable    = fields.Float("Total TTC refacturable"           , digits=(14,2), compute='_compute_total', readonly=True, store=True)
     total_frais           = fields.Float("Total TTC de tous les frais"      , digits=(14,2), compute='_compute_total', readonly=True, store=True)
     total_tva_recuperable = fields.Float("Total TVA récupérable"            , digits=(14,2), compute='_compute_total', readonly=True, store=True)
+    state = fields.Selection([
+            ('brouillon', u'Brouillon'),
+            ('diffuse'  , u'Diffusé'),
+            ('valide'   , u'Validé'),
+        ], u"État", index=True, default='brouillon')
 
 
     @api.model
@@ -133,6 +137,24 @@ class IsFrais(models.Model):
         else:
             ids = self._search(args, limit=limit, access_rights_uid=name_get_uid)
         return self.browse(ids).name_get()
+
+
+    @api.multi
+    def vers_diffuse(self, vals):
+        for obj in self:
+            obj.state='diffuse'
+
+
+    @api.multi
+    def vers_valide(self, vals):
+        for obj in self:
+            obj.state='valide'
+
+
+    @api.multi
+    def vers_brouillon(self, vals):
+        for obj in self:
+            obj.state='brouillon'
 
 
     @api.multi

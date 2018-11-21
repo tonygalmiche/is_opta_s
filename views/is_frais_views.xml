@@ -14,6 +14,39 @@
         <field name="model">is.frais</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button
+                        name="vers_diffuse"
+                        type="object"
+                        string="vers Diffusé"
+                        class="oe_highlight"
+                        states="brouillon"
+                    />
+                    <button
+                        name="vers_valide"
+                        type="object"
+                        string="vers Validé"
+                        class="oe_highlight"
+                        states="diffuse"
+                    />
+                    <button
+                        name="vers_brouillon"
+                        type="object"
+                        string="vers Brouillon"
+                        states="diffuse"
+                    />
+                    <button 
+                        name="vers_diffuse" 
+                        type="object"
+                        string="vers Diffusé"
+                        states="valide"
+                    />
+                    <field 
+                        name="state" 
+                        widget="statusbar"
+                        clickable="True"
+                    />
+                </header>
                 <sheet>
                     <group>
                         <group>
@@ -84,6 +117,7 @@
                 <field name="total_refacturable"    sum="Total"/>
                 <field name="total_frais"           sum="Total"/>
                 <field name="total_tva_recuperable" sum="Total"/>
+                <field name="state"/>
             </tree>
         </field>
     </record>
@@ -119,6 +153,7 @@
                 <field name="activite_id"/>
                 <field name="type_activite"/>
                 <field name="parcours"/>
+                <field name="state"/>
            </search>
         </field>
     </record>

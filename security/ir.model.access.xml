@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- res.partner -->
+    <record id="is_res_partner_access"  model="ir.model.access" >
+        <field name="name">Accès complet pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_res_partner')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+
+
+    <!-- Table : is_type_societe -->
+    <record id="is_type_societe_administratif_access"  model="ir.model.access" >
+        <field name="name">Accès complet Gestion commerciale et administrative</field>
+        <field name="model_id"    eval="ref('model_is_type_societe')"/>
+        <field name="group_id"    eval="ref('is_opta_s.is_administratif_group')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+    <record id="is_type_societe_access"  model="ir.model.access" >
+        <field name="name">Accès consultation pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_is_type_societe')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="perm_create" eval="False"/>
+    </record>
+
+    <!-- Table : is_type_intervention -->
+    <record id="is_type_intervention_administratif_access"  model="ir.model.access" >
+        <field name="name">Accès complet Gestion commerciale et administrative</field>
+        <field name="model_id"    eval="ref('model_is_type_intervention')"/>
+        <field name="group_id"    eval="ref('is_opta_s.is_administratif_group')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+    <record id="is_type_intervention_access"  model="ir.model.access" >
+        <field name="name">Accès consultation pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_is_type_intervention')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="perm_create" eval="False"/>
+    </record>
+
+
+    <!-- Table : is_secteur -->
+    <record id="is_secteur_administratif_access"  model="ir.model.access" >
+        <field name="name">Accès complet Gestion commerciale et administrative</field>
+        <field name="model_id"    eval="ref('model_is_secteur')"/>
+        <field name="group_id"    eval="ref('is_opta_s.is_administratif_group')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+    <record id="is_secteur_access"  model="ir.model.access" >
+        <field name="name">Accès consultation pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_is_secteur')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="perm_create" eval="False"/>
+    </record>
+
+
+    <!-- Table : is_type_offre -->
+    <record id="is_type_offre_administratif_access"  model="ir.model.access" >
+        <field name="name">Accès complet Gestion commerciale et administrative</field>
+        <field name="model_id"    eval="ref('model_is_type_offre')"/>
+        <field name="group_id"    eval="ref('is_opta_s.is_administratif_group')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+    <record id="is_type_offre_access"  model="ir.model.access" >
+        <field name="name">Accès consultation pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_is_type_offre')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="perm_create" eval="False"/>
+    </record>
+
+
+    <!-- Table : is_cause -->
+    <record id="is_cause_administratif_access"  model="ir.model.access" >
+        <field name="name">Accès complet Gestion commerciale et administrative</field>
+        <field name="model_id"    eval="ref('model_is_cause')"/>
+        <field name="group_id"    eval="ref('is_opta_s.is_administratif_group')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+    <record id="is_cause_access"  model="ir.model.access" >
+        <field name="name">Accès consultation pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_is_cause')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="perm_create" eval="False"/>
+    </record>
+
+
+    <!-- Table : is_depense_effectuee_par -->
+    <record id="is_depense_effectuee_par_administratif_access"  model="ir.model.access" >
+        <field name="name">Accès complet Gestion commerciale et administrative</field>
+        <field name="model_id"    eval="ref('model_is_depense_effectuee_par')"/>
+        <field name="group_id"    eval="ref('is_opta_s.is_administratif_group')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+    <record id="is_depense_effectuee_par_access"  model="ir.model.access" >
+        <field name="name">Accès consultation pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_is_depense_effectuee_par')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="perm_create" eval="False"/>
+    </record>
+
+
+    <!-- Table : product_template -->
+    <record id="is_product_template_administratif_access"  model="ir.model.access" >
+        <field name="name">Accès complet Gestion commerciale et administrative</field>
+        <field name="model_id"    eval="ref('model_product_template')"/>
+        <field name="group_id"    eval="ref('is_opta_s.is_administratif_group')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+    <record id="is_product_template_access"  model="ir.model.access" >
+        <field name="name">Accès consultation pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_product_template')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="perm_create" eval="False"/>
+    </record>
+
+
+    <!-- Table : is_account_fiscal_position -->
+    <record id="is_account_fiscal_position_administratif_access"  model="ir.model.access" >
+        <field name="name">Accès complet Gestion commerciale et administrative</field>
+        <field name="model_id"    eval="ref('account.model_account_fiscal_position')"/>
+        <field name="group_id"    eval="ref('is_opta_s.is_administratif_group')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+    <record id="is_account_fiscal_position_access"  model="ir.model.access" >
+        <field name="name">Accès consultation pour tout le monde</field>
+        <field name="model_id"    eval="ref('account.model_account_fiscal_position')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="perm_create" eval="False"/>
+    </record>
+
+
+
+    <!-- Société : is_compte_banque -->
+    <record id="is_compte_banque_administratif_access"  model="ir.model.access" >
+        <field name="name">Accès complet Gestion commerciale et administrative</field>
+        <field name="model_id"    eval="ref('model_is_compte_banque')"/>
+        <field name="group_id"    eval="ref('is_opta_s.is_administratif_group')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+    <record id="is_compte_banque_access"  model="ir.model.access" >
+        <field name="name">Accès consultation pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_is_compte_banque')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="perm_create" eval="False"/>
+    </record>
+
+
+
+
+
+    <!-- Affaire : is_affaire -->
+    <record id="is_affaire_access"  model="ir.model.access" >
+        <field name="name">Accès complet pour tout le monde avant d'appliquer les règles (rules)</field>
+        <field name="model_id"    eval="ref('model_is_affaire')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+    <record id="is_affaire_rule" model="ir.rule">
+        <field name="name">Accès en consultation pour tout le monde dans tous les états</field>
+        <field name="model_id" ref="model_is_affaire"/>
+        <field name="domain_force">[]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('base.group_user'),
+        ])]"/>
+        <field name="perm_create" eval="0" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+    <record id="is_affaire_offre_en_cours_consultants_rule" model="ir.rule">
+        <field name="name">Accès complet à l'état 'Offre en cours' pour les consultants</field>
+        <field name="model_id" ref="model_is_affaire"/>
+        <field name="domain_force">[('state','=','offre_en_cours')]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('is_consultants_group'),
+        ])]"/>
+        <field name="perm_create" eval="1" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record id="is_affaire_gagnee_administratif_rule" model="ir.rule">
+        <field name="name">Accès complet à l'état 'Affaire gagnée' pour le groupe 'Gestion commerciale et administrative'</field>
+        <field name="model_id" ref="model_is_affaire"/>
+        <field name="domain_force">[('state','=','affaire_gagnee')]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('is_administratif_group'),
+        ])]"/>
+        <field name="perm_create" eval="1" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record id="is_affaire_gagnee_createur_rule" model="ir.rule">
+        <field name="name">Accès en modification à l'état 'Affaire gagnée' pour le créateur et le responsable</field>
+        <field name="model_id" ref="model_is_affaire"/>
+        <field name="domain_force">[('state','=','affaire_gagnee'),'|',('createur_id','=',user.id),('responsable_id','=',user.id)]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('base.group_user'),
+        ])]"/>
+        <field name="perm_create" eval="1" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="1" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+
+
+    <!-- Affaire : is_affaire_phase -->
+    <record id="is_affaire_phase_access"  model="ir.model.access" >
+        <field name="name">Accès complet pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_is_affaire_phase')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+
+
+    <!-- Affaire : is_affaire_phase_activite -->
+    <record id="is_affaire_phase_activite_access"  model="ir.model.access" >
+        <field name="name">Accès complet pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_is_affaire_phase_activite')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+
+
+    <!-- Affaire : is_affaire_vendue_par -->
+    <record id="is_affaire_vendue_par_access"  model="ir.model.access" >
+        <field name="name">Accès complet pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_is_affaire_vendue_par')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+
+
+    <!-- Affaire : is_affaire_taux_journalier -->
+    <record id="is_affaire_taux_journalier_access"  model="ir.model.access" >
+        <field name="name">Accès complet pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_is_affaire_taux_journalier')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+
+
+    <!-- Affaire : is_affaire_forfait_jour -->
+    <record id="is_affaire_forfait_jour_access"  model="ir.model.access" >
+        <field name="name">Accès complet pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_is_affaire_forfait_jour')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+
+
+    <!-- Affaire : is_affaire_intervenant -->
+    <record id="is_affaire_intervenant_access"  model="ir.model.access" >
+        <field name="name">Accès complet pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_is_affaire_intervenant')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+
+
+
+    <!-- Affaire : is_activite -->
+    <record id="is_activite_access"  model="ir.model.access" >
+        <field name="name">Accès complet pour tout le monde avant d'appliquer les règles (rules)</field>
+        <field name="model_id"    eval="ref('model_is_activite')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+    <record id="is_activite_brouillon_consultants_access"  model="ir.rule" >
+        <field name="name">Accès complet à l'état 'Brouillon' pour les consultants</field>
+        <field name="model_id" ref="model_is_activite"/>
+        <field name="domain_force">[('state','=','brouillon')]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('is_consultants_group'),
+            ref('is_administratif_group'),
+        ])]"/>
+        <field name="perm_create" eval="1" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record id="is_activite_brouillon_intervenant_rule" model="ir.rule">
+        <field name="name">Accès en modification à l'état 'Brouillon' pour l'Intervenant</field>
+        <field name="model_id" ref="model_is_activite"/>
+        <field name="domain_force">[('state','=','brouillon'),('intervenant_id.intervenant_id','=',user.id)]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('base.group_user'),
+        ])]"/>
+        <field name="perm_create" eval="1" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <record id="is_activite_diffuse_administratif_access"  model="ir.rule" >
+        <field name="name">Accès complet à l'état 'Diffusé' pour le groupe 'Administratif'</field>
+        <field name="model_id" ref="model_is_activite"/>
+        <field name="domain_force">[('state','=','diffuse')]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('is_administratif_group'),
+        ])]"/>
+        <field name="perm_create" eval="1" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record id="is_activite_diffuse_responsable_rule" model="ir.rule">
+        <field name="name">Accès complet à l'état 'Diffusé' pour le responsable de l'affaire</field>
+        <field name="model_id" ref="model_is_activite"/>
+        <field name="domain_force">[('state','=','diffuse'),('affaire_id.responsable_id','=',user.id)]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('base.group_user'),
+        ])]"/>
+        <field name="perm_create" eval="1" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record id="is_activite_diffuse_consultants_access"  model="ir.rule" >
+        <field name="name">Accès consultation à l'état 'Diffusé' pour les consultants</field>
+        <field name="model_id" ref="model_is_activite"/>
+        <field name="domain_force">[('state','=','diffuse')]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('is_consultants_group'),
+        ])]"/>
+        <field name="perm_create" eval="0" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+    <record id="is_activite_valide_administratif_access"  model="ir.rule" >
+        <field name="name">Accès complet à l'état 'Validé' pour le groupe 'Administratif'</field>
+        <field name="model_id" ref="model_is_activite"/>
+        <field name="domain_force">[('state','=','valide')]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('is_administratif_group'),
+        ])]"/>
+        <field name="perm_create" eval="1" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record id="is_activite_valide_responsable_rule" model="ir.rule">
+        <field name="name">Accès complet à l'état 'Validé' pour le responsable de l'affaire</field>
+        <field name="model_id" ref="model_is_activite"/>
+        <field name="domain_force">[('state','=','valide'),('affaire_id.responsable_id','=',user.id)]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('base.group_user'),
+        ])]"/>
+        <field name="perm_create" eval="1" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record id="is_activite_valide_consultants_access"  model="ir.rule" >
+        <field name="name">Accès consultation à l'état 'Validé' pour les consultants</field>
+        <field name="model_id" ref="model_is_activite"/>
+        <field name="domain_force">[('state','=','valide')]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('is_consultants_group'),
+        ])]"/>
+        <field name="perm_create" eval="0" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+
+    <!-- Affaire : is_suivi_temps -->
+    <record id="is_suivi_temps_access"  model="ir.model.access" >
+        <field name="name">Accès complet pour tout le monde avant d'appliquer les règles (rules)</field>
+        <field name="model_id"    eval="ref('model_is_suivi_temps')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+
+    <record id="is_suivi_temps_brouillon_rule" model="ir.rule">
+        <field name="name">Accès complet uniquement si activité à l'état 'brouillon'</field>
+        <field name="model_id"    eval="ref('model_is_suivi_temps')"/>
+        <field name="domain_force">[('activite_id.state','=','brouillon')]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('base.group_user'),
+        ])]"/>
+        <field name="perm_create" eval="1" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record id="is_suivi_temps_administratif_rule" model="ir.rule">
+        <field name="name">Accès complet pour le groupe 'Administratif'</field>
+        <field name="model_id"    eval="ref('model_is_suivi_temps')"/>
+        <field name="domain_force">[]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('is_administratif_group'),
+        ])]"/>
+        <field name="perm_create" eval="1" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record id="is_suivi_temps_base_rule" model="ir.rule">
+        <field name="name">Accès en consultation pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_is_suivi_temps')"/>
+        <field name="domain_force">[]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('base.group_user'),
+        ])]"/>
+        <field name="perm_create" eval="0" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+
+
+
+
+    <!-- Affaire : is_frais -->
+    <!--
+    <record id="is_frais_administratif_access"  model="ir.model.access" >
+        <field name="name">Accès complet Gestion commerciale et administrative</field>
+        <field name="model_id"    eval="ref('model_is_frais')"/>
+        <field name="group_id"    eval="ref('is_opta_s.is_administratif_group')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+    <record id="is_frais_access"  model="ir.model.access" >
+        <field name="name">Accès consultation pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_is_frais')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="perm_create" eval="False"/>
+    </record>
+    -->
+
+
+
+
+
+
+
+
+
+    <!-- Affaire : is_frais -->
+    <record id="is_frais_access"  model="ir.model.access" >
+        <field name="name">Accès complet pour tout le monde avant d'appliquer les règles (rules)</field>
+        <field name="model_id"    eval="ref('model_is_frais')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+    <record id="is_frais_administratif_access"  model="ir.rule" >
+        <field name="name">Accès complet pour le groupe 'Administratif'</field>
+        <field name="model_id" ref="model_is_frais"/>
+        <field name="domain_force">[]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('is_administratif_group'),
+        ])]"/>
+        <field name="perm_create" eval="1" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record id="is_frais_brouillon_createur_rule" model="ir.rule">
+        <field name="name">Accès complet à l'état 'Brouillon' pour le créateur</field>
+        <field name="model_id" ref="model_is_frais"/>
+        <field name="domain_force">[('state','=','brouillon'),('createur_id','=',user.id)]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('base.group_user'),
+        ])]"/>
+        <field name="perm_create" eval="1" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    <record id="is_frais_base_access"  model="ir.rule" >
+        <field name="name">Accès en consultation pour tout le monde</field>
+        <field name="model_id" ref="model_is_frais"/>
+        <field name="domain_force">[]</field>
+        <field name="groups" eval="[(6,0,[
+            ref('base.group_user'),
+        ])]"/>
+        <field name="perm_create" eval="0" />
+        <field name="perm_read"   eval="1" />
+        <field name="perm_write"  eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+
+    <!-- Affaire : is_frais_lignes -->
+    <record id="is_frais_lignes_access"  model="ir.model.access" >
+        <field name="name">Accès complet pour tout le monde</field>
+        <field name="model_id"    eval="ref('model_is_frais_lignes')"/>
+        <field name="group_id"    eval="ref('base.group_user')"/>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="perm_create" eval="True"/>
+    </record>
+
+
+</odoo>

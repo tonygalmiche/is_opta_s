@@ -274,6 +274,7 @@
                 <field name="secteur_id"/>
                 <field name="date_creation"/>
                 <field name="createur_id"/>
+                <field name="responsable_id"/>
                 <field name="ca_previsionnel"/>
                 <field name="state"/>
             </tree>

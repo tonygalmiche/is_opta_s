@@ -123,9 +123,7 @@
                         </tbody>
                     </table>
 
-
                     <div style="page-break-after:always;" />
-
 
                     <h2>Justificatif des frais de déplacement de la facture <span t-field="o.number"/></h2>
                     <table t-attf-class="table table-sm" name="invoice_line_table">
@@ -161,9 +159,6 @@
                             </t>
                         </tbody>
                     </table>
-
-
-
 
                 </div>
             </xpath>

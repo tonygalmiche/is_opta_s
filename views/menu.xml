@@ -93,13 +93,23 @@
 
 
 
+    <record id="is_crm_table_menu" model="ir.ui.menu" >
+        <field name="name">Tables</field>
+        <field name="sequence">90</field>
+        <field name="parent_id" eval="ref('is_crm_main_menu')"/>
+        <field name="groups_id" eval="[(6,0,[
+            ref('is_administratif_group'),
+        ])]"/>
+    </record>
+
+    <!--
     <menuitem
         id="is_crm_table_menu"
         name="Tables"
         parent="is_crm_main_menu"
         sequence="90"
     />
-
+    -->
 
     <menuitem
         id="is_type_societe_menu"
