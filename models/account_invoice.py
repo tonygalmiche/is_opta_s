@@ -154,6 +154,7 @@ class AccountInvoice(models.Model):
                         line._onchange_product_id()
                         line.quantity   = frais.nb_jours
                         line.price_unit = frais.montant_forfait
+                        is_frais+=line.quantity*line.price_unit
 
                     for ligne in frais.ligne_ids:
                         if ligne.refacturable=='oui':
