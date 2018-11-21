@@ -215,8 +215,14 @@ class AccountInvoice(models.Model):
             return html
 
 
-
-
+    @api.multi
+    def affiche_frais(self):
+        for obj in self:
+            test=False
+            for line in obj.invoice_line_ids:
+                if line.is_frais_ligne_id:
+                    test=True
+            return test
 
 
     @api.multi
