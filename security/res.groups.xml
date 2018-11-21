@@ -8,11 +8,14 @@
     </record>
 
 
+    <!--
     <record model="res.groups" id="is_associes_group" >
         <field name="name">Associés</field>
         <field name="comment"></field>
         <field name="category_id" ref="is_groupe_optas_module_category"/>
     </record>
+    -->
+
     <record model="res.groups" id="is_consultants_group" >
         <field name="name">Consultants</field>
         <field name="comment"></field>
