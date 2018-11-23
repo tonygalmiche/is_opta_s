@@ -126,7 +126,7 @@
                     <br />
                     <br />
                     <br />
-                    <p>En votre aimable règlement par virement sur le compte bancaire ouvert au nom de <span t-field="o.company_id.name"/> :</p>
+                    <p>En votre aimable règlement par virement sur le compte bancaire ouvert au nom de <span t-field="o.company_id.name"/></p>
                     <table t-attf-class="table table-sm">
                         <thead>
                             <tr>

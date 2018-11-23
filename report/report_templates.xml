@@ -32,7 +32,7 @@
             <div class="footer o_standard_footer">
                 <div class="text-center" style="border-top: 1px solid black;font-size:10pt">
                     <span t-field="company.name"/> - 
-                    <span t-field="company.street"/> <span t-field="company.zip"/> <span t-field="company.city"/> - 
+                    <span t-field="company.street"/> <span t-field="company.zip"/> <span t-field="company.city"/><br />
                     Tél : <span t-field="company.phone"/> - 
                     <t t-if="company.is_fax">
                         Fax : <span t-field="company.is_fax"/> - 
