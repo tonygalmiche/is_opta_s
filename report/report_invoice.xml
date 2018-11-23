@@ -121,10 +121,11 @@
                             </div>
                         </div>
                     </div>
-
-
                     <br />
                     <br />
+                    <t t-if="o.fiscal_position_id.note">
+                        <div t-field="o.fiscal_position_id.note"/>
+                    </t>
                     <br />
                     <p>En votre aimable règlement par virement sur le compte bancaire ouvert au nom de <span t-field="o.company_id.name"/></p>
                     <table t-attf-class="table table-sm">
@@ -143,6 +144,14 @@
                             </t>
                         </tbody>
                     </table>
+
+                    <div style="font-size:7pt">
+                        En application des articles L441-3 et L441-6 du Code de commerce, tout retard de règlement donnera lieu de plein droit 
+                        et sans qu’aucune mise en demeure ne soit nécessaire au paiement de pénalités de retard au taux de 3 fois le taux d'intérêt légal. 
+                        Indemnité forfaitaire pour frais de recouvrement de 40€.
+                    </div>
+
+
                     <t t-if="o.is_detail_frais">
                         <div style="page-break-after:always;" />
                         <h2>Justificatif des frais de déplacement de la facture <span t-field="o.number"/></h2>
