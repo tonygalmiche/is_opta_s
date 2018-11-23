@@ -124,7 +124,7 @@
                     <br />
                     <br />
                     <t t-if="o.fiscal_position_id.note">
-                        <div t-field="o.fiscal_position_id.note"/>
+                        <div style="text-align:center" t-field="o.fiscal_position_id.note"/>
                     </t>
                     <br />
                     <p>En votre aimable règlement par virement sur le compte bancaire ouvert au nom de <span t-field="o.company_id.name"/></p>
