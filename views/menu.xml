@@ -93,6 +93,22 @@
 
 
 
+    <record id="is_crm_rapport_menu" model="ir.ui.menu" >
+        <field name="name">Rapports</field>
+        <field name="sequence">80</field>
+        <field name="parent_id" eval="ref('is_crm_main_menu')"/>
+    </record>
+    <menuitem
+        id="is_activite_suivi_temps_menu"
+        name="Suivi du temps par activité"
+        parent="is_crm_rapport_menu"
+        sequence="10"
+        action="is_activite_suivi_temps_action"
+    />
+
+
+
+
     <record id="is_crm_table_menu" model="ir.ui.menu" >
         <field name="name">Tables</field>
         <field name="sequence">90</field>
@@ -102,14 +118,6 @@
         ])]"/>
     </record>
 
-    <!--
-    <menuitem
-        id="is_crm_table_menu"
-        name="Tables"
-        parent="is_crm_main_menu"
-        sequence="90"
-    />
-    -->
 
     <menuitem
         id="is_type_societe_menu"

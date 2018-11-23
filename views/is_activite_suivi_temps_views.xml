@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- is.activite.suivi.temps -->
+    <record id="is_activite_suivi_temps_form" model="ir.ui.view">
+        <field name="name">is.activite.suivi.temps.form</field>
+        <field name="model">is.activite.suivi.temps</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Activité">
+                        <group>
+                            <field name="affaire_id"/>
+                            <field name="partner_id"/>
+                            <field name="phase_activite_id" domain="[('affaire_id','=',affaire_id)]" />
+                            <field name="nature_activite"  default_focus="1"/>
+                            <field name="date_debut"/>
+                            <field name="dates_intervention"/>
+                            <field name="intervenant_product_id" domain="[('affaire_id','=',affaire_id)]"/>
+                        </group>
+                        <group>
+                            <field name="point_cle"/>
+                            <field name="montant"/>
+                            <field name="nb_realise"/>
+                            <field name="nb_facturable"/>
+                            <field name="total_facturable"/>
+                            <field name="invoice_id"/>
+                        </group>
+                    </group>
+                    <group string="Suivi du temps">
+                        <group>
+                            <field name="type_activite"/>
+                            <field name="date_activite"/>
+                            <field name="nb_stagiaires"/>
+                            <field name="nb_heures"            widget="float_time"/>
+                        </group>
+                        <group>
+                            <field name="realise_st"/>
+                            <field name="temps_deplacement"    widget="float_time"/>
+                            <field name="detail_activite"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="is_activite_suivi_temps_tree" model="ir.ui.view">
+        <field name="name">is.activite.suivi.temps.tree</field>
+        <field name="model">is.activite.suivi.temps</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="affaire_id"/>
+                <field name="partner_id"/>
+                <field name="phase_activite_id"/>
+                <field name="nature_activite"/>
+                <field name="intervenant_product_id"/>
+                <field name="nb_realise"       sum="Total"/>
+                <field name="nb_facturable"    sum="Total"/>
+                <field name="total_facturable" sum="Total"/>
+                <field name="state"/>
+                <field name="invoice_id"/>
+                <field name="type_activite"/>
+                <field name="date_activite"/>
+                <field name="nb_stagiaires"                            sum="Total"/>
+                <field name="nb_heures"            widget="float_time" sum="Total"/>
+                <field name="realise_st"/>
+                <field name="temps_deplacement"    widget="float_time" sum="Total"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="is_activite_suivi_temps_search" model="ir.ui.view">
+        <field name="name">is.activite.suivi.temps.search</field>
+        <field name="model">is.activite.suivi.temps</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="affaire_id"/>
+                <field name="partner_id"/>
+                <field name="phase_activite_id"/>
+                <field name="nature_activite"/>
+                <field name="intervenant_product_id"/>
+                <field name="state"/>
+                <field name="invoice_id"/>
+                <field name="type_activite"/>
+                <field name="type_activite"/>
+           </search>
+        </field>
+    </record>
+    <record id="is_activite_suivi_temps_pivot" model="ir.ui.view">
+        <field name="name">is_activite_suivi_temps_pivot</field>
+        <field name="model">is.activite.suivi.temps</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="date_debut"             type="row"/>
+                <field name="intervenant_product_id" type="col"/>
+                <field name="total_facturable"       type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="is_activite_suivi_temps_graph" model="ir.ui.view">
+        <field name="name">is_activite_suivi_temps_graph</field>
+        <field name="model">is.activite.suivi.temps</field>
+        <field name="arch" type="xml">
+            <graph type="bar" orientation="vertical" stacked="False">
+                <field name="date_debut"       type="row"/>
+                <field name="total_facturable" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record  id="is_activite_suivi_temps_action" model="ir.actions.act_window">
+        <field name="name">Suivi du temps par activité</field>
+        <field name="res_model">is.activite.suivi.temps</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+    </record>
+
+</odoo>
