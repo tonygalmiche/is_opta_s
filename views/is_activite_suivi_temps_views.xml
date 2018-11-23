@@ -115,4 +115,31 @@
         <field name="view_mode">tree,form,pivot,graph</field>
     </record>
 
+
+
+
+    <record id="is_suivi_production_mensuel_pivot" model="ir.ui.view">
+        <field name="name">is_suivi_production_mensuel_pivot</field>
+        <field name="model">is.activite.suivi.temps</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="intervenant_product_id" type="row"/>
+                <field name="date_debut"             type="col"/>
+                <field name="total_facturable"       type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record  id="is_suivi_production_mensuel_action" model="ir.actions.act_window">
+        <field name="name">Suivi du temps par activité</field>
+        <field name="res_model">is.activite.suivi.temps</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="is_suivi_production_mensuel_pivot"/>
+        <field name="limit">200</field>
+        <field name="view_mode">pivot,tree,form,graph</field>
+    </record>
+
+
+
+
+
 </odoo>

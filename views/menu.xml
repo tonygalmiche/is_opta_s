@@ -105,7 +105,13 @@
         sequence="10"
         action="is_activite_suivi_temps_action"
     />
-
+    <menuitem
+        id="is_suivi_production_mensuel_menu"
+        name="Suivi de production mensuel"
+        parent="is_crm_rapport_menu"
+        sequence="20"
+        action="is_suivi_production_mensuel_action"
+    />
 
 
 
