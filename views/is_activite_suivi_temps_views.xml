@@ -130,7 +130,7 @@
         </field>
     </record>
     <record  id="is_suivi_production_mensuel_action" model="ir.actions.act_window">
-        <field name="name">Suivi du temps par activité</field>
+        <field name="name">Suivi de production mensuel</field>
         <field name="res_model">is.activite.suivi.temps</field>
         <field name="view_type">form</field>
         <field name="view_id" ref="is_suivi_production_mensuel_pivot"/>
