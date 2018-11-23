@@ -32,30 +32,37 @@ class IsActivite(models.Model):
             obj.nb_stagiaires=nb
 
 
+    @api.depends('intervenant_id')
+    def _compute_product_id(self):
+        for obj in self:
+            obj.intervenant_product_id=obj.intervenant_id.intervenant_id.id
+
+
     @api.onchange('affaire_id')
     def onchange_affaire_id(self):
         self.partner_id = self.affaire_id.partner_id.id
 
 
-    affaire_id           = fields.Many2one('is.affaire', 'Affaire', required=True,index=True)
-    partner_id           = fields.Many2one('res.partner', "Client facturable", required=True, index=True, domain=[('customer','=',True),('is_company','=',True)])
-    phase_activite_id    = fields.Many2one('is.affaire.phase.activite', 'Sous-phase',index=True)
-    nature_activite      = fields.Char("Nature de l'activité"     , required=True, index=True)
-    date_debut           = fields.Date("Date de début de l'activité", required=True, index=True)
-    dates_intervention   = fields.Char("Dates des jours d'intervention")
-    intervenant_id        = fields.Many2one('is.affaire.intervenant', "Intervenant", required=True,index=True)
-    tarification_id      = fields.Many2one('is.affaire.taux.journalier', "Tarification")
-    montant              = fields.Float("Montant unitaire", compute='_compute', readonly=True, store=True, digits=(14,2))
-    nb_realise           = fields.Float("Nb unités réalisées"  , digits=(14,2))
-    nb_facturable        = fields.Float("Nb unités facturables", digits=(14,2))
-    total_facturable     = fields.Float("Total facturable", compute='_compute', readonly=True, store=True, digits=(14,2))
-    nb_stagiaires        = fields.Float("Nombre de stagiaires calculé", compute='_compute_nb_stagiaires', readonly=True, store=False, digits=(14,1))
-    facture_sur_accompte = fields.Boolean("Facture sur acompte")
-    point_cle            = fields.Text("Points clés de l'activité réalisée")
-    suivi_temps_ids      = fields.One2many('is.suivi.temps', 'activite_id', u'Suivi du temps')
-    frais_ids            = fields.One2many('is.frais', 'activite_id', u'Frais')
-    invoice_id           = fields.Many2one('account.invoice', "Facture",index=True)
-    state                = fields.Selection([
+    affaire_id             = fields.Many2one('is.affaire', 'Affaire', required=True,index=True)
+    partner_id             = fields.Many2one('res.partner', "Client facturable", required=True, index=True, domain=[('customer','=',True)])
+    phase_activite_id      = fields.Many2one('is.affaire.phase.activite', 'Sous-phase',index=True)
+    nature_activite        = fields.Char("Nature de l'activité"     , required=True, index=True)
+    date_debut             = fields.Date("Date de début de l'activité", required=True, index=True)
+    dates_intervention     = fields.Char("Dates des jours d'intervention")
+    intervenant_id         = fields.Many2one('is.affaire.intervenant', "Intervenant Affaire", required=True,index=True)
+    intervenant_product_id = fields.Many2one('product.product', "Intervenant", compute='_compute_product_id', readonly=True, store=True)
+    tarification_id        = fields.Many2one('is.affaire.taux.journalier', "Tarification")
+    montant                = fields.Float("Montant unitaire", compute='_compute', readonly=True, store=True, digits=(14,2))
+    nb_realise             = fields.Float("Nb unités réalisées"  , digits=(14,2))
+    nb_facturable          = fields.Float("Nb unités facturables", digits=(14,2))
+    total_facturable       = fields.Float("Total facturable", compute='_compute', readonly=True, store=True, digits=(14,2))
+    nb_stagiaires          = fields.Float("Nombre de stagiaires calculé", compute='_compute_nb_stagiaires', readonly=True, store=False, digits=(14,1))
+    facture_sur_accompte   = fields.Boolean("Facture sur acompte")
+    point_cle              = fields.Text("Points clés de l'activité réalisée")
+    suivi_temps_ids        = fields.One2many('is.suivi.temps', 'activite_id', u'Suivi du temps')
+    frais_ids              = fields.One2many('is.frais', 'activite_id', u'Frais')
+    invoice_id             = fields.Many2one('account.invoice', "Facture",index=True)
+    state                  = fields.Selection([
             ('brouillon', u'Brouillon'),
             ('diffuse'  , u'Diffusé'),
             ('valide'   , u'Validé'),

@@ -9,9 +9,15 @@
                         h2{
                             font-size:14pt;
                             font-weight: bold;
+                            text-align: center;
+                            margin-top:10mm;
                         }
                         td,th{
                             font-size:10pt;
+                        }
+                        rs{
+                            font-size:12pt;
+                            font-weight: bold;
                         }
                     </style>
 
@@ -33,7 +39,7 @@
 
                     <div class="address row">
                         <div class="col-5 offset-7">
-                            <t t-if="o.partner_id.name"><span t-field="o.partner_id.name"/><br /></t>
+                            <t t-if="o.partner_id.name"><span class="rs" t-field="o.partner_id.name"/><br /></t>
                             <t t-if="o.partner_id.street"><span t-field="o.partner_id.street"/><br /></t>
                             <t t-if="o.partner_id.street2"><span t-field="o.partner_id.street2"/><br /></t>
                             <t t-if="o.partner_id.zip"><span t-field="o.partner_id.zip"/> </t>
@@ -65,6 +71,17 @@
                         <div id="total" class="row">
                             <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
                                 <table class="table table-sm">
+
+                                    <t t-if="o.is_frais">
+                                        <tr class="border-black" style="border-bottom:1px solid #dddddd;">
+                                            <td><strong>Frais refacturables</strong></td>
+                                            <td class="text-right">
+                                                <span t-field="o.is_frais"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+
                                     <tr class="border-black" style="border-bottom:1px solid #dddddd;">
                                         <td><strong>Total HT</strong></td>
                                         <td class="text-right">
@@ -93,14 +110,6 @@
                                         </tr>
                                     </t>
 
-                                    <t t-if="o.is_frais">
-                                        <tr class="border-black" style="border-bottom:1px solid #dddddd;">
-                                            <td><strong>Frais refacturables</strong></td>
-                                            <td class="text-right">
-                                                <span t-field="o.is_frais"/>
-                                            </td>
-                                        </tr>
-                                    </t>
 
                                     <tr class="border-black">
                                         <td><strong>Total TTC</strong></td>
@@ -114,6 +123,8 @@
                     </div>
 
 
+                    <br />
+                    <br />
                     <br />
                     <p>En votre aimable règlement par virement sur le compte bancaire ouvert au nom de <span t-field="o.company_id.name"/> :</p>
                     <table t-attf-class="table table-sm">
@@ -132,7 +143,7 @@
                             </t>
                         </tbody>
                     </table>
-                    <t t-if="o.is_frais">
+                    <t t-if="o.is_detail_frais">
                         <div style="page-break-after:always;" />
                         <h2>Justificatif des frais de déplacement de la facture <span t-field="o.number"/></h2>
                         <table t-attf-class="table table-sm" name="invoice_line_table">

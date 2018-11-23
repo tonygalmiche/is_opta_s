@@ -205,7 +205,7 @@
                 <field name="nature_activite"/>
                 <field name="date_debut"/>
                 <field name="dates_intervention"/>
-                <field name="intervenant_id"/>
+                <field name="intervenant_product_id"/>
                 <field name="tarification_id"/>
                 <field name="nb_realise"       sum="Total"/>
                 <field name="nb_facturable"    sum="Total"/>
@@ -225,7 +225,7 @@
                 <field name="phase_activite_id"/>
                 <field name="nature_activite"/>
                 <field name="dates_intervention"/>
-                <field name="intervenant_id"/>
+                <field name="intervenant_product_id"/>
                 <field name="nb_facturable"    sum="Total"/>
                 <field name="total_facturable" sum="Total"/>
             </tree>
@@ -243,7 +243,7 @@
                 <field name="partner_id"/>
                 <field name="phase_activite_id"/>
                 <field name="nature_activite"/>
-                <field name="intervenant_id"/>
+                <field name="intervenant_product_id"/>
            </search>
         </field>
     </record>
@@ -252,8 +252,9 @@
         <field name="model">is.activite</field>
         <field name="arch" type="xml">
             <pivot>
-                <field name="date_debut"       type="row"/>
-                <field name="total_facturable" type="measure"/>
+                <field name="date_debut"             type="row"/>
+                <field name="intervenant_product_id" type="col"/>
+                <field name="total_facturable"       type="measure"/>
             </pivot>
         </field>
     </record>

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
+from odoo.exceptions import Warning
 
 
 class IsTypeIntervention(models.Model):
@@ -112,29 +113,14 @@ class IsAffaireForfaitJour(models.Model):
         return self.browse(ids).name_get()
 
 
-#class IsAffairePartenaire(models.Model):
-#    _name = 'is.affaire.partenaire'
-#    _description = u"Partenaires liés à l'affaire"
-
-#    affaire_id  = fields.Many2one('is.affaire', 'Affaire', required=True, ondelete='cascade')
-#    type_partenaire = fields.Selection([
-#            ('co-traitant'  , 'Co-traitant'),
-#            ('sous-traitant', 'Sous-Traitant'),
-#        ], "Type de partenaire",)
-#    partenaire_id = fields.Many2one('res.partner', "Partenaire", domain=[('supplier','=',True)])
-#    commentaire   = fields.Char("Commentaire")
-
-
 class IsAffaireIntervenant(models.Model):
     _name = 'is.affaire.intervenant'
     _description = u"Intervenants liés à l'affaire"
-
 
     @api.depends('intervenant_id')
     def _compute(self):
         for obj in self:
             obj.type_intervenant=obj.intervenant_id.is_type_intervenant
-
 
     affaire_id  = fields.Many2one('is.affaire', 'Affaire', required=True, ondelete='cascade')
     intervenant_id = fields.Many2one('product.product', "Intervenant", domain=[('is_type_intervenant','!=',False)], required=True)
@@ -145,7 +131,6 @@ class IsAffaireIntervenant(models.Model):
         ], "Type d'intervenant", compute='_compute', readonly=True, store=True)
     commentaire   = fields.Char("Commentaire")
 
-
     @api.multi
     def name_get(self):
         result = []
@@ -154,15 +139,14 @@ class IsAffaireIntervenant(models.Model):
             result.append((obj.id, name))
         return result
 
-
     @api.model
     def _name_search(self, name, args=None, operator='ilike', limit=100, name_get_uid=None):
         args = args or []
-        ids = self._search(args, limit=limit, access_rights_uid=name_get_uid)
+        if name:
+            ids = self._search([('intervenant_id.name', 'ilike', name)] + args, limit=limit, access_rights_uid=name_get_uid)
+        else:
+            ids = self._search(args, limit=limit, access_rights_uid=name_get_uid)
         return self.browse(ids).name_get()
-
-
-
 
 
 class IsAffairePhase(models.Model):
@@ -211,7 +195,6 @@ class IsAffairePhaseActivite(models.Model):
         for obj in self:
             obj.total_vendu=obj.montant_vendu*obj.nb_unites
 
-
     def _compute_realise(self):
         for obj in self:
             activites=self.env['is.activite'].search([('phase_activite_id', '=', obj.id)])
@@ -225,9 +208,6 @@ class IsAffairePhaseActivite(models.Model):
                 avancement=100*realise/obj.total_vendu
             obj.avancement=avancement
 
-
-
-
     affaire_id       = fields.Many2one('is.affaire', 'Affaire'      , required=True, ondelete='cascade')
     affaire_phase_id = fields.Many2one('is.affaire.phase', 'Phase')
     name             = fields.Char("Sous-phase", required=True)
@@ -237,7 +217,6 @@ class IsAffairePhaseActivite(models.Model):
     montant_realise  = fields.Float("Montant réalisé"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
     montant_restant  = fields.Float("Montant restant"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
     avancement       = fields.Integer("Avancement"           , compute='_compute_realise', readonly=True, store=False)
-
 
     @api.multi
     def acceder_activites_action(self, vals):
@@ -251,7 +230,6 @@ class IsAffairePhaseActivite(models.Model):
                 'domain': [['phase_activite_id','=',obj.id]],
             }
             return res
-
 
     @api.multi
     def creation_activite_action(self, vals):
@@ -270,17 +248,11 @@ class IsAffairePhaseActivite(models.Model):
             return res
 
 
-
-
-
-
-
 class IsAffaire(models.Model):
     _name = 'is.affaire'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _description = "Affaire"
     _order = 'name desc'
-
 
     @api.depends('date_creation')
     def _compute(self):
@@ -288,7 +260,6 @@ class IsAffaire(models.Model):
             if obj.date_creation:
                 obj.annee_creation = str(obj.date_creation)[:4]
             obj.code_long=(obj.annee_creation or '')+'-'+(obj.name or '')
-
 
     @api.depends('intervenant_ids')
     def _compute_consultant_ids(self):
@@ -299,9 +270,7 @@ class IsAffaire(models.Model):
                 x=row.intervenant_id.is_consultant_id.id or False
                 if x and x not in ids:
                     ids.append(x)
-            print(ids)
             obj.consultant_ids=[(6,0,ids)]
-
 
     def _compute_realise(self):
         for obj in self:
@@ -312,21 +281,43 @@ class IsAffaire(models.Model):
             obj.montant_realise=realise
             obj.montant_restant=obj.ca_previsionnel-realise
 
+    def _compute_total_facure(self):
+        for obj in self:
+            total_facture_ht   = 0
+            total_facture_ttc  = 0
+            total_encaissement = 0
+            reste_encaissement = 0
+            for invoice in obj.facture_ids:
+                total_facture_ht   += invoice.amount_untaxed
+                total_facture_ttc  += invoice.amount_total_signed
+                total_encaissement += invoice.amount_total_signed-invoice.residual_signed
+                reste_encaissement += invoice.residual_signed
+            obj.total_facture_ht   = total_facture_ht
+            obj.total_facture_ttc  = total_facture_ttc
+            obj.total_encaissement = total_encaissement
+            obj.reste_encaissement = reste_encaissement
 
     name                 = fields.Char("Code affaire court", readonly=True, index=True)
     code_long            = fields.Char("Code affaire", compute='_compute', readonly=True, store=True)
-    nature_affaire       = fields.Char("Nature de l'affaire"      , required=True)
-    partner_id           = fields.Many2one('res.partner', "Client", required=True, index=True, domain=[('customer','=',True),('is_company','=',True)])
-    type_intervention_id = fields.Many2one('is.type.intervention', "Type d'intervention")
-    secteur_id           = fields.Many2one('is.secteur', "Secteur", help="Secteur ou Type de politique publique")
-    type_offre_id        = fields.Many2one('is.type.offre', "Type d'offre")
-    date_creation        = fields.Date("Date de création", default=fields.Date.today())
+    nature_affaire       = fields.Char("Nature de l'affaire"      , required=True, readonly=True, states={'offre_en_cours': [('readonly', False)]})
+    partner_id           = fields.Many2one('res.partner', "Client", required=True, index=True, 
+                                domain=[('customer','=',True),('is_company','=',True)],
+                                readonly=True, states={'offre_en_cours': [('readonly', False)]})
+    type_intervention_id = fields.Many2one('is.type.intervention', "Type d'intervention", 
+                                readonly=True, states={'offre_en_cours': [('readonly', False)]})
+    secteur_id           = fields.Many2one('is.secteur', "Secteur", help="Secteur ou Type de politique publique",
+                                readonly=True, states={'offre_en_cours': [('readonly', False)]})
+    type_offre_id        = fields.Many2one('is.type.offre', "Type d'offre",
+                                readonly=True, states={'offre_en_cours': [('readonly', False)]})
+    date_creation        = fields.Date("Date de création", default=fields.Date.today(),
+                                readonly=True, states={'offre_en_cours': [('readonly', False)]})
     annee_creation       = fields.Char("Année", compute='_compute', readonly=True, store=True)
-    createur_id          = fields.Many2one('res.users', "Créateur", default=lambda self: self.env.user)
-    ca_previsionnel      = fields.Float("CA prévisionnel / Vendu", digits=(14,2))
+    createur_id          = fields.Many2one('res.users', "Créateur", default=lambda self: self.env.user, readonly=True, states={'offre_en_cours': [('readonly', False)]})
+    ca_previsionnel      = fields.Float("CA prévisionnel / Vendu", digits=(14,2), readonly=True, states={'offre_en_cours': [('readonly', False)]})
     montant_realise      = fields.Float("Montant réalisé"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
     montant_restant      = fields.Float("Montant restant"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
-    fiscal_position_id   = fields.Many2one('account.fiscal.position', "Position fiscale")
+    fiscal_position_id   = fields.Many2one('account.fiscal.position', "Position fiscale",
+                                readonly=True, states={'offre_en_cours': [('readonly', False)]})
     proposition_ids      = fields.Many2many('ir.attachment', 'is_affaire_propositions_rel', 'doc_id', 'file_id', 'Propositions commerciales')
     cause_id             = fields.Many2one('is.cause', "Cause si offre perdue")
     commentaire          = fields.Char("Commentaire si offre perdue")
@@ -362,7 +353,11 @@ class IsAffaire(models.Model):
     activite_ids       = fields.One2many('is.activite', 'affaire_id', u'Activités')
     frais_ids          = fields.One2many('is.frais'   , 'affaire_id', u'Frais')
     suivi_temps_ids    = fields.One2many('is.suivi.temps', 'affaire_id', u'Suivi du temps')
-
+    facture_ids        = fields.One2many('account.invoice', 'is_affaire_id', u'Factures')
+    total_facture_ht   = fields.Float('Total facturé HT'  , digits=(14,2), compute='_compute_total_facure', readonly=True, store=False)
+    total_facture_ttc  = fields.Float('Total facturé TTC' , digits=(14,2), compute='_compute_total_facure', readonly=True, store=False)
+    total_encaissement = fields.Float('Total encaissement', digits=(14,2), compute='_compute_total_facure', readonly=True, store=False)
+    reste_encaissement = fields.Float('Reste à encaisser' , digits=(14,2), compute='_compute_total_facure', readonly=True, store=False)
 
     @api.multi
     def name_get(self):
@@ -383,14 +378,22 @@ class IsAffaire(models.Model):
         return self.browse(ids).name_get()
 
 
-
-
-
     @api.model
     def create(self, vals):
         vals['name'] = self.env['ir.sequence'].next_by_code('is.affaire')
         res = super(IsAffaire, self).create(vals)
         return res
+
+
+    @api.multi
+    def write(self, vals):
+        res=super(IsAffaire, self).write(vals)
+        if 'responsable_id' in vals:
+            print(self.createur_id,self.env.user)
+            if self.createur_id!=self.env.user:
+                raise Warning(u"Il n'y a que le créateur de l'affaire qui est autorisé à modifier le responsable de l'affaire")
+        return res
+
 
 
     @api.multi

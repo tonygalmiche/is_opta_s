@@ -6,15 +6,8 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form" />
             <field name="arch" type="xml">
-
-
                 <xpath expr="//button[@name='preview_invoice']" position="replace"/>
                 <xpath expr="//button[@name='action_invoice_sent']" position="replace"/>
-
-
-
-
-
                 <xpath expr="//button[@name='action_invoice_open']" position="replace">
                     <button
                         name="activites_vers_lignes_action"
@@ -23,8 +16,6 @@
                         class="oe_highlight"
                         states="draft"
                     />
-
-
                     <button
                         name="vers_diffuse_action"
                         type="object"
@@ -32,7 +23,6 @@
                         class="oe_highlight"
                         states="draft"
                     />
-
                     <button
                         name="vers_brouillon_action" 
                         states="diffuse" 
@@ -40,7 +30,6 @@
                         type="object" 
                         groups="account.group_account_invoice"
                     />
-
                     <button
                         name="vers_open_action"
                         type="object" 
@@ -49,11 +38,9 @@
                         class="oe_highlight o_invoice_validate" 
                         groups="account.group_account_invoice"
                     />
-
-
-
                 </xpath>
-                <field name="user_id" position="after">
+                <field name="user_id" position="replace">
+                    <field name="is_createur_id"/>
                     <field name="is_detail_activite" />
                     <field name="is_phase"/>
                     <field name="is_intervenant"/>
@@ -63,11 +50,9 @@
                     <field name="is_dates_intervention"/>
                     <field name="is_activite_id" invisible="1"/>
                 </xpath>
-
                 <xpath expr="//page[1]/field[@name='invoice_line_ids']/tree/field[@name='discount']" position="replace">
                     <field name="discount" invisible="1"/>
                 </xpath>
-
                 <xpath expr="//notebook" position="before" >
                     <group string="Activités à facturer">
                         <field name="is_affaire_id" domain="[('partner_id','=',partner_id)]"/>
@@ -95,6 +80,36 @@
                 </xpath>
             </field>
         </record>
+
+
+       <record id="is_invoice_tree" model="ir.ui.view">
+            <field name="name">is_invoice_tree</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree" />
+            <field name="arch" type="xml">
+                <field name="user_id" position="replace">
+                    <field name="is_affaire_id"/>
+                    <field name="is_createur_id"/>
+                </field>
+            </field>
+        </record>
+
+
+
+        <record id="is_view_account_invoice_filter" model="ir.ui.view">
+            <field name="name">is_view_account_invoice_filter</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter" />
+            <field name="arch" type="xml">
+                <field name="user_id" position="replace">
+                    <field name="is_affaire_id"/>
+                    <field name="is_createur_id"/>
+                </field>
+            </field>
+        </record>
+
+
+
 
         <record  id="is_account_invoice_action" model="ir.actions.act_window">
             <field name="name">Factures</field>

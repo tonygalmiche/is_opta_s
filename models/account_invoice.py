@@ -15,6 +15,7 @@ class AccountInvoiceLine(models.Model):
 
     is_dates_intervention = fields.Char("Dates d'intervention")
     is_activite_id        = fields.Many2one('is.activite', 'Activité')
+    is_frais_id           = fields.Many2one('is.frais', 'Frais')
     is_frais_ligne_id     = fields.Many2one('is.frais.lignes', 'Ligne de frais')
 
 
@@ -32,6 +33,10 @@ class AccountInvoice(models.Model):
         track_visibility='onchange', copy=False)
 
 
+    is_createur_id = fields.Many2one('res.users', string='Créateur', track_visibility='onchange',
+        readonly=True, states={'draft': [('readonly', False)]},
+        default=lambda self: self.env.user, copy=False)
+
     is_affaire_id      = fields.Many2one('is.affaire', 'Affaire')
     is_activites       = fields.Many2many('is.activite', 'is_account_invoice_activite_rel', 'invoice_id', 'activite_id')
     is_detail_activite = fields.Boolean('Afficher le détail des activités',default=True)
@@ -39,6 +44,24 @@ class AccountInvoice(models.Model):
     is_intervenant     = fields.Boolean('Afficher les intervenants sur la facture')
     is_prix_unitaire   = fields.Boolean('Afficher les quantités et prix unitaire sur la facture')
     is_frais           = fields.Monetary('Total des frais refacturables')
+    is_detail_frais    = fields.Boolean('Afficher le détail des frais',default=False)
+
+
+    @api.multi
+    def acceder_facture_action(self, vals):
+        for obj in self:
+
+            res= {
+                'name': 'Facture',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'res_model': 'account.invoice',
+                'res_id': obj.id,
+                'type': 'ir.actions.act_window',
+                'view_id': self.env.ref('account.invoice_form').id,
+                'domain': [('type','=','out_invoice')],
+            }
+            return res
 
 
     @api.multi
@@ -105,9 +128,9 @@ class AccountInvoice(models.Model):
             obj.invoice_line_ids.unlink()
             activites=self.env['is.activite'].search([('invoice_id', '=', obj.id)])
             for act in activites:
-                act.invoice_id=False
+                act.sudo().invoice_id=False
             for act in obj.is_activites:
-                act.invoice_id=obj.id
+                act.sudo().invoice_id=obj.id
                 account_id=act.intervenant_id.intervenant_id.property_account_income_id.id
                 vals={
                     'invoice_id'           : obj.id,
@@ -136,6 +159,7 @@ class AccountInvoice(models.Model):
 
 
             is_frais=0
+            obj.is_detail_frais=False
             for act in obj.is_activites:
                 for frais in act.frais_ids:
                     if product and frais.frais_forfait:
@@ -149,6 +173,7 @@ class AccountInvoice(models.Model):
                             'price_unit'           : 0,
                             'account_id'           : account_id,
                             'is_activite_id'       : act.id,
+                            'is_frais_id'          : frais.id,
                         }
                         line=self.env['account.invoice.line'].create(vals)
                         line._onchange_product_id()
@@ -158,6 +183,7 @@ class AccountInvoice(models.Model):
 
                     for ligne in frais.ligne_ids:
                         if ligne.refacturable=='oui':
+                            obj.is_detail_frais=True
                             account_id=ligne.product_id.property_account_income_id.id
                             if account_id==False:
                                 raise Warning(u"Compte de revenu non renseigné pour l'article "+ligne.product_id.name)
@@ -168,6 +194,7 @@ class AccountInvoice(models.Model):
                                 'price_unit'           : 0,
                                 'account_id'           : account_id,
                                 'is_activite_id'       : act.id,
+                                'is_frais_id'          : frais.id,
                                 'is_frais_ligne_id'    : ligne.id,
                             }
                             line=self.env['account.invoice.line'].create(vals)
@@ -214,22 +241,6 @@ class AccountInvoice(models.Model):
             html+='<td class="text-right bg-100"">'+f2(montant)+' €</td>'
             html+='</tr>'
             return html
-
-
-#    @api.multi
-#    def affiche_frais(self):
-#        for obj in self:
-#            test=False
-#            for line in obj.invoice_line_ids:
-#                if line.is_frais_ligne_id:
-#                    test=True
-#            return test
-
-
-#    @api.multi
-#    def get_frais(self):
-#        for obj in self:
-#            return 123.45
 
 
     @api.multi
@@ -285,7 +296,7 @@ class AccountInvoice(models.Model):
                             #    html+='<tr><td colspan="'+str(colspan)+'" class="bg-100">' +sous_phase.name+'</td></tr>'
                             for line in obj.invoice_line_ids:
                                 if line.is_activite_id.phase_activite_id.id==sous_phase.id:
-                                    if line.is_frais_ligne_id.id==False:
+                                    if line.is_frais_ligne_id.id==False and line.is_frais_id.id==False:
                                         if obj.is_detail_activite:
                                             html+=self._add_tr(line)
                             #if obj.is_detail_activite==False:
@@ -295,7 +306,8 @@ class AccountInvoice(models.Model):
 
             else:
                 for line in obj.invoice_line_ids:
-                    if line.is_frais_ligne_id.id==False:
+                    print(line,line.is_frais_ligne_id,line.is_frais_id)
+                    if line.is_frais_ligne_id.id==False and line.is_frais_id.id==False:
                         html+=self._add_tr(line)
 
 

@@ -61,7 +61,6 @@
                     <field 
                         name="state" 
                         widget="statusbar"
-                        clickable="True"
                         statusbar_visible="offre_en_cours,affaire_gagnee,affaire_soldee" 
                     />
                 </header>
@@ -250,6 +249,30 @@
                                         <field name="detail_activite"/>
                                     </tree>
                                 </field>
+                            </group>
+                        </page>
+                        <page string="Factures" states="affaire_gagnee">
+                            <group>
+                                <field name="facture_ids" nolabel="1" readonly="1">
+                                    <tree>
+                                        <button string="Facture" name="acceder_facture_action" type="object" icon="fa-search-plus"/>
+                                        <field name="date_invoice"/>
+                                        <field name="number"/>
+                                        <field name="is_createur_id"/>
+                                        <field name="date_due"/>
+                                        <field name="amount_untaxed"      string="Total HT"   sum="Total"/>
+                                        <field name="amount_tax"          string="TVA"        sum="Total"/>
+                                        <field name="amount_total_signed" string="Total TTC"  sum="Total"/>
+                                        <field name="residual_signed"     string="Restant du" sum="Total"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group>
+                                <field name="total_facture_ht"/>
+                                <field name="total_facture_ttc"/>
+                                <field name="total_encaissement"/>
+                                <field name="reste_encaissement"/>
                             </group>
                         </page>
                     </notebook>
