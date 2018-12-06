@@ -158,7 +158,7 @@ class is_export_compta(models.Model):
                                 general   = lig.product_id.property_account_income_id.code or ''
                         else:
                             if lig.refacturable=='non':
-                                general=f.createur_id.is_compte_general or ''
+                                general = lig.product_id.property_account_expense_id.code or ''
                             else:
                                 general = lig.product_id.property_account_income_id.code or ''
 
