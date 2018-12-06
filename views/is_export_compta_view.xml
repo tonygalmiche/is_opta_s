@@ -85,10 +85,8 @@
                 <tree >
                     <field name="name"/>
                     <field name="journal" />
-                    <!--<field name="date_debut" />
-                    <field name="date_fin" />-->
-                    <field name="facture_debut_id"/>
-                    <field name="facture_fin_id"/>
+                    <field name="date_debut" />
+                    <field name="date_fin" />
                 </tree>
             </field>
         </record>
@@ -111,7 +109,7 @@
                             attrs="{'invisible': [('ligne_ids', '=', [])]}"
                         />
                         <button
-                            name="action_generer_fichier"
+                            name="generer_fichier_action"
                             type="object"
                             string="Générer fichier à exporter"
                         />
@@ -120,19 +118,13 @@
                         <group>
                             <field name="name" />
                             <field name="journal" />
-                            <!--<field name="date_debut"/>
-                            <field name="date_fin"/>-->
-                            <field name="facture_debut_id"/>
-                            <field name="facture_fin_id"/>
-
-
+                            <field name="date_debut"/>
+                            <field name="date_fin"/>
                             <field 
                                 name="file_ids" 
-                                widget="many2many_binary" 
+                                widget="many2many_binary"
+                                readonly="1"
                             />
-
-
-
                             <field name="ligne_ids" invisible="1"/>
                         </group>
                     </sheet>

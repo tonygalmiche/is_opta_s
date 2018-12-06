@@ -28,12 +28,7 @@ class is_export_compta(models.Model):
     ], 'Journal', default='VEB')
     date_debut         = fields.Date(u"Date de début")
     date_fin           = fields.Date(u"Date de fin")
-    facture_debut_id   = fields.Many2one('account.invoice', u"Facture début", required=True, domain=[('state','in',['open','paid'])])
-    facture_fin_id     = fields.Many2one('account.invoice', u"Facture fin"  , required=True, domain=[('state','in',['open','paid'])])
     file_ids           = fields.Many2many('ir.attachment', 'is_export_compta_attachment_rel', 'doc_id', 'file_id', u'Fichiers')
-
-
-
     ligne_ids          = fields.One2many('is.export.compta.ligne', 'export_compta_id', u'Lignes')
     _defaults = {
     }
@@ -48,34 +43,34 @@ class is_export_compta(models.Model):
 
 
 
-    @api.multi
-    def action_generer_fichier(self):
-        for obj in self:
-            ct=0
-            for row in obj.ligne_ids:
-                if not row.account_id.id:
-                    ct=ct+1
-            if ct:
-                raise Warning('Compte non renseigné sur '+str(ct)+' lignes')
-            #** Ajout des lignes en 512000
-            if obj.journal=='BQ':
-                account_id = self.env['account.account'].search([('code','=','512000')])[0].id
-                self.env['is.export.compta.ligne'].search([('export_compta_id','=',obj.id),('account_id','=',account_id)]).unlink()
-                for row in obj.ligne_ids:
-                    vals={
-                        'export_compta_id'  : obj.id,
-                        'ligne'             : row.ligne,
-                        'date_facture'      : row.date_facture,
-                        'account_id'        : account_id,
-                        'libelle'           : row.libelle,
-                        'libelle_piece'     : row.libelle_piece,
-                        'journal'           : obj.journal,
-                        'debit'             : row.credit,
-                        'credit'            : row.debit,
-                        'devise'            : u'EUR',
-                    }
-                    self.env['is.export.compta.ligne'].create(vals)
-            self.generer_fichier()
+#    @api.multi
+#    def generer_fichier_action(self):
+#        for obj in self:
+#            ct=0
+#            for row in obj.ligne_ids:
+#                if not row.account_id.id:
+#                    ct=ct+1
+#            if ct:
+#                raise Warning('Compte non renseigné sur '+str(ct)+' lignes')
+#            #** Ajout des lignes en 512000
+#            if obj.journal=='BQ':
+#                account_id = self.env['account.account'].search([('code','=','512000')])[0].id
+#                self.env['is.export.compta.ligne'].search([('export_compta_id','=',obj.id),('account_id','=',account_id)]).unlink()
+#                for row in obj.ligne_ids:
+#                    vals={
+#                        'export_compta_id'  : obj.id,
+#                        'ligne'             : row.ligne,
+#                        'date_facture'      : row.date_facture,
+#                        'account_id'        : account_id,
+#                        'libelle'           : row.libelle,
+#                        'libelle_piece'     : row.libelle_piece,
+#                        'journal'           : obj.journal,
+#                        'debit'             : row.credit,
+#                        'credit'            : row.debit,
+#                        'devise'            : u'EUR',
+#                    }
+#                    self.env['is.export.compta.ligne'].create(vals)
+#            self.generer_fichier()
 
 
     @api.multi
@@ -98,7 +93,11 @@ class is_export_compta(models.Model):
                                                inner join account_account aa             on aml.account_id=aa.id
                                                left outer join res_partner rp            on aml.partner_id=rp.id
                                                inner join account_journal aj             on aml.journal_id=aj.id
-                    WHERE aj.code='FAC'
+                    WHERE 
+                        aj.code='FAC' and
+                        aml.date>='"""+str(obj.date_debut)+"""' and
+                        aml.date<='"""+str(obj.date_fin)+"""' 
+
                     GROUP BY
                         aml.date,
                         aa.code, 
@@ -133,10 +132,10 @@ class is_export_compta(models.Model):
                     'reference'       : reference,
                 }
                 self.env['is.export.compta.ligne'].create(vals)
-            self.generer_fichier()
+            self.generer_fichier_action()
 
 
-    def generer_fichier(self):
+    def generer_fichier_action(self):
         cr=self._cr
         for obj in self:
             name='export-compta.csv'
