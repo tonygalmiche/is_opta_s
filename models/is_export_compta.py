@@ -149,6 +149,7 @@ class is_export_compta(models.Model):
                         self.env['is.export.compta.ligne'].create(vals)
                         #*******************************************************
 
+
                         #** Ligne HT *******************************************
                         if lig.partner_id:
                             if lig.refacturable=='non':
@@ -156,7 +157,7 @@ class is_export_compta(models.Model):
                             else:
                                 general   = lig.product_id.property_account_income_id.code or ''
                         else:
-                            general=f.createur_id.is_compte_general or ''
+                            general = lig.product_id.property_account_income_id.code or ''
 
 
                         vals['general']   = general
