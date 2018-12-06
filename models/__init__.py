@@ -10,3 +10,4 @@ from . import is_frais
 from . import account_invoice
 from . import res_company
 from . import is_activite_suivi_temps
+from . import is_export_compta

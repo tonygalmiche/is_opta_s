@@ -13,6 +13,8 @@ class IsTypeSociete(models.Model):
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    is_type_societe_id  = fields.Many2one('is.type.societe', 'Type de société')
+    is_type_societe_id              = fields.Many2one('is.type.societe', 'Type de société')
+    is_compte_auxilaire_client      = fields.Char("Compte auxilaire client")
+    is_compte_auxilaire_fournisseur = fields.Char("Compte auxilaire fournisseur")
 
 

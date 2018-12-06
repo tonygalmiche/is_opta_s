@@ -76,7 +76,6 @@
     />
 
 
-
     <menuitem
         id="is_crm_facture_menu"
         name="Factures"
@@ -87,10 +86,16 @@
         id="is_account_invoice_menu"
         name="Factures"
         parent="is_crm_facture_menu"
-        sequence="70"
+        sequence="10"
         action="is_account_invoice_action"
     />
-
+    <menuitem
+        id="is_export_compta_menu"
+        name="Export Compta Cegid"
+        parent="is_crm_facture_menu"
+        sequence="20"
+        action="is_export_compta_action"
+    />
 
 
     <record id="is_crm_rapport_menu" model="ir.ui.menu" >
