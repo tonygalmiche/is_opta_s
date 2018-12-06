@@ -43,36 +43,6 @@ class is_export_compta(models.Model):
 
 
 
-#    @api.multi
-#    def generer_fichier_action(self):
-#        for obj in self:
-#            ct=0
-#            for row in obj.ligne_ids:
-#                if not row.account_id.id:
-#                    ct=ct+1
-#            if ct:
-#                raise Warning('Compte non renseigné sur '+str(ct)+' lignes')
-#            #** Ajout des lignes en 512000
-#            if obj.journal=='BQ':
-#                account_id = self.env['account.account'].search([('code','=','512000')])[0].id
-#                self.env['is.export.compta.ligne'].search([('export_compta_id','=',obj.id),('account_id','=',account_id)]).unlink()
-#                for row in obj.ligne_ids:
-#                    vals={
-#                        'export_compta_id'  : obj.id,
-#                        'ligne'             : row.ligne,
-#                        'date_facture'      : row.date_facture,
-#                        'account_id'        : account_id,
-#                        'libelle'           : row.libelle,
-#                        'libelle_piece'     : row.libelle_piece,
-#                        'journal'           : obj.journal,
-#                        'debit'             : row.credit,
-#                        'credit'            : row.debit,
-#                        'devise'            : u'EUR',
-#                    }
-#                    self.env['is.export.compta.ligne'].create(vals)
-#            self.generer_fichier()
-
-
     @api.multi
     def generer_lignes_action(self):
         cr=self._cr
@@ -144,18 +114,20 @@ class is_export_compta(models.Model):
             attachments.unlink()
             dest     = '/tmp/'+name
             f = codecs.open(dest,'wb',encoding='utf-8')
+
+            f.write("DATE;JOURNAL;GENERAL;AUXILIAIRE;SENS;MONTANT;LIBELLE;REFERENCE\r\n")
             for row in obj.ligne_ids:
                 montant='%0.2f' % row.montant
                 date=row.date_facture
                 date=date.strftime('%d%m%Y')
-                f.write('"'+date+'";')
-                f.write('"'+obj.journal+'";')
-                f.write('"'+row.general+'";')
-                f.write('"'+row.auxilaire+'";')
-                f.write('"'+row.sens+'";')
-                f.write('"'+montant+'";')
-                f.write('"'+row.libelle+'";')
-                f.write('"'+row.reference+'"')
+                f.write(date+';')
+                f.write(obj.journal+';')
+                f.write(row.general+';')
+                f.write(row.auxilaire+';')
+                f.write(row.sens+';')
+                f.write(montant+';')
+                f.write(row.libelle+';')
+                f.write(row.reference)
                 f.write('\r\n')
             f.close()
             r = open(dest,'rb').read()
