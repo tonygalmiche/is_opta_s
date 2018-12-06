@@ -23,11 +23,11 @@ class is_export_compta(models.Model):
 
     name               = fields.Char(u"N°Folio"      , readonly=True)
     journal = fields.Selection([
-        ('VEB' , 'Ventes'),
-        ('ACB' , 'Achats'),
-    ], 'Journal', default='VEB')
-    date_debut         = fields.Date(u"Date de début")
-    date_fin           = fields.Date(u"Date de fin")
+        ('VE', 'Ventes'),
+        ('AC', 'Achats'),
+    ], 'Journal', default='VE',required=True)
+    date_debut         = fields.Date(u"Date de début",required=True)
+    date_fin           = fields.Date(u"Date de fin"  ,required=True)
     file_ids           = fields.Many2many('ir.attachment', 'is_export_compta_attachment_rel', 'doc_id', 'file_id', u'Fichiers')
     ligne_ids          = fields.One2many('is.export.compta.ligne', 'export_compta_id', u'Lignes')
     _defaults = {
@@ -45,12 +45,13 @@ class is_export_compta(models.Model):
 
     @api.multi
     def generer_lignes_action(self):
-        cr=self._cr
+        cr,uid,context = self.env.args
         for obj in self:
+            user = self.env['res.users'].browse(uid)
+            company  = user.company_id
             obj.ligne_ids.unlink()
-
-
-            if obj.journal=='VEB':
+            if obj.journal=='VE':
+                journal=company.is_journal_vente
                 sql="""
                     SELECT  
                         aml.date,
@@ -75,35 +76,107 @@ class is_export_compta(models.Model):
                         ai.number,
                         rp.name
                 """
-            cr.execute(sql)
-            ct=0
-            for row in cr.fetchall():
-                ct=ct+1
-                date_facture = row[0]
-                general      = row[1]
-                auxilaire    = row[2] or ''
-                if general[0:3]!='411':
-                    auxilaire=''
-                libelle      = row[3] or ''
-                reference    = row[4] or ''
-                montant=row[5]
-                sens='C'
-                if montant<0:
-                    sens='D'
-                    montant=-montant
-                vals={
-                    'export_compta_id': obj.id,
-                    'journal'         : obj.journal,
-                    'ligne'           : ct,
-                    'date_facture'    : date_facture,
-                    'general'         : general,
-                    'auxilaire'       : auxilaire,
-                    'sens'            : sens,
-                    'montant'         : montant,
-                    'libelle'         : libelle,
-                    'reference'       : reference,
-                }
-                self.env['is.export.compta.ligne'].create(vals)
+                cr.execute(sql)
+                ct=0
+                for row in cr.fetchall():
+                    ct=ct+1
+                    date_facture = row[0]
+                    general      = row[1]
+                    auxilaire    = row[2] or ''
+                    if general[0:3]!='411':
+                        auxilaire=''
+                    libelle      = row[3] or ''
+                    reference    = row[4] or ''
+                    montant=row[5]
+                    sens='C'
+                    if montant<0:
+                        sens='D'
+                        montant=-montant
+                    vals={
+                        'export_compta_id': obj.id,
+                        'journal'         : journal,
+                        'ligne'           : ct,
+                        'date_facture'    : date_facture,
+                        'general'         : general,
+                        'auxilaire'       : auxilaire,
+                        'sens'            : sens,
+                        'montant'         : montant,
+                        'libelle'         : libelle,
+                        'reference'       : reference,
+                    }
+                    self.env['is.export.compta.ligne'].create(vals)
+
+            if obj.journal=='AC':
+                journal=company.is_journal_achat
+                frais = self.env['is.frais'].search([
+                    ('date_creation','>=',obj.date_debut),
+                    ('date_creation','<=',obj.date_fin),
+                    ('state','=','valide'),
+                ],order='date_creation')
+                ct=0
+                for f in frais:
+                    for lig in f.ligne_ids:
+                        ct=ct+1
+
+                        #** Ligne TTC ******************************************
+                        general=''
+                        auxilaire=''
+                        if lig.partner_id:
+                            if lig.refacturable=='non':
+                                general   = lig.partner_id.property_account_payable_id.code
+                                auxilaire = lig.partner_id.is_compte_auxilaire_fournisseur or ''
+                            else:
+                                general   = lig.partner_id.property_account_payable_id.code
+                                auxilaire = lig.partner_id.is_compte_auxilaire_fournisseur or ''
+                        else:
+                            general=f.createur_id.is_compte_general or ''
+                        sens='C'
+                        montant=lig.montant_ttc
+                        libelle=lig.product_id.name
+                        reference=f.chrono_long
+                        vals={
+                            'export_compta_id': obj.id,
+                            'journal'         : journal,
+                            'ligne'           : ct,
+                            'date_facture'    : f.date_creation,
+                            'general'         : general,
+                            'auxilaire'       : auxilaire,
+                            'sens'            : sens,
+                            'montant'         : montant,
+                            'libelle'         : libelle,
+                            'reference'       : reference,
+                        }
+                        self.env['is.export.compta.ligne'].create(vals)
+                        #*******************************************************
+
+                        #** Ligne HT *******************************************
+                        if lig.partner_id:
+                            if lig.refacturable=='non':
+                                general   = lig.product_id.property_account_expense_id.code or ''
+                            else:
+                                general   = lig.product_id.property_account_income_id.code or ''
+                        else:
+                            general=f.createur_id.is_compte_general or ''
+
+
+                        vals['general']   = general
+                        vals['auxilaire'] = ''
+                        montant=lig.montant_ttc-lig.montant_tva
+                        vals['montant'] = montant
+                        vals['sens']    = 'D'
+                        self.env['is.export.compta.ligne'].create(vals)
+                        #*******************************************************
+
+                        #** Ligne TVA ******************************************
+                        if lig.montant_tva:
+                            general='445xxx'
+                            for tax in lig.product_id.supplier_taxes_id:
+                                general=tax.account_id.code
+                            vals['general']   = general
+                            vals['montant'] = lig.montant_tva
+                            self.env['is.export.compta.ligne'].create(vals)
+                        #*******************************************************
+
             self.generer_fichier_action()
 
 

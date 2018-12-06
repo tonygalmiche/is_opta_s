@@ -14,6 +14,8 @@
                         <field name="is_mail_facture"/>
                         <field name="is_mail_frais"/>
                         <field name="is_num_formation"/>
+                        <field name="is_journal_achat"/>
+                        <field name="is_journal_vente"/>
                         <field name="report_header"  widget="char"
                             placeholder="e.g. Global Business Solutions" />
                         <field name="report_footer" string="Footer"
