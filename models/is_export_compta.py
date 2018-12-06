@@ -197,7 +197,7 @@ class is_export_compta(models.Model):
                 date=row.date_facture
                 date=date.strftime('%d%m%Y')
                 f.write(date+';')
-                f.write(obj.journal+';')
+                f.write(row.journal+';')
                 f.write(row.general+';')
                 f.write(row.auxilaire+';')
                 f.write(row.sens+';')
