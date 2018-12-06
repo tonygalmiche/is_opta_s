@@ -157,8 +157,10 @@ class is_export_compta(models.Model):
                             else:
                                 general   = lig.product_id.property_account_income_id.code or ''
                         else:
-                            general = lig.product_id.property_account_income_id.code or ''
-
+                            if lig.refacturable=='non':
+                                general=f.createur_id.is_compte_general or ''
+                            else:
+                                general = lig.product_id.property_account_income_id.code or ''
 
                         vals['general']   = general
                         vals['auxilaire'] = ''
