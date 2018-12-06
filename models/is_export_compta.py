@@ -82,6 +82,8 @@ class is_export_compta(models.Model):
                 date_facture = row[0]
                 general      = row[1]
                 auxilaire    = row[2] or ''
+                if general[0:3]!='411':
+                    auxilaire=''
                 libelle      = row[3] or ''
                 reference    = row[4] or ''
                 montant=row[5]
