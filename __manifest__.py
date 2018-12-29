@@ -5,7 +5,7 @@
     'author'   : 'InfoSaône',
     'category' : 'InfoSaône',
     'description': """
-InfoSaône - Module Odoo 12 pour Opta-S / SGP
+InfoSaône - Module Odoo 12 pour Opta-S / SGP 
 ===================================================
 """,
     'maintainer' : 'InfoSaône',
