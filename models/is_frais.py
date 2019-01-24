@@ -32,6 +32,12 @@ class IsFraisLigne(models.Model):
         ], u"Justificatif joint", index=True, default='oui')
 
 
+    @api.multi
+    def copie_frais_action(self, vals):
+        for obj in self:
+            obj.copy()
+
+
 class IsFrais(models.Model):
     _name = 'is.frais'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']

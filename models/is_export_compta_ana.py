@@ -86,9 +86,9 @@ class is_export_compta_ana(models.Model):
                     #***********************************************************
 
 
-                    #** Lignes G des activités HT ******************************
                     for line in invoice.invoice_line_ids:
                         if not line.is_frais_id:
+                            #** Lignes G des activités HT **********************
                             ct=ct+1
                             vals={
                                 'export_compta_id': obj.id,
@@ -105,12 +105,9 @@ class is_export_compta_ana(models.Model):
                                 'partner_id'      : invoice.partner_id.id,
                             }
                             self.env['is.export.compta.ana.ligne'].create(vals)
-                    #***********************************************************
+                            #***************************************************
 
-
-                    #** Lignes A1 des activités HT *****************************
-                    for line in invoice.invoice_line_ids:
-                        if not line.is_frais_id:
+                            #** Lignes A1 des activités HT *********************
                             ct=ct+1
                             axe1=line.account_id.is_code_analytique
                             anomalie=''
@@ -134,12 +131,10 @@ class is_export_compta_ana(models.Model):
                                 'anomalie'        : anomalie,
                             }
                             self.env['is.export.compta.ana.ligne'].create(vals)
-                    #***********************************************************
+                            #***************************************************
 
 
-                    #** Lignes A2 des activités HT *****************************
-                    for line in invoice.invoice_line_ids:
-                        if not line.is_frais_id:
+                            #** Lignes A2 des activités HT *********************
                             ct=ct+1
                             axe2=line.is_activite_id.intervenant_id.intervenant_id.is_code_analytique
                             anomalie=''
@@ -163,7 +158,7 @@ class is_export_compta_ana(models.Model):
                                 'anomalie'        : anomalie,
                             }
                             self.env['is.export.compta.ana.ligne'].create(vals)
-                    #***********************************************************
+                            #***************************************************
 
 
                     #** Frais refacturés ***************************************

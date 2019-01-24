@@ -69,6 +69,7 @@
                     <group>
                         <field name="ligne_ids" nolabel="1">
                             <tree editable="bottom">
+                                <button string="Copie" name="copie_frais_action" type="object" icon="fa-files-o"/>
                                 <field name="partner_id"/>
                                 <field name="product_id"/>
                                 <field name="effectuee_par_id"/>
