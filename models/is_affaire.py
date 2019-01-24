@@ -159,15 +159,20 @@ class IsAffairePhase(models.Model):
         for obj in self:
             activites=self.env['is.activite'].search([('phase_activite_id.affaire_phase_id', '=', obj.id)])
             realise=0
+            jours_consommes=0
             for act in activites:
                 realise+=act.total_facturable
+                jours_consommes+=act.nb_facturable
             obj.montant_realise=realise
-
+            obj.jours_consommes=jours_consommes
             sous_phases=self.env['is.affaire.phase.activite'].search([('affaire_phase_id', '=', obj.id)])
             vendu=0
+            jours_prevus=0
             for o in sous_phases:
                 vendu+=o.total_vendu
+                jours_prevus+=o.jours_prevus
             obj.total_vendu=vendu
+            obj.jours_prevus=jours_prevus
             obj.montant_restant=obj.total_vendu-realise
             avancement=0
             if vendu>0:
@@ -175,12 +180,15 @@ class IsAffairePhase(models.Model):
             obj.avancement=avancement
 
 
+
     affaire_id      = fields.Many2one('is.affaire', 'Affaire', required=True, ondelete='cascade')
     name            = fields.Char("Phases")
-    total_vendu     = fields.Float("Total vendu"    , digits=(14,2), compute='_compute', readonly=True, store=False)
-    montant_realise = fields.Float("Montant réalisé", digits=(14,2), compute='_compute', readonly=True, store=False)
-    montant_restant = fields.Float("Montant restant", digits=(14,2), compute='_compute', readonly=True, store=False)
-    avancement      = fields.Integer("Avancement"                  , compute='_compute', readonly=True, store=False)
+    jours_prevus    = fields.Float("Nb jours prévus"   , digits=(14,2), compute='_compute', readonly=True, store=False)
+    jours_consommes = fields.Float("Nb jours consommés", digits=(14,2), compute='_compute', readonly=True, store=False, help="Jours facturables des activités")
+    total_vendu     = fields.Float("Total vendu"       , digits=(14,2), compute='_compute', readonly=True, store=False)
+    montant_realise = fields.Float("Montant réalisé"   , digits=(14,2), compute='_compute', readonly=True, store=False)
+    montant_restant = fields.Float("Montant restant"   , digits=(14,2), compute='_compute', readonly=True, store=False)
+    avancement      = fields.Integer("Avancement"                     , compute='_compute', readonly=True, store=False)
 
 
 
@@ -199,18 +207,23 @@ class IsAffairePhaseActivite(models.Model):
         for obj in self:
             activites=self.env['is.activite'].search([('phase_activite_id', '=', obj.id)])
             realise=0
+            jours_consommes=0
             for act in activites:
                 realise+=act.total_facturable
+                jours_consommes+=act.nb_facturable
             obj.montant_realise=realise
             obj.montant_restant=obj.total_vendu-realise
             avancement=0
             if obj.total_vendu>0:
                 avancement=100*realise/obj.total_vendu
             obj.avancement=avancement
+            obj.jours_consommes=jours_consommes
 
     affaire_id       = fields.Many2one('is.affaire', 'Affaire'      , required=True, ondelete='cascade')
     affaire_phase_id = fields.Many2one('is.affaire.phase', 'Phase')
     name             = fields.Char("Sous-phase", required=True)
+    jours_prevus     = fields.Float("Nb jours prévus"   , digits=(14,2))
+    jours_consommes  = fields.Float("Nb jours consommés", digits=(14,2), compute='_compute_realise', readonly=True, store=False,help="Jours facturables des activités")
     montant_vendu    = fields.Float("Montant vendu unitaire" , digits=(14,2))
     nb_unites        = fields.Float("Nombre d'unités vendues", digits=(14,2))
     total_vendu      = fields.Float("Total vendu"            , digits=(14,2), compute='_compute'        , readonly=True, store=True)
@@ -276,10 +289,13 @@ class IsAffaire(models.Model):
         for obj in self:
             activites=self.env['is.activite'].search([('affaire_id', '=', obj.id)])
             realise=0
+            jours_consommes=0
             for act in activites:
                 realise+=act.total_facturable
+                jours_consommes+=act.nb_facturable
             obj.montant_realise=realise
             obj.montant_restant=obj.ca_previsionnel-realise
+            obj.jours_consommes=jours_consommes
 
     def _compute_total_facure(self):
         for obj in self:
@@ -316,6 +332,8 @@ class IsAffaire(models.Model):
     ca_previsionnel      = fields.Float("CA prévisionnel / Vendu", digits=(14,2), readonly=True, states={'offre_en_cours': [('readonly', False)]})
     montant_realise      = fields.Float("Montant réalisé"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
     montant_restant      = fields.Float("Montant restant"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
+    jours_prevus         = fields.Float("Nb jours prévus"   , digits=(14,2), readonly=True, states={'offre_en_cours': [('readonly', False)]})
+    jours_consommes      = fields.Float("Nb jours consommés", digits=(14,2), compute='_compute_realise', readonly=True, store=False,help="Jours facturables des activités")
     fiscal_position_id   = fields.Many2one('account.fiscal.position', "Position fiscale",
                                 readonly=True, states={'offre_en_cours': [('readonly', False)]})
     proposition_ids      = fields.Many2many('ir.attachment', 'is_affaire_propositions_rel', 'doc_id', 'file_id', 'Propositions commerciales')
@@ -389,31 +407,46 @@ class IsAffaire(models.Model):
     def write(self, vals):
         res=super(IsAffaire, self).write(vals)
         if 'responsable_id' in vals:
-            print(self.createur_id,self.env.user)
             if self.createur_id!=self.env.user:
                 raise Warning(u"Il n'y a que le créateur de l'affaire qui est autorisé à modifier le responsable de l'affaire")
         return res
 
-
+    @api.multi
+    def creer_notification(self, subject):
+        for obj in self:
+            vals={
+                'subject'       : subject,
+                'body'          : subject, 
+                'body_html'     : subject, 
+                'model'         : self._name,
+                'res_id'        : obj.id,
+                'notification'  : True,
+                'message_type'  : 'comment',
+            }
+            email=self.env['mail.mail'].create(vals)
 
     @api.multi
     def vers_affaire_gagnee(self, vals):
         for obj in self:
+            self.creer_notification(u'Vers affaire gagnée')
             obj.state='affaire_gagnee'
 
     @api.multi
     def vers_offre_en_cours(self, vals):
         for obj in self:
+            self.creer_notification(u'Vers Offre en cours')
             obj.state='offre_en_cours'
 
     @api.multi
     def vers_offre_perdue(self, vals):
         for obj in self:
+            self.creer_notification(u'Vers Offre perdue')
             obj.state='offre_perdue'
 
     @api.multi
     def vers_affaire_soldee(self, vals):
         for obj in self:
+            self.creer_notification(u'Vers Affaire soldée')
             obj.state='affaire_soldee'
 
     @api.multi
@@ -451,7 +484,6 @@ class IsAffaire(models.Model):
             partner_id=obj.partner_id.id
             for act in obj.activite_ids:
                 if act.invoice_id.id==False:
-                    print(act.partner_id.name,act.invoice_id)
                     partner_id=act.partner_id.id
                     break
             #*******************************************************************

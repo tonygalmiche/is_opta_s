@@ -26,7 +26,7 @@
                         name="vers_offre_en_cours"
                         type="object"
                         string="vers Offre en cours"
-                        states="offre_perdue"
+                        states="offre_perdue,affaire_gagnee"
                     />
                     <button
                         name="vers_offre_perdue"
@@ -82,6 +82,8 @@
                             <field name="date_creation"/>
                             <field name="createur_id"/>
                             <field name="ca_previsionnel"/>
+                            <field name="jours_prevus"/>
+                            <field name="jours_consommes"/>
                         </group>
                     </group>
                     <group>
@@ -157,6 +159,8 @@
                                 <field name="phase_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="name"/>
+                                        <field name="jours_prevus"    sum="Total"/>
+                                        <field name="jours_consommes" sum="Total"/>
                                         <field name="total_vendu"     sum="Total"/>
                                         <field name="montant_realise" sum="Total"/>
                                         <field name="montant_restant" sum="Total"/>
@@ -171,6 +175,8 @@
                                         <button string="Nouvelle activité"        name="creation_activite_action" type="object" icon="fa-plus"/>
                                         <field name="affaire_phase_id" domain="[('affaire_id','=',parent.id)]"/>
                                         <field name="name"/>
+                                        <field name="jours_prevus"    sum="Total"/>
+                                        <field name="jours_consommes" sum="Total"/>
                                         <field name="montant_vendu"/>
                                         <field name="nb_unites"/>
                                         <field name="total_vendu"     sum="Total"/>
