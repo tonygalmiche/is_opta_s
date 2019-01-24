@@ -2,4 +2,6 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_is_activite_suivi_temps,access_is_activite_suivi_temps,model_is_activite_suivi_temps,base.group_user,1,0,0,0 
 access_is_export_compta,access_is_export_compta,model_is_export_compta,is_opta_s.is_administratif_group,1,1,1,1
 access_is_export_compta_ligne,access_is_export_compta_ligne,model_is_export_compta_ligne,is_opta_s.is_administratif_group,1,1,1,1
+access_is_export_compta_ana,access_is_export_compta_ana,model_is_export_compta_ana,is_opta_s.is_administratif_group,1,1,1,1
+access_is_export_compta_ana_ligne,access_is_export_compta_ana_ligne,model_is_export_compta_ana_ligne,is_opta_s.is_administratif_group,1,1,1,1
 

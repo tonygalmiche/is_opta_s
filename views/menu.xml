@@ -96,6 +96,14 @@
         sequence="20"
         action="is_export_compta_action"
     />
+    <menuitem
+        id="is_export_compta_ana_menu"
+        name="Export Compta Analytique Cegid"
+        parent="is_crm_facture_menu"
+        sequence="30"
+        action="is_export_compta_ana_action"
+    />
+
 
 
     <record id="is_crm_rapport_menu" model="ir.ui.menu" >

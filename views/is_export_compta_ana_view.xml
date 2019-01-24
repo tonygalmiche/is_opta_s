@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="is_export_compta_ana_seq" model="ir.sequence">
+            <field name="name">Folio Export Compta</field>
+            <field name="code">is.export.compta.ana</field>
+            <field name="prefix"></field>
+            <field name="padding">5</field>
+            <field eval="False" name="company_id"/>
+        </record>
+
+
+        <!-- Lignes -->
+        <record id="is_export_compta_ana_ligne_tree" model="ir.ui.view">
+            <field name="name">is.export.compta.ana.ligne.tree</field>
+            <field name="model">is.export.compta.ana.ligne</field>
+            <field name="arch" type="xml">
+                <tree editable="top">
+                    <field name="ligne"/>
+                    <field name="type_ecriture"/>
+                    <field name="date_facture"/>
+                    <field name="journal"/>
+                    <field name="general"/>
+                    <field name="auxilaire"/>
+                    <field name="sens"/>
+                    <field name="montant" sum="Total"/>
+                    <field name="libelle"/>
+                    <field name="reference"/>
+                    <field name="axe1"/>
+                    <field name="axe2"/>
+                    <field name="invoice_id"/>
+                    <field name="partner_id"/>
+                    <field name="activite_id"/>
+                    <field name="anomalie"/>
+                </tree>
+            </field>
+        </record>
+        <record id="is_export_compta_ana_ligne_form" model="ir.ui.view">
+            <field name="name">is.export.compta.ana.ligne.form</field>
+            <field name="model">is.export.compta.ana.ligne</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="ligne"/>
+                                <field name="type_ecriture"/>
+                                <field name="date_facture"/>
+                                <field name="journal"/>
+                                <field name="general"/>
+                                <field name="auxilaire"/>
+                                <field name="sens"/>
+                                <field name="montant" sum="Total"/>
+                                <field name="libelle"/>
+                                <field name="reference"/>
+                                <field name="axe1"/>
+                                <field name="axe2"/>
+                                <field name="invoice_id"/>
+                                <field name="partner_id"/>
+                                <field name="activite_id"/>
+                                <field name="anomalie"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="is_export_compta_ana_ligne_search" model="ir.ui.view">
+            <field name="name">is.export.compta.ana.ligne.search</field>
+            <field name="model">is.export.compta.ana.ligne</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="type_ecriture"/>
+                    <field name="date_facture"/>
+                    <field name="journal"/>
+                    <field name="general"/>
+                    <field name="auxilaire"/>
+                    <field name="sens"/>
+                    <field name="libelle"/>
+                    <field name="reference"/>
+                    <field name="axe1"/>
+                    <field name="axe2"/>
+                    <field name="invoice_id"/>
+                    <field name="partner_id"/>
+                    <field name="activite_id"/>
+                    <field name="anomalie"/>
+               </search>
+            </field>
+        </record>
+        <record  id="is_export_compta_ana_ligne_action" model="ir.actions.act_window">
+            <field name="name">Détail des lignes à exporter</field>
+            <field name="res_model">is.export.compta.ana.ligne</field>
+            <field name="view_type">form</field>
+            <field name="limit">1000</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('export_compta_id','=',active_id)]</field>
+            <field name="context">{'default_export_compta_id': active_id}</field>
+        </record>
+
+
+        <record id="is_export_compta_ana_tree" model="ir.ui.view">
+            <field name="name">is.export.compta.ana.tree</field>
+            <field name="model">is.export.compta.ana</field>
+            <field name="arch" type="xml">
+                <tree >
+                    <field name="name"/>
+                    <field name="journal" />
+                    <field name="date_debut" />
+                    <field name="date_fin" />
+                </tree>
+            </field>
+        </record>
+        <record id="is_export_compta_ana_form" model="ir.ui.view">
+            <field name="name">is.export.compta.ana.form</field>
+            <field name="model">is.export.compta.ana</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button
+                            name="generer_lignes_action"
+                            type="object"
+                            string="Générer les lignes"
+                            confirm="Cela va écraser les lignes ?"
+                        />
+                        <button 
+                            name="%(is_export_compta_ana_ligne_action)d"
+                            type="action"
+                            string="Voir les lignes"
+                            attrs="{'invisible': [('ligne_ids', '=', [])]}"
+                        />
+                        <button
+                            name="generer_fichier_action"
+                            type="object"
+                            string="Générer fichier à exporter"
+                        />
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="journal" />
+                            <field name="date_debut"/>
+                            <field name="date_fin"/>
+                            <field 
+                                name="file_ids" 
+                                widget="many2many_binary"
+                                readonly="1"
+                            />
+                            <field name="ligne_ids" invisible="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="is_export_compta_ana_search" model="ir.ui.view">
+            <field name="name">is.export.compta.ana.search</field>
+            <field name="model">is.export.compta.ana</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+               </search>
+            </field>
+        </record>
+
+
+        <!-- Export comptable -->
+        <record id="is_export_compta_ana_action" model="ir.actions.act_window">
+            <field name="name">Export Compta Analytique Cegid</field>
+            <field name="res_model">is.export.compta.ana</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+
+
+    </data>
+</openerp>

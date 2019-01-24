@@ -15,6 +15,9 @@
                     }"
                 />
             </xpath>
+            <field name="property_account_income_id" position="after">
+                <field name="is_code_analytique"/>
+            </field>
         </field>
     </record>
     <record id="is_product_template_tree_view" model="ir.ui.view">

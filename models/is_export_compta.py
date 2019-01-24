@@ -235,8 +235,9 @@ class is_export_compta_ligne(models.Model):
     auxilaire        = fields.Char("Compte auxilaire")
     sens             = fields.Char("Sens")
     montant          = fields.Float("Montant")
+    reference        = fields.Char("N°Pièce")
     libelle          = fields.Char("Libéllé")
-    reference        = fields.Char("Référence")
+
 
 
 
