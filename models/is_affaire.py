@@ -182,13 +182,13 @@ class IsAffairePhase(models.Model):
 
 
     affaire_id      = fields.Many2one('is.affaire', 'Affaire', required=True, ondelete='cascade')
-    name            = fields.Char("Phases")
-    jours_prevus    = fields.Float("Nb jours prévus"   , digits=(14,2), compute='_compute', readonly=True, store=False)
-    jours_consommes = fields.Float("Nb jours consommés", digits=(14,2), compute='_compute', readonly=True, store=False, help="Jours facturables des activités")
-    total_vendu     = fields.Float("Total vendu"       , digits=(14,2), compute='_compute', readonly=True, store=False)
-    montant_realise = fields.Float("Montant réalisé"   , digits=(14,2), compute='_compute', readonly=True, store=False)
-    montant_restant = fields.Float("Montant restant"   , digits=(14,2), compute='_compute', readonly=True, store=False)
-    avancement      = fields.Integer("Avancement"                     , compute='_compute', readonly=True, store=False)
+    name            = fields.Char(u"Phases")
+    jours_prevus    = fields.Float(u"Nb jours prévus"   , digits=(14,2), compute='_compute', readonly=True, store=False)
+    jours_consommes = fields.Float(u"Nb jours consommés", digits=(14,2), compute='_compute', readonly=True, store=False, help="Jours facturables des activités")
+    total_vendu     = fields.Float(u"Total vendu"       , digits=(14,2), compute='_compute', readonly=True, store=False)
+    montant_realise = fields.Float(u"Montant réalisé"   , digits=(14,2), compute='_compute', readonly=True, store=False)
+    montant_restant = fields.Float(u"Montant restant"   , digits=(14,2), compute='_compute', readonly=True, store=False)
+    avancement      = fields.Integer(u"Avancement"                     , compute='_compute', readonly=True, store=False)
 
 
 
@@ -203,6 +203,8 @@ class IsAffairePhaseActivite(models.Model):
         for obj in self:
             obj.total_vendu=obj.montant_vendu*obj.nb_unites
 
+
+    @api.depends('jours_prevus')
     def _compute_realise(self):
         for obj in self:
             activites=self.env['is.activite'].search([('phase_activite_id', '=', obj.id)])
@@ -221,15 +223,15 @@ class IsAffairePhaseActivite(models.Model):
 
     affaire_id       = fields.Many2one('is.affaire', 'Affaire'      , required=True, ondelete='cascade')
     affaire_phase_id = fields.Many2one('is.affaire.phase', 'Phase')
-    name             = fields.Char("Sous-phase", required=True)
-    jours_prevus     = fields.Float("Nb jours prévus"   , digits=(14,2))
-    jours_consommes  = fields.Float("Nb jours consommés", digits=(14,2), compute='_compute_realise', readonly=True, store=False,help="Jours facturables des activités")
-    montant_vendu    = fields.Float("Montant vendu unitaire" , digits=(14,2))
-    nb_unites        = fields.Float("Nombre d'unités vendues", digits=(14,2))
-    total_vendu      = fields.Float("Total vendu"            , digits=(14,2), compute='_compute'        , readonly=True, store=True)
-    montant_realise  = fields.Float("Montant réalisé"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
-    montant_restant  = fields.Float("Montant restant"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
-    avancement       = fields.Integer("Avancement"           , compute='_compute_realise', readonly=True, store=False)
+    name             = fields.Char(u"Sous-phase", required=True)
+    jours_prevus     = fields.Float(u"Nb jours prévus"   , digits=(14,2))
+    jours_consommes  = fields.Float(u"Nb jours consommés", digits=(14,2), compute='_compute_realise', readonly=True, store=False,help="Jours facturables des activités")
+    montant_vendu    = fields.Float(u"Montant vendu unitaire" , digits=(14,2))
+    nb_unites        = fields.Float(u"Nombre d'unités vendues", digits=(14,2))
+    total_vendu      = fields.Float(u"Total vendu"            , digits=(14,2), compute='_compute'        , readonly=True, store=True)
+    montant_realise  = fields.Float(u"Montant réalisé"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
+    montant_restant  = fields.Float(u"Montant restant"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
+    avancement       = fields.Integer(u"Avancement"           , compute='_compute_realise', readonly=True, store=False)
 
     @api.multi
     def acceder_activites_action(self, vals):
