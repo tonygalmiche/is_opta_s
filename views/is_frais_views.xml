@@ -119,6 +119,7 @@
                 <field name="total_frais"           sum="Total"/>
                 <field name="total_tva_recuperable" sum="Total"/>
                 <field name="state"/>
+                <field name="is_dynacase_ids" widget="many2many_tags" groups="base.group_system"/>
             </tree>
         </field>
     </record>

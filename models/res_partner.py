@@ -16,5 +16,6 @@ class ResPartner(models.Model):
     is_type_societe_id              = fields.Many2one('is.type.societe', 'Type de société')
     is_compte_auxilaire_client      = fields.Char("Compte auxilaire client")
     is_compte_auxilaire_fournisseur = fields.Char("Compte auxilaire fournisseur")
+    is_dynacase_ids                 = fields.Many2many('is.dynacase', 'res_partner_dynacase_rel', 'doc_id', 'dynacase_id', 'Ids Dynacase', readonly=True)
 
 

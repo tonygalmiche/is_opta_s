@@ -9,6 +9,7 @@
                 <group>
                     <field name="is_initiales"/>
                     <field name="is_compte_general"/>
+                    <field name="is_dynacase_ids" widget="many2many_tags" groups="base.group_system"/>
                 </group>
             </field>
         </field>
@@ -21,6 +22,7 @@
             <field name="login" position="after">
                 <field name="is_initiales"/>
                 <field name="is_compte_general"/>
+                <field name="is_dynacase_ids" widget="many2many_tags" groups="base.group_system"/>
             </field>
         </field>
     </record>

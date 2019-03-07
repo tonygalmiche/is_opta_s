@@ -14,6 +14,7 @@ InfoSaône - Module Odoo 12 pour Opta-S / SGP
         'base',
         'account',
         'l10n_fr',
+        'mail',
     ],
     'data' : [
         'security/res.groups.xml',

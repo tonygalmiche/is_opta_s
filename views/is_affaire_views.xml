@@ -94,6 +94,9 @@
                         <field name="commentaire"/>
                     </group>
                     <group>
+                        <field name="date_signature"/>
+                    </group>
+                    <group>
                         <field name="vendue_par_ids" nolabel="1">
                             <tree editable="bottom">
                                 <field name="user_id"/>
@@ -106,7 +109,7 @@
                         <field name="activer_phases"/>
                     </group>
                     <notebook>
-                        <page string="Affaire" states="affaire_gagnee">
+                        <page string="Affaire" states="affaire_gagnee,affaire_soldee">
                             <group string="Affaire">
                                 <group>
                                     <field name="responsable_id"/>
@@ -187,7 +190,7 @@
                                 </field>
                             </group>
                         </page>
-                        <page string="Activités" states="affaire_gagnee">
+                        <page string="Activités" states="affaire_gagnee,affaire_soldee">
                             <group>
                                 <field 
                                     name="activite_ids"
@@ -216,7 +219,7 @@
                                 <field name="montant_restant" sum="Total"/>
                             </group>
                         </page>
-                        <page string="Frais" states="affaire_gagnee">
+                        <page string="Frais" states="affaire_gagnee,affaire_soldee">
                             <group>
                                 <field name="frais_ids" nolabel="1" readonly="1">
                                     <tree>
@@ -236,7 +239,7 @@
                                 </field>
                             </group>
                         </page>
-                        <page string="Suivi du temps" states="affaire_gagnee">
+                        <page string="Suivi du temps" states="affaire_gagnee,affaire_soldee">
                             <group>
                                 <field name="suivi_temps_ids" nolabel="1" readonly="1">
                                     <tree>
@@ -257,7 +260,7 @@
                                 </field>
                             </group>
                         </page>
-                        <page string="Factures" states="affaire_gagnee">
+                        <page string="Factures" states="affaire_gagnee,affaire_soldee">
                             <group>
                                 <field name="facture_ids" nolabel="1" readonly="1">
                                     <tree>
@@ -282,6 +285,10 @@
                             </group>
                         </page>
                     </notebook>
+                    <group>
+                        <field name="date_solde" readonly="True"/>
+                        <field name="active" groups="base.group_system"/>
+                    </group>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
@@ -299,13 +306,14 @@
                 <field name="code_long"/>
                 <field name="nature_affaire"/>
                 <field name="partner_id"/>
-                <field name="type_intervention_id"/>
+                <field name="type_offre_id"/>
                 <field name="secteur_id"/>
                 <field name="date_creation"/>
                 <field name="createur_id"/>
                 <field name="responsable_id"/>
                 <field name="ca_previsionnel"/>
                 <field name="state"/>
+                <field name="is_dynacase_ids" widget="many2many_tags" groups="base.group_system"/>
             </tree>
         </field>
     </record>

@@ -33,6 +33,19 @@
             </tree>
         </field>
     </record>
+    <record id="is_product_template_search_view" model="ir.ui.view">
+        <field name="name">is_product_template_search_view</field>
+        <field name="model">product.template</field>
+        <field name="mode">primary</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="is_type_intervenant"/>
+                <field name="is_consultant_id"/>
+            </field>
+           <field name="categ_id" position="replace"/>
+        </field>
+    </record>
     <record  id="is_product_template_action" model="ir.actions.act_window">
         <field name="name">Articles</field>
         <field name="res_model">product.template</field>

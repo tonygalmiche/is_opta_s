@@ -212,6 +212,7 @@
                 <field name="total_facturable" sum="Total"/>
                 <field name="state"/>
                 <field name="invoice_id"/>
+                <field name="is_dynacase_ids" widget="many2many_tags" groups="base.group_system"/>
             </tree>
         </field>
     </record>

@@ -126,8 +126,6 @@ class AccountInvoice(models.Model):
             obj.action_invoice_open()
 
 
-
-
     @api.multi
     def activites_vers_lignes_action(self, vals):
         for obj in self:
@@ -137,10 +135,13 @@ class AccountInvoice(models.Model):
                 act.sudo().invoice_id=False
             for act in obj.is_activites:
                 act.sudo().invoice_id=obj.id
-                account_id=act.intervenant_id.intervenant_id.property_account_income_id.id
+                product_id=act.intervenant_id.intervenant_id
+                account_id=product_id.property_account_income_id.id
+                if not account_id:
+                    raise Warning(u"Compte de revenus non défini pour l'article "+product_id.name+u' (id='+str(product_id.product_tmpl_id.id)+u')')
                 vals={
                     'invoice_id'           : obj.id,
-                    'product_id'           : act.intervenant_id.intervenant_id.id,
+                    'product_id'           : product_id.id,
                     'name'                 : ' ',
                     'price_unit'           : 0,
                     'account_id'           : account_id,
@@ -210,6 +211,7 @@ class AccountInvoice(models.Model):
                             is_frais+=ligne.montant_ttc
             obj.compute_taxes()
             obj.is_frais=is_frais
+            return True
 
 
     @api.multi

@@ -67,8 +67,7 @@ class IsActivite(models.Model):
             ('diffuse'  , u'Diffusé'),
             ('valide'   , u'Validé'),
         ], u"État", index=True, default='brouillon')
-
-
+    is_dynacase_ids = fields.Many2many('is.dynacase', 'is_activite_dynacase_rel', 'doc_id', 'dynacase_id', 'Ids Dynacase', readonly=True)
 
 
     @api.multi

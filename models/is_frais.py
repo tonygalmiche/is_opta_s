@@ -46,7 +46,7 @@ class IsFrais(models.Model):
 
 
     @api.depends('date_creation','createur_id','chrono')
-    def _compute(self):
+    def compute_chrono(self):
         for obj in self:
             if obj.date_creation:
                 obj.mois_creation  = str(obj.date_creation)[:7]
@@ -83,12 +83,12 @@ class IsFrais(models.Model):
 
 
     chrono           = fields.Char("Chrono", readonly=True, index=True)
-    chrono_long      = fields.Char("Chrono long", compute='_compute', readonly=True, store=True)
+    chrono_long      = fields.Char("Chrono long", compute='compute_chrono', readonly=True, store=True)
     createur_id      = fields.Many2one('res.users', "Créateur", required=True, default=lambda self: self.env.user)
-    login            = fields.Char("Login" , compute='_compute', readonly=True, store=True)
+    login            = fields.Char("Login" , compute='compute_chrono', readonly=True, store=True)
     date_creation    = fields.Date("Date de création", required=True, index=True, default=fields.Date.today())
-    mois_creation    = fields.Char("Mois" , compute='_compute', readonly=True, store=True)
-    annee_creation   = fields.Char("Année", compute='_compute', readonly=True, store=True)
+    mois_creation    = fields.Char("Mois" , compute='compute_chrono', readonly=True, store=True)
+    annee_creation   = fields.Char("Année", compute='compute_chrono', readonly=True, store=True)
     affaire_id       = fields.Many2one('is.affaire' , 'Affaire' , required=False)
     activite_id      = fields.Many2one('is.activite', 'Activite', required=True)
     type_activite    = fields.Selection([
@@ -113,7 +113,7 @@ class IsFrais(models.Model):
             ('diffuse'  , u'Diffusé'),
             ('valide'   , u'Validé'),
         ], u"État", index=True, default='brouillon')
-
+    is_dynacase_ids = fields.Many2many('is.dynacase', 'is_frais_dynacase_rel', 'doc_id', 'dynacase_id', 'Ids Dynacase', readonly=True)
 
     @api.model
     def create(self, vals):

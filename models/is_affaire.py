@@ -342,6 +342,7 @@ class IsAffaire(models.Model):
     cause_id             = fields.Many2one('is.cause', "Cause si offre perdue")
     commentaire          = fields.Char("Commentaire si offre perdue")
     date_signature       = fields.Date("Date de signature de l'affaire")
+    date_solde           = fields.Date("Date de solde de l'affaire")
     vendue_par_ids       = fields.One2many('is.affaire.vendue.par', 'affaire_id', u'Affaire vendue par')
     responsable_id       = fields.Many2one('res.users', "Responsable de l'affaire")
 
@@ -353,7 +354,7 @@ class IsAffaire(models.Model):
         ], u"Nature des frais",)
     forfait_jours_ids  = fields.One2many('is.affaire.forfait.jour', 'affaire_id', u' Forfait frais jour')
 
-    correspondant_id = fields.Many2one('res.users', "Correspondant facturation")
+    correspondant_id = fields.Many2one('res.partner', "Correspondant facturation")
     state                = fields.Selection([
             ('offre_en_cours', u'Offre en cours'),
             ('affaire_gagnee', u'Affaire gagnée'),
@@ -378,6 +379,9 @@ class IsAffaire(models.Model):
     total_facture_ttc  = fields.Float('Total facturé TTC' , digits=(14,2), compute='_compute_total_facure', readonly=True, store=False)
     total_encaissement = fields.Float('Total encaissement', digits=(14,2), compute='_compute_total_facure', readonly=True, store=False)
     reste_encaissement = fields.Float('Reste à encaisser' , digits=(14,2), compute='_compute_total_facure', readonly=True, store=False)
+    is_dynacase_ids    = fields.Many2many('is.dynacase', 'is_affaire_dynacase_rel', 'doc_id', 'dynacase_id', 'Ids Dynacase', readonly=True)
+    active             = fields.Boolean("Affaire active", default=True)
+
 
     @api.multi
     def name_get(self):
