@@ -317,6 +317,17 @@
             </tree>
         </field>
     </record>
+    <record id="is_affaire_pivot" model="ir.ui.view">
+        <field name="name">is_affaire_pivot</field>
+        <field name="model">is.affaire</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="date_creation"   type="col" interval="year"/>
+                <field name="secteur_id"      type="row"/>
+                <field name="ca_previsionnel" type="measure"/>
+            </pivot>
+        </field>
+    </record>
     <record id="is_affaire_search" model="ir.ui.view">
         <field name="name">is.affaire.search</field>
         <field name="model">is.affaire</field>
@@ -335,7 +346,7 @@
         <field name="res_model">is.affaire</field>
         <field name="view_type">form</field>
         <field name="limit">200</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,pivot</field>
     </record>
 
     <!-- is.type.intervention -->
