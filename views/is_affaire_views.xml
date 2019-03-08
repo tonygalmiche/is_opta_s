@@ -322,8 +322,8 @@
         <field name="model">is.affaire</field>
         <field name="arch" type="xml">
             <pivot>
-                <field name="date_creation"   type="col" interval="year"/>
-                <field name="secteur_id"      type="row"/>
+                <field name="date_creation"   type="row" interval="year"/>
+                <field name="secteur_id"      type="col"/>
                 <field name="ca_previsionnel" type="measure"/>
             </pivot>
         </field>
