@@ -189,7 +189,6 @@ class AccountInvoice(models.Model):
                         is_frais+=line.quantity*line.price_unit
 
                     for ligne in frais.ligne_ids:
-                        print(ligne.refacturable)
                         if ligne.refacturable=='oui' and not frais.frais_forfait:
                             obj.is_detail_frais=True
                             account_id=ligne.product_id.property_account_income_id.id
@@ -280,8 +279,6 @@ class AccountInvoice(models.Model):
                         </thead>
                         <tbody class="invoice_tbody">
             """
-
-
             if obj.is_phase:
                 #Recherche des phases et sous-phases à afficher ****************
                 phase_ids=[]
@@ -310,17 +307,10 @@ class AccountInvoice(models.Model):
                                             html+=self._add_tr(line)
                             #if obj.is_detail_activite==False:
                             #    html+=self._add_tr_total_sous_phase(sous_phase)
-
-
-
             else:
                 for line in obj.invoice_line_ids:
-                    print(line,line.is_frais_ligne_id,line.is_frais_id)
                     if line.is_frais_ligne_id.id==False and line.is_frais_id.id==False:
                         html+=self._add_tr(line)
-
-
-
             html+='</tbody>'
             html+='</table>'
             return html
