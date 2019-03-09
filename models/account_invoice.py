@@ -189,7 +189,8 @@ class AccountInvoice(models.Model):
                         is_frais+=line.quantity*line.price_unit
 
                     for ligne in frais.ligne_ids:
-                        if ligne.refacturable=='oui':
+                        print(ligne.refacturable)
+                        if ligne.refacturable=='oui' and not frais.frais_forfait:
                             obj.is_detail_frais=True
                             account_id=ligne.product_id.property_account_income_id.id
                             if account_id==False:
