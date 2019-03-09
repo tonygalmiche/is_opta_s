@@ -25,6 +25,14 @@ class AccountInvoiceLine(models.Model):
     is_frais_ligne_id     = fields.Many2one('is.frais.lignes', 'Ligne de frais')
 
 
+    @api.multi
+    def uptate_onchange_product_id(self):
+        for obj in self:
+            obj._onchange_product_id()
+        return True
+
+
+
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
