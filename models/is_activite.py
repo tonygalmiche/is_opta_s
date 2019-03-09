@@ -76,26 +76,25 @@ class IsActivite(models.Model):
         for obj in self:
             if obj.state=='diffuse' and 'state' not in vals:
                 #** Envoi d'un courriel a l'intervenant si modification ********
-                subject=u'[Activité] '+obj.nature_activite+u' Modifiée'
-                email_to=obj.intervenant_id.intervenant_id.is_consultant_id.email
-                if not email_to:
-                    raise Warning(u"Mail de l'intervenant non configuré")
-                user  = self.env['res.users'].browse(self._uid)
-                email_from = user.email
-                if not email_from:
-                    raise Warning(u"Votre mail n'est pas configuré")
-                nom   = user.name
-
-                print(email_from,email_to)
-
-                if email_from!=email_to:
-                    base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-                    url=base_url+u'/web#id='+str(obj.id)+u'&view_type=form&model='+self._name
-                    body_html=u"""
-                        <p>Bonjour,</p>
-                        <p>Pour information, """+nom+""" vient de modifier votre activité <a href='"""+url+"""'>"""+obj.nature_activite+"""</a>.</p>
-                    """
-                    self.envoi_mail(email_from,email_to,subject,body_html)
+                if obj.intervenant_id.intervenant_id.is_type_intervenant == 'consultant':
+                    subject=u'[Activité] '+obj.nature_activite+u' Modifiée'
+                    email_to=obj.intervenant_id.intervenant_id.is_consultant_id.email
+                    if not email_to:
+                        print(obj.intervenant_id,obj.intervenant_id.intervenant_id,obj.intervenant_id.intervenant_id.is_type_intervenant)
+                        raise Warning(u"Mail de l'intervenant non configuré pour ")
+                    user  = self.env['res.users'].browse(self._uid)
+                    email_from = user.email
+                    if not email_from:
+                        raise Warning(u"Votre mail n'est pas configuré")
+                    nom   = user.name
+                    if email_from!=email_to:
+                        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+                        url=base_url+u'/web#id='+str(obj.id)+u'&view_type=form&model='+self._name
+                        body_html=u"""
+                            <p>Bonjour,</p>
+                            <p>Pour information, """+nom+""" vient de modifier votre activité <a href='"""+url+"""'>"""+obj.nature_activite+"""</a>.</p>
+                        """
+                        self.envoi_mail(email_from,email_to,subject,body_html)
                 #***************************************************************
 
         res = super(IsActivite, self).write(vals)
