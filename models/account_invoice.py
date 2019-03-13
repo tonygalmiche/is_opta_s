@@ -51,14 +51,15 @@ class AccountInvoice(models.Model):
         readonly=True, states={'draft': [('readonly', False)]},
         default=lambda self: self.env.user, copy=False)
 
-    is_affaire_id      = fields.Many2one('is.affaire', 'Affaire')
-    is_activites       = fields.Many2many('is.activite', 'is_account_invoice_activite_rel', 'invoice_id', 'activite_id')
-    is_detail_activite = fields.Boolean('Afficher le détail des activités',default=True)
-    is_phase           = fields.Boolean('Afficher les phases',default=True)
-    is_intervenant     = fields.Boolean('Afficher les intervenants sur la facture')
-    is_prix_unitaire   = fields.Boolean('Afficher les quantités et prix unitaire sur la facture')
-    is_frais           = fields.Monetary('Total des frais refacturables')
-    is_detail_frais    = fields.Boolean('Afficher le détail des frais',default=False)
+    is_affaire_id           = fields.Many2one('is.affaire', 'Affaire')
+    is_activites            = fields.Many2many('is.activite', 'is_account_invoice_activite_rel', 'invoice_id', 'activite_id')
+    is_detail_activite      = fields.Boolean('Afficher le détail des activités',default=True)
+    is_phase                = fields.Boolean('Afficher les phases',default=True)
+    is_intervenant          = fields.Boolean('Afficher les intervenants sur la facture')
+    is_prix_unitaire        = fields.Boolean('Afficher les quantités et prix unitaire sur la facture')
+    is_frais                = fields.Monetary('Total des frais refacturables')
+    is_detail_frais         = fields.Boolean('Afficher le détail des frais',default=False)
+    is_montant_encaissement = fields.Float('Montant encaissement', digits=(14,2))
 
 
     @api.multi

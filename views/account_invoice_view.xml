@@ -92,6 +92,12 @@
                         <field name="is_frais" readonly="1"/>
                     </group>
                 </xpath>
+                <field name="comment" position="after">
+                    <group>
+                        <field name="is_montant_encaissement" readonly="1"/>
+                    </group>
+                </field>
+
             </field>
         </record>
 
