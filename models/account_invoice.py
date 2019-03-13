@@ -59,6 +59,7 @@ class AccountInvoice(models.Model):
     is_prix_unitaire        = fields.Boolean('Afficher les quantités et prix unitaire sur la facture')
     is_frais                = fields.Monetary('Total des frais refacturables')
     is_detail_frais         = fields.Boolean('Afficher le détail des frais',default=False)
+    is_date_encaissement    = fields.Date('Date encaissement')
     is_montant_encaissement = fields.Float('Montant encaissement', digits=(14,2))
 
 

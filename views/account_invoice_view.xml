@@ -94,6 +94,7 @@
                 </xpath>
                 <field name="comment" position="after">
                     <group>
+                        <field name="is_date_encaissement"    readonly="1"/>
                         <field name="is_montant_encaissement" readonly="1"/>
                     </group>
                 </field>
