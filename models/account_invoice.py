@@ -63,6 +63,16 @@ class AccountInvoice(models.Model):
     is_montant_encaissement = fields.Float('Montant encaissement', digits=(14,2))
 
 
+    @api.onchange('partner_id', 'company_id', 'is_affaire_id')
+    def _onchange_partner_id(self):
+        res = super(AccountInvoice, self)._onchange_partner_id()
+        if self.is_affaire_id and self.is_affaire_id.fiscal_position_id:
+            self.fiscal_position_id = self.is_affaire_id.fiscal_position_id.id
+        else:
+            self.fiscal_position_id = self.partner_id.property_account_position_id.id
+        return res
+
+
     @api.multi
     def acceder_facture_action(self, vals):
         for obj in self:
