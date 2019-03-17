@@ -109,7 +109,7 @@
             <field name="inherit_id" ref="account.invoice_tree" />
             <field name="arch" type="xml">
                 <field name="number" position="replace">
-                    <field name="move_name"/>
+                    <field name="move_name" string="N°Facture"/>
                 </field>
                 <field name="user_id" position="replace">
                     <field name="is_affaire_id"/>
