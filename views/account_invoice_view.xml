@@ -108,6 +108,9 @@
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_tree" />
             <field name="arch" type="xml">
+                <field name="number" position="replace">
+                    <field name="move_name"/>
+                </field>
                 <field name="user_id" position="replace">
                     <field name="is_affaire_id"/>
                     <field name="is_createur_id"/>
