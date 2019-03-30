@@ -153,6 +153,7 @@
                 <field name="mois_creation"/>
                 <field name="createur_id"/>
                 <field name="activite_id"/>
+                <field name="affaire_id"/>
                 <field name="type_activite"/>
                 <field name="parcours"/>
                 <field name="state"/>
