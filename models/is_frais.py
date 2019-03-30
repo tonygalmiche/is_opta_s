@@ -97,7 +97,7 @@ class IsFrais(models.Model):
             ('divers'   , u'Divers'),
         ], u"Type d'activité", index=True, required=True)
     frais_forfait    = fields.Boolean("Frais au forfait",default=False)
-    nb_jours         = fields.Integer("Nb jours (si frais au forfait)")
+    nb_jours         = fields.Float("Nb jours (si frais au forfait)", digits=(14,2))
     forfait_jour_id  = fields.Many2one('is.affaire.forfait.jour', "Forfait jour de l'affaire")
     montant_forfait  = fields.Float("Montant forfait", digits=(14,2))
     parcours         = fields.Text("Parcours")
