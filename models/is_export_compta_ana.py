@@ -185,7 +185,7 @@ class is_export_compta_ana(models.Model):
                             if not compte_auxilaire:
                                 anomalie.append("Compte auxilaire non trouvé pour ce fournisseur")
                         if effectuee_par == 'CONSULTANT':
-                            compte_general = f.createur_id.partner_id.property_account_payable_id
+                            compte_general = f.createur_id.partner_id.property_account_payable_id.code
                         if effectuee_par == 'CAISSE OPTA-S':
                             compte_general = '531000'
                         if effectuee_par == 'ESPECES_ASSOCIE':
