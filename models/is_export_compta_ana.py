@@ -329,7 +329,7 @@ class is_export_compta_ana(models.Model):
                             'type_ecriture'   : 'G',
                             'date_facture'    : invoice.date_invoice,
                             'journal'         : journal,
-                            'general'         : line.account_id.code,
+                            'general'         : '467100',
                             'sens'            : 'C',
                             'montant'         : refacture,
                             'libelle'         : invoice.partner_id.name,
@@ -358,7 +358,7 @@ class is_export_compta_ana(models.Model):
                         ct=ct+1
                         vals={
                             'export_compta_id': obj.id,
-                            'ligne'           : ct+9000,
+                            'ligne'           : ct,
                             'type_ecriture'   : 'G',
                             'date_facture'    : invoice.date_invoice,
                             'journal'         : journal,
@@ -372,13 +372,13 @@ class is_export_compta_ana(models.Model):
                         }
                         self.env['is.export.compta.ana.ligne'].create(vals)
                         ct=ct+1
-                        vals['ligne']         = ct+1000
+                        vals['ligne']         = ct
                         vals['type_ecriture'] = 'A1'
                         vals['axe1']          = axe1
                         vals['axe2']          = ''
                         self.env['is.export.compta.ana.ligne'].create(vals)
                         ct=ct+1
-                        vals['ligne']         = ct+1000
+                        vals['ligne']         = ct
                         vals['type_ecriture'] = 'A2'
                         vals['axe1']          = ''
                         vals['axe2']          = axe2
