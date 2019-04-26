@@ -42,7 +42,7 @@ class is_export_compta_ana(models.Model):
 
 
     @api.multi
-    def ajout_ligne(self,id,journal,ct,type_ecriture,date_facture,compte_general,compte_auxilaire,sens,montant,piece,axe1,axe2,libelle,partner_id,anomalie,frais_id=False,product_id=False):
+    def ajout_ligne(self,id,journal,ct,type_ecriture,date_facture,compte_general,compte_auxilaire,sens,montant,piece,axe1,axe2,libelle,partner_id,anomalie,frais_id=False,product_id=False,consultant_id=False):
         vals={
             'export_compta_id': id,
             'ligne'           : ct,
@@ -61,6 +61,7 @@ class is_export_compta_ana(models.Model):
             'anomalie'        : ', '.join(anomalie),
             'frais_id'        : frais_id,
             'product_id'      : product_id,
+            'consultant_id'   : consultant_id,
         }
         self.env['is.export.compta.ana.ligne'].create(vals)
 
@@ -105,9 +106,6 @@ class is_export_compta_ana(models.Model):
                         anomalie=[]
 
                         #** Recherche du compte fournisseur ********************
-                        compte_fournisseur=l.partner_id.is_compte_auxilaire_fournisseur
-                        if not compte_fournisseur:
-                            anomalie.append("Compte auxilaire non trouvé pour ce fournisseur")
                         #*******************************************************
 
                         #** Recherche du compte général ************************
@@ -155,11 +153,13 @@ class is_export_compta_ana(models.Model):
                             ])
                         axe1=''
                         axe2=''
+                        consultant_id=False
                         for product in  products:
+                            consultant_id=product.id
                             axe2 = product.is_code_analytique
                         if not axe2:
                             anomalie=["Code analytique de l'article associé au consultant non défini"]
-                        self.ajout_ligne(obj.id,journal,ct,'A2',f.date_creation,compte_general,compte_auxilaire,'D',montant,piece,axe1,axe2,libelle,partner_id,anomalie,frais_id,product_id)
+                        self.ajout_ligne(obj.id,journal,ct,'A2',f.date_creation,compte_general,compte_auxilaire,'D',montant,piece,axe1,axe2,libelle,partner_id,anomalie,frais_id,product_id,consultant_id)
                         #*******************************************************
 
 
@@ -180,12 +180,11 @@ class is_export_compta_ana(models.Model):
                         compte_auxilaire = ''
                         compte_general   = ''
                         effectuee_par = l.effectuee_par_id.name
-
                         if effectuee_par == 'OPTA-S':
                             compte_general   = '401000'
-                            compte_auxilaire = compte_fournisseur
+                            compte_auxilaire=l.partner_id.is_compte_auxilaire_fournisseur
                             if not compte_auxilaire:
-                                anomalie.append("Compte non trouvé pour ce fournisseur")
+                                anomalie.append("Compte auxilaire non trouvé pour ce fournisseur")
                         if effectuee_par == 'CONSULTANT':
                             compte_general = f.createur_id.partner_id.property_account_payable_id
                         if effectuee_par == 'CAISSE OPTA-S':
@@ -474,6 +473,7 @@ class is_export_compta_ligne(models.Model):
     activite_id      = fields.Many2one('is.activite', "Activité", readonly=True)
     frais_id         = fields.Many2one('is.frais', "Frais", readonly=True)
     product_id       = fields.Many2one('product.product', "Article", readonly=True)
+    consultant_id    = fields.Many2one('product.product', "Consultant", readonly=True)
     anomalie         = fields.Char("Anomalie", readonly=True)
 
 
