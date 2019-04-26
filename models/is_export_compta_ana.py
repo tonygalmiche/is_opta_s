@@ -277,6 +277,7 @@ class is_export_compta_ana(models.Model):
                                 'invoice_id'      : invoice.id,
                                 'partner_id'      : invoice.partner_id.id,
                                 'activite_id'     : line.is_activite_id.id,
+                                'account_id'      : line.account_id.id,
                                 'axe1'            : axe1,
                                 'anomalie'        : anomalie,
                             }
@@ -286,7 +287,8 @@ class is_export_compta_ana(models.Model):
 
                             #** Lignes A2 des activités HT *********************
                             ct=ct+1
-                            axe2=line.is_activite_id.intervenant_id.intervenant_id.is_code_analytique
+                            consultant = line.is_activite_id.intervenant_id.intervenant_id
+                            axe2=consultant.is_code_analytique
                             anomalie=''
                             if not axe2:
                                 anomalie='Code analytique non défini pour le consultant de cette activité'
@@ -304,6 +306,7 @@ class is_export_compta_ana(models.Model):
                                 'invoice_id'      : invoice.id,
                                 'partner_id'      : invoice.partner_id.id,
                                 'activite_id'     : line.is_activite_id.id,
+                                'consultant_id'   : consultant.id,
                                 'axe2'            : axe2,
                                 'anomalie'        : anomalie,
                             }
@@ -473,6 +476,7 @@ class is_export_compta_ligne(models.Model):
     frais_id         = fields.Many2one('is.frais', "Frais", readonly=True)
     product_id       = fields.Many2one('product.product', "Article", readonly=True)
     consultant_id    = fields.Many2one('product.product', "Consultant", readonly=True)
+    account_id       = fields.Many2one('account.account', "Compte", readonly=True)
     anomalie         = fields.Char("Anomalie", readonly=True)
 
 

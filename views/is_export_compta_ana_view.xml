@@ -32,6 +32,7 @@
                     <field name="invoice_id"/>
                     <field name="partner_id"/>
                     <field name="activite_id"/>
+                    <field name="account_id"/>
                     <field name="frais_id"/>
                     <field name="product_id"/>
                     <field name="consultant_id"/>
@@ -62,6 +63,7 @@
                                 <field name="invoice_id"/>
                                 <field name="partner_id"/>
                                 <field name="activite_id"/>
+                                <field name="account_id"/>
                                 <field name="frais_id"/>
                                 <field name="product_id"/>
                                 <field name="consultant_id"/>
@@ -90,6 +92,7 @@
                     <field name="invoice_id"/>
                     <field name="partner_id"/>
                     <field name="activite_id"/>
+                    <field name="account_id"/>
                     <field name="frais_id"/>
                     <field name="product_id"/>
                     <field name="consultant_id"/>
