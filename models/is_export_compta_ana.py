@@ -42,12 +42,164 @@ class is_export_compta_ana(models.Model):
 
 
     @api.multi
+    def ajout_ligne(self,id,journal,ct,type_ecriture,date_facture,compte_general,compte_auxilaire,sens,montant,piece,axe1,axe2,libelle,partner_id,anomalie,frais_id=False,product_id=False):
+        vals={
+            'export_compta_id': id,
+            'ligne'           : ct,
+            'type_ecriture'   : type_ecriture,
+            'date_facture'    : date_facture,
+            'journal'         : journal,
+            'general'         : compte_general,
+            'auxilaire'       : compte_auxilaire,
+            'sens'            : sens,
+            'montant'         : montant,
+            'libelle'         : libelle,
+            'reference'       : piece,
+            'partner_id'      : partner_id,
+            'axe1'            : axe1,
+            'axe2'            : axe2,
+            'anomalie'        : ', '.join(anomalie),
+            'frais_id'        : frais_id,
+            'product_id'      : product_id,
+        }
+        self.env['is.export.compta.ana.ligne'].create(vals)
+
+
+    @api.multi
     def generer_lignes_action(self):
         cr,uid,context = self.env.args
         for obj in self:
             user = self.env['res.users'].browse(uid)
             company  = user.company_id
             obj.ligne_ids.unlink()
+
+
+            if obj.journal=='AC':
+                journal=company.is_journal_achat
+                ct=0
+                frais=self.env['is.frais'].search([
+                        ('date_creation', '>=', obj.date_debut),
+                        ('date_creation', '<=', obj.date_fin),
+                        ('state'       , '=', 'valide'),
+                    ])
+                for f in frais:
+                    frais_id = f.id
+
+                    #** Recherche du client ************************************
+                    client=f.affaire_id.partner_id.name
+                    #***********************************************************
+
+
+                    #** Type d'activité ****************************************
+                    types={
+                        'formation': 1000,
+                        'conseil'  : 2000,
+                        'divers'   : 9000,
+                    }
+                    type_activite = types[f.type_activite]
+                    #***********************************************************
+
+
+                    for l in f.ligne_ids:
+                        product_id = l.product_id.id
+                        anomalie=[]
+
+                        #** Recherche du compte fournisseur ********************
+                        compte_fournisseur=l.partner_id.is_compte_auxilaire_fournisseur
+                        if not compte_fournisseur:
+                            anomalie.append("Compte auxilaire non trouvé pour ce fournisseur")
+                        #*******************************************************
+
+                        #** Recherche du compte général ************************
+                        compte_general=''
+                        if l.refacturable!='oui':
+                            compte_general = l.product_id.property_account_expense_id.code
+                        else:
+                            compte_general = '467100'
+                        if not compte_general:
+                            anomalie.append("Compte non trouvé pour ce type de dépense")
+                        #*******************************************************
+
+
+
+
+
+                        #** Ligne HT *******************************************
+                        ct=ct+1
+                        compte_auxilaire=''
+                        montant = l.montant_ttc-l.montant_tva
+                        piece = f.chrono_long
+                        if l.refacturable!='oui':
+                            libelle = l.product_id.name
+                        else:
+                            libelle = client
+                        partner_id = l.partner_id.id
+                        axe1=''
+                        axe2=''
+                        self.ajout_ligne(obj.id,journal,ct,'G',f.date_creation,compte_general,compte_auxilaire,'D',montant,piece,axe1,axe2,libelle,partner_id,anomalie,frais_id,product_id)
+                        #*******************************************************
+
+
+                        #** Ligne Axe1 *****************************************
+                        ct=ct+1
+                        axe1 = type_activite
+                        axe2 = ''
+                        self.ajout_ligne(obj.id,journal,ct,'A1',f.date_creation,compte_general,compte_auxilaire,'D',montant,piece,axe1,axe2,libelle,partner_id,anomalie,frais_id,product_id)
+                        #*******************************************************
+
+
+                        #** Ligne Axe2 *****************************************
+                        anomalie=[]
+                        products=self.env['product.product'].search([
+                                ('is_consultant_id', '=', f.createur_id.id),
+                            ])
+                        axe1=''
+                        axe2=''
+                        for product in  products:
+                            axe2 = product.is_code_analytique
+                        if not axe2:
+                            anomalie=["Code analytique de l'article associé au consultant non défini"]
+                        self.ajout_ligne(obj.id,journal,ct,'A2',f.date_creation,compte_general,compte_auxilaire,'D',montant,piece,axe1,axe2,libelle,partner_id,anomalie,frais_id,product_id)
+                        #*******************************************************
+
+
+                        #** Ligne TVA déductible *******************************
+                        if l.refacturable!='oui':
+                            compte_general = '445660'
+                            montant        = l.montant_tva
+                            libelle        = l.product_id.name
+                            axe1 = ''
+                            axe2 = ''
+                            if montant:
+                                self.ajout_ligne(obj.id,journal,ct,'G',f.date_creation,compte_general,compte_auxilaire,'D',montant,piece,axe1,axe2,libelle,partner_id,anomalie,frais_id,product_id)
+                        #*******************************************************
+
+
+                        #** Ligne TTC ******************************************
+                        anomalie=[]
+                        compte_auxilaire = ''
+                        compte_general   = ''
+                        effectuee_par = l.effectuee_par_id.name
+
+                        if effectuee_par == 'OPTA-S':
+                            compte_general   = '401000'
+                            compte_auxilaire = compte_fournisseur
+                            if not compte_auxilaire:
+                                anomalie.append("Compte non trouvé pour ce fournisseur")
+                        if effectuee_par == 'CONSULTANT':
+                            compte_general = f.createur_id.partner_id.property_account_payable_id
+                        if effectuee_par == 'CAISSE OPTA-S':
+                            compte_general = '531000'
+                        if effectuee_par == 'ESPECES_ASSOCIE':
+                            compte_general = '455111'
+                        montant = l.montant_ttc
+                        libelle = l.product_id.name
+                        axe1    = ''
+                        axe2    = ''
+                        self.ajout_ligne(obj.id,journal,ct,'G',f.date_creation,compte_general,compte_auxilaire,'C',montant,piece,axe1,axe2,libelle,partner_id,anomalie,frais_id,product_id)
+                        #*******************************************************
+
+
             if obj.journal=='VE':
                 journal=company.is_journal_vente
 
@@ -320,6 +472,8 @@ class is_export_compta_ligne(models.Model):
     invoice_id       = fields.Many2one('account.invoice', "Facture", readonly=True)
     partner_id       = fields.Many2one('res.partner', "Client/Fournisseur", readonly=True)
     activite_id      = fields.Many2one('is.activite', "Activité", readonly=True)
+    frais_id         = fields.Many2one('is.frais', "Frais", readonly=True)
+    product_id       = fields.Many2one('product.product', "Article", readonly=True)
     anomalie         = fields.Char("Anomalie", readonly=True)
 
 

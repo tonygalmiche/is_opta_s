@@ -32,6 +32,8 @@
                     <field name="invoice_id"/>
                     <field name="partner_id"/>
                     <field name="activite_id"/>
+                    <field name="frais_id"/>
+                    <field name="product_id"/>
                     <field name="anomalie"/>
                 </tree>
             </field>
@@ -59,6 +61,8 @@
                                 <field name="invoice_id"/>
                                 <field name="partner_id"/>
                                 <field name="activite_id"/>
+                                <field name="frais_id"/>
+                                <field name="product_id"/>
                                 <field name="anomalie"/>
                             </group>
                         </group>
@@ -84,6 +88,8 @@
                     <field name="invoice_id"/>
                     <field name="partner_id"/>
                     <field name="activite_id"/>
+                    <field name="frais_id"/>
+                    <field name="product_id"/>
                     <field name="anomalie"/>
                </search>
             </field>
@@ -92,7 +98,7 @@
             <field name="name">Détail des lignes à exporter</field>
             <field name="res_model">is.export.compta.ana.ligne</field>
             <field name="view_type">form</field>
-            <field name="limit">1000</field>
+            <field name="limit">100</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[('export_compta_id','=',active_id)]</field>
             <field name="context">{'default_export_compta_id': active_id}</field>
