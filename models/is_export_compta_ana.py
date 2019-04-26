@@ -259,7 +259,8 @@ class is_export_compta_ana(models.Model):
 
                             #** Lignes A1 des activités HT *********************
                             ct=ct+1
-                            axe1=line.account_id.is_code_analytique
+                            #axe1=line.account_id.is_code_analytique
+                            axe1 = invoice.fiscal_position_id.is_code_analytique or '2000'
                             anomalie=''
                             if not axe1:
                                 anomalie='Code analytique non défini pour ce compte général'
@@ -315,9 +316,10 @@ class is_export_compta_ana(models.Model):
 
 
                     #** Frais refacturés ***************************************
+                    comptes_au_forfait=['791000','791100','791110']
                     refacture=0
                     for line in invoice.invoice_line_ids:
-                        if line.is_frais_id and line.account_id.code=='467100':
+                        if line.is_frais_id and line.account_id.code not in comptes_au_forfait:
                             refacture+=line.price_subtotal
                     if refacture:
                         ct=ct+1
@@ -335,6 +337,7 @@ class is_export_compta_ana(models.Model):
                             'invoice_id'      : invoice.id,
                             'partner_id'      : invoice.partner_id.id,
                         }
+                        print('Frais refacturés',invoice.number)
                         self.env['is.export.compta.ana.ligne'].create(vals)
                     #***********************************************************
 
@@ -344,7 +347,7 @@ class is_export_compta_ana(models.Model):
                     general=''
                     axe1=''
                     for line in invoice.invoice_line_ids:
-                        if line.is_frais_id and line.account_id.code!='791100':
+                        if line.is_frais_id and line.account_id.code in comptes_au_forfait:
                             general=line.account_id.code
                             axe1=line.account_id.is_code_analytique
                             axe2=line.is_activite_id.intervenant_id.intervenant_id.is_code_analytique
@@ -355,7 +358,7 @@ class is_export_compta_ana(models.Model):
                         ct=ct+1
                         vals={
                             'export_compta_id': obj.id,
-                            'ligne'           : ct,
+                            'ligne'           : ct+9000,
                             'type_ecriture'   : 'G',
                             'date_facture'    : invoice.date_invoice,
                             'journal'         : journal,
@@ -368,16 +371,14 @@ class is_export_compta_ana(models.Model):
                             'partner_id'      : invoice.partner_id.id,
                         }
                         self.env['is.export.compta.ana.ligne'].create(vals)
-
                         ct=ct+1
-                        vals['ligne']         = ct
+                        vals['ligne']         = ct+1000
                         vals['type_ecriture'] = 'A1'
                         vals['axe1']          = axe1
                         vals['axe2']          = ''
                         self.env['is.export.compta.ana.ligne'].create(vals)
-
                         ct=ct+1
-                        vals['ligne']         = ct
+                        vals['ligne']         = ct+1000
                         vals['type_ecriture'] = 'A2'
                         vals['axe1']          = ''
                         vals['axe2']          = axe2

@@ -10,6 +10,12 @@ def f2(number):
     return '{0:,.2f}'.format(number).replace(',', ' ').replace('.', ',')
 
 
+class AccountFiscalPosition(models.Model):
+    _inherit = "account.fiscal.position"
+
+    is_code_analytique = fields.Char("Code analytique")
+
+
 class AccountAccount(models.Model):
     _inherit = "account.account"
 
