@@ -103,10 +103,6 @@ class is_export_compta_ana(models.Model):
 
                     for l in f.ligne_ids:
                         product_id = l.product_id.id
-                        anomalie=[]
-
-                        #** Recherche du compte fournisseur ********************
-                        #*******************************************************
 
                         #** Recherche du compte général ************************
                         compte_general=''
@@ -123,6 +119,7 @@ class is_export_compta_ana(models.Model):
 
 
                         #** Ligne HT *******************************************
+                        anomalie=[]
                         ct=ct+1
                         compte_auxilaire=''
                         montant = l.montant_ttc-l.montant_tva
@@ -139,6 +136,7 @@ class is_export_compta_ana(models.Model):
 
 
                         #** Ligne Axe1 *****************************************
+                        anomalie=[]
                         ct=ct+1
                         axe1 = type_activite
                         axe2 = ''
@@ -164,6 +162,7 @@ class is_export_compta_ana(models.Model):
 
 
                         #** Ligne TVA déductible *******************************
+                        anomalie=[]
                         if l.refacturable!='oui':
                             compte_general = '445660'
                             montant        = l.montant_tva
