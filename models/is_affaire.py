@@ -53,12 +53,12 @@ class IsAffaireTauxJournalier(models.Model):
 
     affaire_id  = fields.Many2one('is.affaire', 'Affaire', required=True, ondelete='cascade')
     unite       = fields.Selection([
-            ('heure'        , 'Heure'),
-            ('demie_journee', '1/2 journée'),
-            ('journee'      , 'Journée'),
-            ('forfait'      , 'Forfait'),
-            ('participant'  , 'Participant'),
-        ], u"Unité",)
+            ('heure'        , u'Heure'),
+            ('demie_journee', u'1/2 journée'),
+            ('journee'      , u'Journée'),
+            ('forfait'      , u'Forfait'),
+            ('participant'  , u'Participant'),
+        ], u"Unité",default='journee')
     montant = fields.Float("Montant intervention", digits=(14,2))
     commentaire = fields.Char("Commentaire")
 
@@ -267,7 +267,7 @@ class IsAffaire(models.Model):
     _name = 'is.affaire'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _description = "Affaire"
-    _order = 'name desc'
+    _order = 'code_long desc'
 
     @api.depends('date_creation')
     def _compute(self):
@@ -316,8 +316,8 @@ class IsAffaire(models.Model):
             obj.reste_encaissement = reste_encaissement
 
     name                 = fields.Char("Code affaire court", readonly=True, index=True)
-    code_long            = fields.Char("Code affaire", compute='_compute', readonly=True, store=True)
-    nature_affaire       = fields.Char("Nature de l'affaire"      , required=True, readonly=True, states={'offre_en_cours': [('readonly', False)]})
+    code_long            = fields.Char("Code affaire", compute='_compute', readonly=True, store=True, index=True)
+    nature_affaire       = fields.Char("Nature de l'affaire"      , required=True, readonly=True, states={'offre_en_cours': [('readonly', False)],'affaire_gagnee': [('readonly', False)]})
     partner_id           = fields.Many2one('res.partner', "Client", required=True, index=True, 
                                 domain=[('customer','=',True),('is_company','=',True)],
                                 readonly=True, states={'offre_en_cours': [('readonly', False)]})

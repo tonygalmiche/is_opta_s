@@ -5,28 +5,20 @@
         name="CRM"
         sequence="1"
     />
-    <menuitem
-        id="is_client_menu"
-        name="Clients"
-        parent="is_crm_main_menu"
-        sequence="10"
-        action="is_client_action"
-    />
-    <menuitem
-        id="is_partenai_menu"
-        name="Partenaires"
-        parent="is_crm_main_menu"
-        sequence="20"
-        action="is_partenaire_action"
-    />
+
+
 
     <menuitem
         id="is_affaire_menu"
         name="Affaires"
         parent="is_crm_main_menu"
-        sequence="30"
+        sequence="10"
         action="is_affaire_action"
     />
+
+
+
+
 
     <menuitem
         id="is_activite_menu"
@@ -126,6 +118,24 @@
         action="is_suivi_production_mensuel_action"
     />
     -->
+
+
+
+    <menuitem
+        id="is_client_menu"
+        name="Clients"
+        parent="is_crm_main_menu"
+        sequence="85"
+        action="is_client_action"
+    />
+    <menuitem
+        id="is_partenai_menu"
+        name="Partenaires"
+        parent="is_crm_main_menu"
+        sequence="86"
+        action="is_partenaire_action"
+    />
+
 
 
     <record id="is_crm_table_menu" model="ir.ui.menu" >
