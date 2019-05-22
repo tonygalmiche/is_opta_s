@@ -66,12 +66,16 @@
         <field name="model">is.facture.st</field>
         <field name="arch" type="xml">
             <search>
+                <field name="mois_facture"/>
+                <field name="annee_facture"/>
                 <field name="name"/>
                 <field name="sous_traitant_id"/>
                 <field name="description"/>
                 <field name="client_id"/>
                 <field name="affaire_id"/>
                 <field name="activite_id"/>
+                <filter name="2018" string="2018" domain="[('annee_facture','=','2018')]"/>
+                <filter name="2019" string="2019" domain="[('annee_facture','=','2019')]"/>
            </search>
         </field>
     </record>
