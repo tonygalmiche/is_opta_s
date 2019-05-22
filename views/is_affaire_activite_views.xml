@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="is_affaire_activite_form" model="ir.ui.view">
+        <field name="name">is.affaire.activite.form</field>
+        <field name="model">is.affaire.activite</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Affaire">
+                            <field name="affaire_id"/>
+                            <field name="code_long"/>
+                            <field name="nature_affaire"/>
+                            <field name="type_intervention_id"/>
+                            <field name="secteur_id"/>
+                            <field name="type_offre_id"/>
+                            <field name="annee_creation"/>
+                            <field name="fiscal_position_id"/>
+                            <field name="responsable_id"/>
+                        </group>
+                        <group string="Activité">
+                            <field name="activite_id"/>
+                            <field name="partner_id"/>
+                            <field name="nature_activite"/>
+                            <field name="date_debut"/>
+                            <field name="mois_activite"/>
+                            <field name="intervenant_product_id"/>
+                            <field name="montant"/>
+                            <field name="nb_realise"/>
+                            <field name="nb_facturable"/>
+                            <field name="total_facturable"/>
+                            <field name="invoice_id"/>
+                            <field name="state"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="is_affaire_activite_tree" model="ir.ui.view">
+        <field name="name">is.affaire.activite.tree</field>
+        <field name="model">is.affaire.activite</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="affaire_id"/>
+                <field name="nature_affaire"/>
+                <field name="type_intervention_id"/>
+                <field name="secteur_id"/>
+                <field name="type_offre_id"/>
+                <field name="annee_creation"/>
+                <field name="responsable_id"/>
+                <field name="partner_id"/>
+                <field name="nature_activite"/>
+                <field name="date_debut"/>
+                <field name="intervenant_product_id"/>
+                <field name="total_facturable" sum="Total"/>
+                <field name="invoice_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="is_affaire_activite_search" model="ir.ui.view">
+        <field name="name">is.affaire.activite.search</field>
+        <field name="model">is.affaire.activite</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="affaire_id"/>
+                <field name="code_long"/>
+                <field name="nature_affaire"/>
+                <field name="type_intervention_id"/>
+                <field name="secteur_id"/>
+                <field name="type_offre_id"/>
+                <field name="annee_creation"/>
+                <field name="mois_activite"/>
+                <field name="fiscal_position_id"/>
+                <field name="responsable_id"/>
+                <field name="partner_id"/>
+                <field name="nature_activite"/>
+                <field name="intervenant_product_id"/>
+                <field name="invoice_id"/>
+                <field name="state"/>
+           </search>
+        </field>
+    </record>
+    <record id="is_affaire_activite_pivot" model="ir.ui.view">
+        <field name="name">is_affaire_activite_pivot</field>
+        <field name="model">is.affaire.activite</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="date_debut"             type="col"/>
+                <field name="intervenant_product_id" type="row"/>
+                <field name="total_facturable"       type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="is_affaire_activite_graph" model="ir.ui.view">
+        <field name="name">is_affaire_activite_graph</field>
+        <field name="model">is.affaire.activite</field>
+        <field name="arch" type="xml">
+            <graph type="bar" orientation="vertical" stacked="False">
+                <field name="date_debut"       type="row"/>
+                <field name="total_facturable" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record  id="is_affaire_activite_action" model="ir.actions.act_window">
+        <field name="name">Suivi des activités par affaire</field>
+        <field name="res_model">is.affaire.activite</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">pivot,tree,form,graph</field>
+    </record>
+</odoo>

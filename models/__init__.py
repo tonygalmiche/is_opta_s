@@ -12,3 +12,4 @@ from . import res_company
 from . import is_activite_suivi_temps
 from . import is_export_compta
 from . import is_export_compta_ana
+from . import is_affaire_activite

@@ -185,6 +185,7 @@
                     <group>
                         <field name="invoice_id"/>
                         <field name="active" groups="base.group_system"/>
+                        <field name="is_dynacase_ids" widget="many2many_tags" groups="base.group_system"/>
                     </group>
                 </sheet>
                 <div class="oe_chatter">

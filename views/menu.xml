@@ -97,29 +97,6 @@
     />
 
 
-    <!--
-    <record id="is_crm_rapport_menu" model="ir.ui.menu" >
-        <field name="name">Rapports</field>
-        <field name="sequence">80</field>
-        <field name="parent_id" eval="ref('is_crm_main_menu')"/>
-    </record>
-    <menuitem
-        id="is_activite_suivi_temps_menu"
-        name="Suivi du temps par activité"
-        parent="is_crm_rapport_menu"
-        sequence="10"
-        action="is_activite_suivi_temps_action"
-    />
-    <menuitem
-        id="is_suivi_production_mensuel_menu"
-        name="Suivi de production mensuel"
-        parent="is_crm_rapport_menu"
-        sequence="20"
-        action="is_suivi_production_mensuel_action"
-    />
-    -->
-
-
 
     <menuitem
         id="is_client_menu"
@@ -219,7 +196,17 @@
         action="is_account_fiscal_position_action"
     />
 
-
-
+    <record id="is_crm_indicateur_menu" model="ir.ui.menu" >
+        <field name="name">Indicateurs</field>
+        <field name="sequence">95</field>
+        <field name="parent_id" eval="ref('is_crm_main_menu')"/>
+    </record>
+    <menuitem
+        id="is_affaire_activite_menu"
+        name="Suivi du temps par activité"
+        parent="is_crm_indicateur_menu"
+        sequence="10"
+        action="is_affaire_activite_action"
+    />
 
 </odoo>

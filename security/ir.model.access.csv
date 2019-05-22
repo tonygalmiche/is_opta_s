@@ -5,4 +5,5 @@ access_is_export_compta_ligne,access_is_export_compta_ligne,model_is_export_comp
 access_is_export_compta_ana,access_is_export_compta_ana,model_is_export_compta_ana,is_opta_s.is_administratif_group,1,1,1,1
 access_is_export_compta_ana_ligne,access_is_export_compta_ana_ligne,model_is_export_compta_ana_ligne,is_opta_s.is_administratif_group,1,1,1,1
 access_is_dynacase,access_is_dynacase,model_is_dynacase,base.group_user,base.group_user,1,1,1,1
+access_is_affaire_activite,access_is_affaire_activite,model_is_affaire_activite,base.group_user,1,0,0,0 
 

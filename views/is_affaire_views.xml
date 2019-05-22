@@ -338,6 +338,7 @@
                 <field name="partner_id"/>
                 <field name="type_intervention_id"/>
                 <field name="secteur_id"/>
+                <field name="annee_creation"/>
            </search>
         </field>
     </record>
