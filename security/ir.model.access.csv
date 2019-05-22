@@ -7,7 +7,6 @@ access_is_export_compta_ana_ligne,access_is_export_compta_ana_ligne,model_is_exp
 access_is_dynacase,access_is_dynacase,model_is_dynacase,base.group_user,base.group_user,1,1,1,1
 access_is_affaire_activite,access_is_affaire_activite,model_is_affaire_activite,base.group_user,1,0,0,0 
 access_is_invoice_activite,access_is_invoice_activite,model_is_invoice_activite,base.group_user,1,0,0,0 
-
-
-
+access_is_facture_st,access_is_facture_st,model_is_facture_st,base.group_user,1,0,0,0 
+access_is_facture_st_administratif,access_is_facture_st_administratif,model_is_facture_st,is_opta_s.is_administratif_group,1,1,1,1
 

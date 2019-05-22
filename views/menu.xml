@@ -81,6 +81,17 @@
         sequence="10"
         action="is_account_invoice_action"
     />
+
+
+    <menuitem
+        id="is_facture_st_menu"
+        name="Factures ST"
+        parent="is_crm_facture_menu"
+        sequence="15"
+        action="is_facture_st_action"
+    />
+
+
     <menuitem
         id="is_export_compta_menu"
         name="Export Compta Cegid"
