@@ -202,11 +202,30 @@
         <field name="parent_id" eval="ref('is_crm_main_menu')"/>
     </record>
     <menuitem
-        id="is_affaire_activite_menu"
-        name="Suivi du temps par activité"
+        id="is_suivi_production_menu"
+        name="Suivi de production"
         parent="is_crm_indicateur_menu"
         sequence="10"
-        action="is_affaire_activite_action"
+        action="is_suivi_production_action"
     />
+    <menuitem
+        id="is_suivi_production_facture_menu"
+        name="Suivi de production sur facture"
+        parent="is_crm_indicateur_menu"
+        sequence="10"
+        action="is_suivi_production_facture_action"
+    />
+
+
+    <menuitem
+        id="is_activite_suivi_temps_menu"
+        name="Temps de déplacement par mois"
+        parent="is_crm_indicateur_menu"
+        sequence="90"
+        action="is_activite_suivi_temps_action"
+    />
+
+
+
 
 </odoo>

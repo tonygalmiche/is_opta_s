@@ -24,7 +24,9 @@ class IsAffaireActivite(models.Model):
     partner_id             = fields.Many2one('res.partner', "Client facturable")
     nature_activite        = fields.Char("Nature de l'activité")
     date_debut             = fields.Date("Date de début de l'activité")
-    mois_activite          = fields.Char("Mois de l'activité")
+    annee_activite         = fields.Char("Année activité")
+    annee_mois_activite    = fields.Char("Année-Mois activité")
+    mois_activite          = fields.Char("Mois activité")
     intervenant_product_id = fields.Many2one('product.product', "Intervenant")
     montant                = fields.Float("Montant unitaire")
     nb_realise             = fields.Float("Nb unités réalisées")
@@ -61,7 +63,9 @@ class IsAffaireActivite(models.Model):
                     act.partner_id,
                     act.nature_activite,
                     act.date_debut,
-                    to_char(act.date_debut,'YYYY-MM') mois_activite,
+                    to_char(act.date_debut,'YYYY')    annee_activite,
+                    to_char(act.date_debut,'YYYY-MM') annee_mois_activite,
+                    to_char(act.date_debut,'MM')      mois_activite,
                     act.intervenant_product_id,
                     act.montant,
                     act.nb_realise,

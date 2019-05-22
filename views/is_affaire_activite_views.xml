@@ -23,6 +23,8 @@
                             <field name="partner_id"/>
                             <field name="nature_activite"/>
                             <field name="date_debut"/>
+                            <field name="annee_activite"/>
+                            <field name="annee_mois_activite"/>
                             <field name="mois_activite"/>
                             <field name="intervenant_product_id"/>
                             <field name="montant"/>
@@ -47,7 +49,6 @@
                 <field name="type_intervention_id"/>
                 <field name="secteur_id"/>
                 <field name="type_offre_id"/>
-                <field name="annee_creation"/>
                 <field name="responsable_id"/>
                 <field name="partner_id"/>
                 <field name="nature_activite"/>
@@ -70,7 +71,8 @@
                 <field name="type_intervention_id"/>
                 <field name="secteur_id"/>
                 <field name="type_offre_id"/>
-                <field name="annee_creation"/>
+                <field name="annee_activite"/>
+                <field name="annee_mois_activite"/>
                 <field name="mois_activite"/>
                 <field name="fiscal_position_id"/>
                 <field name="responsable_id"/>
@@ -79,6 +81,8 @@
                 <field name="intervenant_product_id"/>
                 <field name="invoice_id"/>
                 <field name="state"/>
+                <filter name="2018" string="2018" domain="[('annee_activite','=','2018')]"/>
+                <filter name="2019" string="2019" domain="[('annee_activite','=','2019')]"/>
            </search>
         </field>
     </record>
@@ -103,8 +107,8 @@
             </graph>
         </field>
     </record>
-    <record  id="is_affaire_activite_action" model="ir.actions.act_window">
-        <field name="name">Suivi des activités par affaire</field>
+    <record  id="is_suivi_production_action" model="ir.actions.act_window">
+        <field name="name">Suivi de production</field>
         <field name="res_model">is.affaire.activite</field>
         <field name="view_type">form</field>
         <field name="limit">200</field>
