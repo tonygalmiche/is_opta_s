@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="is_invoice_activite_form" model="ir.ui.view">
+        <field name="name">is.invoice.activite.form</field>
+        <field name="model">is.invoice.activite</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="invoice_id"/>
+                        <field name="date_invoice"/>
+                        <field name="annee_invoice"/>
+                        <field name="annee_mois_invoice"/>
+                        <field name="mois_invoice"/>
+                        <field name="partner_id"/>
+                        <field name="is_affaire_id"/>
+                        <field name="state"/>
+                        <field name="product_id"/>
+                        <field name="is_type_intervenant"/>
+                        <field name="is_activite_id"/>
+                        <field name="is_frais_id"/>
+                        <field name="price_subtotal"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="is_invoice_activite_tree" model="ir.ui.view">
+        <field name="name">is.invoice.activite.tree</field>
+        <field name="model">is.invoice.activite</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="invoice_id"/>
+                <field name="date_invoice"/>
+                <field name="partner_id"/>
+                <field name="is_affaire_id"/>
+                <field name="state"/>
+                <field name="product_id"/>
+                <field name="is_type_intervenant"/>
+                <field name="is_activite_id"/>
+                <field name="is_frais_id"/>
+                <field name="price_subtotal" sum="Total"/>
+            </tree>
+        </field>
+    </record>
+    <record id="is_invoice_activite_search" model="ir.ui.view">
+        <field name="name">is.invoice.activite.search</field>
+        <field name="model">is.invoice.activite</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="invoice_id"/>
+                <field name="partner_id"/>
+                <field name="is_affaire_id"/>
+                <field name="product_id"/>
+                <field name="is_type_intervenant"/>
+                <field name="is_activite_id"/>
+                <field name="is_frais_id"/>
+                <field name="state"/>
+                <filter name="2018" string="2018" domain="[('annee_invoice','=','2018')]"/>
+                <filter name="2019" string="2019" domain="[('annee_invoice','=','2019')]"/>
+           </search>
+        </field>
+    </record>
+    <record id="is_invoice_activite_pivot" model="ir.ui.view">
+        <field name="name">is_invoice_activite_pivot</field>
+        <field name="model">is.invoice.activite</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="date_invoice"   type="col"/>
+                <field name="product_id"     type="row"/>
+                <field name="price_subtotal" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="is_invoice_activite_graph" model="ir.ui.view">
+        <field name="name">is_invoice_activite_graph</field>
+        <field name="model">is.invoice.activite</field>
+        <field name="arch" type="xml">
+            <graph type="bar" orientation="vertical" stacked="False">
+                <field name="date_invoice"       type="row"/>
+                <field name="price_subtotal" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record  id="is_suivi_production_facture_action" model="ir.actions.act_window">
+        <field name="name">Suivi de production sur facture</field>
+        <field name="res_model">is.invoice.activite</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">pivot,tree,form,graph</field>
+    </record>
+</odoo>
