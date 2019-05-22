@@ -60,6 +60,7 @@ class IsInvoiceActivite(models.Model):
                 from account_invoice_line ail inner join account_invoice  ai on ail.invoice_id=ai.id
                                               inner join product_product  pp on ail.product_id=pp.id
                                               inner join product_template pt on pp.product_tmpl_id=pt.id
+                where pt.is_type_intervenant is not null and ai.state not in ('cancel','draft')
             )
         """)
 
