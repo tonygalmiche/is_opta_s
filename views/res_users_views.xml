@@ -12,6 +12,13 @@
                     <field name="is_dynacase_ids" widget="many2many_tags" groups="base.group_system"/>
                 </group>
             </field>
+            <group name="preferences" position="before">
+                <group string="Consultant" groups="base.group_system">
+                    <field name="is_nb_jours"/>
+                    <field name="is_salaire_an"/>
+                    <field name="is_salaire_jour"/>
+                </group>
+            </group>
         </field>
     </record>
     <record model="ir.ui.view" id="is_view_users_tree">

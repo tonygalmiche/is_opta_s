@@ -56,11 +56,17 @@ class IsFrais(models.Model):
             obj.chrono_long=(obj.login or '')+'-'+(obj.mois_creation or '')+'-'+(obj.chrono or '')
 
 
-    @api.depends('ligne_ids','nb_jours','montant_forfait')
+    @api.depends('ligne_ids','nb_jours','montant_forfait','frais_forfait')
     def _compute_total(self):
         for obj in self:
             total_consultant      = 0
-            total_refacturable    = obj.nb_jours*obj.montant_forfait
+            total_refacturable = 0
+            if obj.frais_forfait:
+                total_refacturable = obj.nb_jours*obj.montant_forfait
+
+            print(obj.frais_forfait,total_refacturable)
+
+
             total_frais           = 0
             total_tva_recuperable = 0
             for l in obj.ligne_ids:

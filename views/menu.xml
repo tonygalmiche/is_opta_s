@@ -223,7 +223,7 @@
         id="is_suivi_production_facture_menu"
         name="Suivi de production sur facture"
         parent="is_crm_indicateur_menu"
-        sequence="10"
+        sequence="20"
         action="is_suivi_production_facture_action"
     />
 
@@ -232,10 +232,16 @@
         id="is_activite_suivi_temps_menu"
         name="Temps de déplacement par mois"
         parent="is_crm_indicateur_menu"
-        sequence="90"
+        sequence="30"
         action="is_activite_suivi_temps_action"
     />
-
+    <menuitem
+        id="is_suivi_production_affaire_menu"
+        name="Suivi de production par affaire"
+        parent="is_crm_indicateur_menu"
+        sequence="40"
+        action="is_suivi_production_affaire_action"
+    />
 
 
 
