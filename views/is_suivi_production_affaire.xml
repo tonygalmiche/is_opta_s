@@ -36,6 +36,7 @@
                 <field name="date_fin"/>
                 <field name="regroupement_par"/>
                 <field name="affaire_id"/>
+                <field name="createur_id" invisible="1"/>
             </tree>
         </field>
     </record>
@@ -53,6 +54,7 @@
         <field name="res_model">is.suivi.production.affaire</field>
         <field name="view_type">form</field>
         <field name="limit">200</field>
+        <field name="domain">[('createur_id','=',uid)]</field>
         <field name="view_mode">tree,form</field>
     </record>
 

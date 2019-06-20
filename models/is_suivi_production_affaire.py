@@ -232,6 +232,7 @@ class IsSuiviProductionAffaire(models.Model):
                 'res_model': 'is.suivi.production.affaire.line',
                 'type': 'ir.actions.act_window',
                 'domain': [['suivi_id','=',obj.id]],
+                'limit': 1000,
             }
             return res
 
