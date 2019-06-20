@@ -244,7 +244,7 @@ class IsSuiviProductionAffaireLine(models.Model):
     _rec_name = 'affaire_id'
 
 
-    suivi_id           = fields.Many2one('is.suivi.production.affaire', 'Suivi', required=True,index=True)
+    suivi_id           = fields.Many2one('is.suivi.production.affaire', 'Suivi', required=True,index=True, ondelete='cascade')
     affaire_id         = fields.Many2one('is.affaire', 'Affaire')
     consultant_id      = fields.Many2one('product.template', 'Consultant')
     ca_brut_facturable = fields.Float("CA brut facturable (1)"        , digits=(14,2))
