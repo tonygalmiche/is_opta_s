@@ -327,7 +327,7 @@ class IsAffaire(models.Model):
                                 readonly=True, states={'offre_en_cours': [('readonly', False)]})
     type_offre_id        = fields.Many2one('is.type.offre', "Type d'offre",
                                 readonly=True, states={'offre_en_cours': [('readonly', False)]})
-    date_creation        = fields.Date("Date de création", default=fields.Date.today(),
+    date_creation        = fields.Date("Date de création", default=lambda *a: fields.Date.today(),
                                 readonly=True, states={'offre_en_cours': [('readonly', False)]})
     annee_creation       = fields.Char("Année", compute='_compute', readonly=True, store=True)
     createur_id          = fields.Many2one('res.users', "Créateur", default=lambda self: self.env.user, readonly=True, states={'offre_en_cours': [('readonly', False)]})

@@ -92,7 +92,7 @@ class IsFrais(models.Model):
     chrono_long      = fields.Char("Chrono long", compute='compute_chrono', readonly=True, store=True)
     createur_id      = fields.Many2one('res.users', "Créateur", required=True, default=lambda self: self.env.user)
     login            = fields.Char("Login" , compute='compute_chrono', readonly=True, store=True)
-    date_creation    = fields.Date("Date de création", required=True, index=True, default=fields.Date.today())
+    date_creation    = fields.Date("Date de création", required=True, index=True, default=lambda *a: fields.Date.today())
     mois_creation    = fields.Char("Mois" , compute='compute_chrono', readonly=True, store=True)
     annee_creation   = fields.Char("Année", compute='compute_chrono', readonly=True, store=True)
     affaire_id       = fields.Many2one('is.affaire' , 'Affaire' , required=False)
