@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="is_google_agenda_form" model="ir.ui.view">
+            <field name="name">is.google.agenda.form</field>
+            <field name="model">is.google.agenda</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="date_debut"/>
+                            <field name="date_fin"/>
+                            <field name="duree"/>
+                            <field name="event_id"/>
+                            <field name="intitule"/>
+                            <field name="categorie_id"/>
+                        </group>
+                     </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="is_google_agenda_tree" model="ir.ui.view">
+            <field name="name">is.google.agenda.tree</field>
+            <field name="model">is.google.agenda</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="user_id"/>
+                    <field name="date_debut"/>
+                    <field name="date_fin"/>
+                    <field name="duree"/>
+                    <field name="event_id"/>
+                    <field name="intitule"/>
+                    <field name="categorie_id"/>
+                </tree>
+            </field>
+        </record>
+        <record id="is_google_agenda_search" model="ir.ui.view">
+            <field name="name">is.google.agenda.search</field>
+            <field name="model">is.google.agenda</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="user_id"/>
+                    <field name="intitule"/>
+                    <field name="categorie_id"/>
+               </search>
+            </field>
+        </record>
+        <record  id="is_google_agenda_action" model="ir.actions.act_window">
+            <field name="name">Evénements Google Agenda</field>
+            <field name="res_model">is.google.agenda</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+
+
+        <!-- is.google.agenda.categorie -->
+        <record id="is_google_agenda_categorie_form" model="ir.ui.view">
+            <field name="name">is.google.agenda.categorie.form</field>
+            <field name="model">is.google.agenda.categorie</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                     </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="is_google_agenda_categorie_tree" model="ir.ui.view">
+            <field name="name">is.google.agenda.categorie.tree</field>
+            <field name="model">is.google.agenda.categorie</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="is_google_agenda_categorie_search" model="ir.ui.view">
+            <field name="name">is.google.agenda.categorie.search</field>
+            <field name="model">is.google.agenda.categorie</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+               </search>
+            </field>
+        </record>
+        <record  id="is_google_agenda_categorie_action" model="ir.actions.act_window">
+            <field name="name">Catégorie Google Agenda</field>
+            <field name="res_model">is.google.agenda.categorie</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </data>
+</openerp>

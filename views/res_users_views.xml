@@ -9,6 +9,7 @@
                 <group>
                     <field name="is_initiales"/>
                     <field name="is_compte_general"/>
+                    <field name="is_google_agenda_ical"/>
                     <field name="is_dynacase_ids" widget="many2many_tags" groups="base.group_system"/>
                 </group>
             </field>
@@ -29,8 +30,23 @@
             <field name="login" position="after">
                 <field name="is_initiales"/>
                 <field name="is_compte_general"/>
+                <field name="is_google_agenda_ical"/>
                 <field name="is_dynacase_ids" widget="many2many_tags" groups="base.group_system"/>
             </field>
+        </field>
+    </record>
+
+
+
+    <!-- Actualiser Google agenda  -->
+    <record id="actualiser_google_agenda_action_server" model="ir.actions.server">
+        <field name="name">Actualiser Google agenda</field>
+        <field name="type">ir.actions.server</field>
+        <field name="state">code</field>
+        <field name="model_id" ref="is_opta_s.model_res_users"/>
+        <field name="binding_model_id" ref="is_opta_s.model_res_users"/>
+        <field name="code">
+records.actualiser_google_agenda_action()
         </field>
     </record>
 

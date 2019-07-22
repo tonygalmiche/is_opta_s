@@ -155,7 +155,7 @@
             <field name="view_mode">tree,form,calendar,graph</field>
             <field name="view_id" ref="account.invoice_tree"/>
             <field name="search_view_id" ref="account.view_account_invoice_filter"/>
-            <field name="domain">[('type','=','out_invoice')]</field>
+            <field name="domain">[('type','in',['out_invoice','out_refund'])]</field>
             <field name="context">{'type':'out_invoice', 'journal_type': 'sale'}</field>
             <field name="limit">200</field>
         </record>
