@@ -11,7 +11,8 @@
                             <field name="user_id"/>
                             <field name="date_debut"/>
                             <field name="date_fin"/>
-                            <field name="duree"/>
+                            <field name="duree" widget="float_time"/>
+                            <field name="temps_disponible"/>
                             <field name="event_id"/>
                             <field name="intitule"/>
                             <field name="categorie_id"/>
@@ -28,8 +29,8 @@
                     <field name="user_id"/>
                     <field name="date_debut"/>
                     <field name="date_fin"/>
-                    <field name="duree"/>
-                    <field name="event_id"/>
+                    <field name="duree" widget="float_time"/>
+                    <field name="temps_disponible"/>
                     <field name="intitule"/>
                     <field name="categorie_id"/>
                 </tree>
@@ -43,14 +44,64 @@
                     <field name="user_id"/>
                     <field name="intitule"/>
                     <field name="categorie_id"/>
+                    <field name="temps_disponible"/>
                </search>
             </field>
         </record>
-        <record  id="is_google_agenda_action" model="ir.actions.act_window">
-            <field name="name">Evénements Google Agenda</field>
+
+
+
+        <record id="is_google_agenda_temps_prevu_pivot" model="ir.ui.view">
+            <field name="name">is_google_agenda_temps_prevu_pivot</field>
+            <field name="model">is.google.agenda</field>
+            <field name="arch" type="xml">
+                <pivot>
+                    <field name="date_debut" type="row" interval="day"/>
+                    <field name="user_id"    type="col"/>
+                    <field name="duree"      type="measure"/>
+                </pivot>
+            </field>
+        </record>
+        <record  id="is_google_agenda_temps_prevu_action" model="ir.actions.act_window">
+            <field name="name">Temps prévu par jour et par consultant</field>
             <field name="res_model">is.google.agenda</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">pivot,tree,form</field>
+            <field name="view_id" ref="is_google_agenda_temps_prevu_pivot"/>
+            <field name="domain">[('temps_disponible','=',False)]</field>
+            <field name="limit">200</field>
+        </record>
+
+        <record id="is_google_agenda_temps_dispo_pivot" model="ir.ui.view">
+            <field name="name">is_google_agenda_temps_dispo_pivot</field>
+            <field name="model">is.google.agenda</field>
+            <field name="arch" type="xml">
+                <pivot>
+                    <field name="date_debut" type="row" interval="day"/>
+                    <field name="user_id"    type="col"/>
+                    <field name="duree"      type="measure"/>
+                </pivot>
+            </field>
+        </record>
+        <record  id="is_google_agenda_temps_dispo_action" model="ir.actions.act_window">
+            <field name="name">Temps disponible par jour et par consultant</field>
+            <field name="res_model">is.google.agenda</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">pivot,tree,form</field>
+            <field name="view_id" ref="is_google_agenda_temps_dispo_pivot"/>
+            <field name="domain">[('temps_disponible','=',True)]</field>
+            <field name="limit">200</field>
+        </record>
+
+        <!-- Recalul la nuit -->
+        <record id="is_google_agenda_cron" model="ir.cron">
+            <field name="name">Actualisation Google Agenda</field>
+            <field name="model_id" ref="model_is_google_agenda"/>
+            <field name="state">code</field>
+            <field name="code">model.actualiser_action()</field>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>days</field>
+            <field name="numbercall">-1</field>
         </record>
 
 
@@ -95,15 +146,6 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
-
-
-
-
-
-
-
-
-
 
 
 

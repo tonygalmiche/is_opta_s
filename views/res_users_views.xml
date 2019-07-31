@@ -5,14 +5,14 @@
         <field name="model">res.users</field>
         <field name="inherit_id" ref="base.view_users_form"/>
         <field name="arch" type="xml">
-            <field name="login" position="after">
+            <xpath expr="//div[hasclass('oe_title')][1]" position="after">
                 <group>
                     <field name="is_initiales"/>
                     <field name="is_compte_general"/>
                     <field name="is_google_agenda_ical"/>
                     <field name="is_dynacase_ids" widget="many2many_tags" groups="base.group_system"/>
                 </group>
-            </field>
+            </xpath>
             <group name="preferences" position="before">
                 <group string="Consultant" groups="is_opta_s.is_administratif_group">
                     <field name="is_nb_jours"/>

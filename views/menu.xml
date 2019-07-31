@@ -135,20 +135,26 @@
         ])]"/>
     </record>
     <menuitem
-        id="is_google_agenda_menu"
-        name="Evénements"
+        id="is_google_agenda_temps_prevu_menu"
+        name="Temps prévu par jour et par consultant"
         parent="is_google_agenda_main_menu"
         sequence="10"
-        action="is_google_agenda_action"
+        action="is_google_agenda_temps_prevu_action"
+    />
+    <menuitem
+        id="is_google_agenda_temps_dispo_menu"
+        name="Temps disponible par jour et par consultant"
+        parent="is_google_agenda_main_menu"
+        sequence="20"
+        action="is_google_agenda_temps_dispo_action"
     />
     <menuitem
         id="is_google_agenda_categorie_menu"
         name="Catégories"
         parent="is_google_agenda_main_menu"
-        sequence="20"
+        sequence="30"
         action="is_google_agenda_categorie_action"
     />
-
 
 
     <!-- Tables -->
