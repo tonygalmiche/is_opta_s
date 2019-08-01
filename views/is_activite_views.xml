@@ -277,6 +277,7 @@
         <field name="view_type">form</field>
         <field name="limit">200</field>
         <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="view_id" ref="is_activite_tree"/>
     </record>
 
 </odoo>

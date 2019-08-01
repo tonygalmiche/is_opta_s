@@ -312,6 +312,7 @@
                 <field name="createur_id"/>
                 <field name="responsable_id"/>
                 <field name="ca_previsionnel"/>
+                <field name="total_facture_ht"/>
                 <field name="state"/>
                 <field name="is_dynacase_ids" widget="many2many_tags" groups="base.group_system"/>
             </tree>

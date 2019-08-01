@@ -267,7 +267,7 @@ class IsAffaire(models.Model):
     _name = 'is.affaire'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _description = "Affaire"
-    _order = 'code_long desc'
+    _order = 'date_creation desc'
 
     @api.depends('date_creation')
     def _compute(self):
