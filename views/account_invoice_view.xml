@@ -67,6 +67,13 @@
                         groups="account.group_account_invoice"
                     />
                 </xpath>
+
+                <field name="payment_term_id" position="after">
+                    <field name="is_code_service"/>
+                    <field name="is_ref_engagement"/>
+                    <field name="is_frais_commentaire"/>
+                </field>
+
                 <field name="user_id" position="replace">
                     <field name="is_createur_id"/>
                     <field name="is_detail_activite" />

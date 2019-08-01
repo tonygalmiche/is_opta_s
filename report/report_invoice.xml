@@ -10,7 +10,7 @@
                             font-size:14pt;
                             font-weight: bold;
                             text-align: center;
-                            margin-top:10mm;
+                            margin-top:2mm;
                         }
                         td,th{
                             font-size:10pt;
@@ -46,7 +46,17 @@
                             <t t-if="o.partner_id.city"><span t-field="o.partner_id.city"/><br /></t>
                         </div>
                     </div>
-                    <br />
+                    <div class="row">
+                        <div class="col-7">
+                            <div t-if="o.partner_id.siret">SIRET : <span t-field="o.partner_id.siret"/></div>
+                            <div t-if="o.is_code_service">Code service : <span t-field="o.is_code_service"/></div>
+                            <div t-if="o.is_ref_engagement">Réf engagement : <span t-field="o.is_ref_engagement"/></div>
+                        </div>
+                        <div class="col-5">
+                            <br />
+                            <div><span t-field="o.company_id.city"/>, le <span t-field="o.date_invoice"/></div>
+                        </div>
+                    </div>
                     <h2>
                         <span t-if="o.type == 'out_invoice' and o.state in ('open', 'in_payment', 'paid')">Facture</span>
                         <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Facture brouillon</span>
@@ -54,13 +64,11 @@
                         <span t-if="o.type == 'out_refund'">Avoir</span>
                         <span t-if="o.type == 'in_refund'">Avoir</span>
                         <span t-if="o.type == 'in_invoice'">Facture fournisseur</span>
-                        <span t-field="o.number"/> du <span t-field="o.date_invoice"/>
+                        <span t-field="o.number"/>
                     </h2>
-                    <br />
+
 
                     <p><b>Affaire : </b><span t-field="o.is_affaire_id.nature_affaire"/></p>
-
-
 
                     <t t-set="phases" t-value="o.get_invoice_line()"/>
                     <p t-raw="phases"/>
@@ -74,7 +82,7 @@
 
                                     <t t-if="o.is_frais">
                                         <tr class="border-black" style="border-bottom:1px solid #dddddd;">
-                                            <td><strong>Frais refacturables</strong></td>
+                                            <td><strong><span t-field="o.is_frais_commentaire"/></strong></td>
                                             <td class="text-right">
                                                 <span t-field="o.is_frais"/>
                                             </td>
@@ -89,25 +97,27 @@
                                         </td>
                                     </tr>
                                     <t t-foreach="o.amount_by_group" t-as="amount_by_group">
-                                        <tr style="border-bottom:1px solid #dddddd;">
-                                            <t t-if="len(o.tax_line_ids) == 1 and o.amount_untaxed == amount_by_group[2]">
-                                                <td><span t-esc="amount_by_group[0]"/></td>
-                                                <td class="text-right">
-                                                    <span t-esc="amount_by_group[3]" />
-                                                </td>
-                                            </t>
-                                            <t t-else="">
-                                                <td>
-                                                    <span t-esc="amount_by_group[0]"/>
-                                                    <span>&amp;nbsp;<span>on</span>
-                                                        <t t-esc="amount_by_group[4]"/>
-                                                    </span>
-                                                </td>
-                                                <td class="text-right">
-                                                    <span t-esc="amount_by_group[3]"/>
-                                                </td>
-                                            </t>
-                                        </tr>
+                                        <t t-if="amount_by_group[3]!='0,00 €'">
+                                            <tr style="border-bottom:1px solid #dddddd;">
+                                                <t t-if="len(o.tax_line_ids) == 1 and o.amount_untaxed == amount_by_group[2]">
+                                                    <td><span t-esc="amount_by_group[0]"/></td>
+                                                    <td class="text-right">
+                                                        <span t-esc="amount_by_group[3]" />
+                                                    </td>
+                                                </t>
+                                                <t t-else="">
+                                                    <td>
+                                                        <span t-esc="amount_by_group[0]"/>
+                                                        <span>&amp;nbsp;<span>sur</span>
+                                                            <t t-esc="amount_by_group[4]"/>
+                                                        </span>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <span t-esc="amount_by_group[3]"/>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                        </t>
                                     </t>
 
 

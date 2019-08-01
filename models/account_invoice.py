@@ -57,16 +57,40 @@ class AccountInvoice(models.Model):
         readonly=True, states={'draft': [('readonly', False)]},
         default=lambda self: self.env.user, copy=False)
 
-    is_affaire_id           = fields.Many2one('is.affaire', 'Affaire')
+    is_affaire_id           = fields.Many2one('is.affaire', u'Affaire')
     is_activites            = fields.Many2many('is.activite', 'is_account_invoice_activite_rel', 'invoice_id', 'activite_id')
-    is_detail_activite      = fields.Boolean('Afficher le détail des activités',default=True)
-    is_phase                = fields.Boolean('Afficher les phases',default=True)
-    is_intervenant          = fields.Boolean('Afficher les intervenants sur la facture')
-    is_prix_unitaire        = fields.Boolean('Afficher les quantités et prix unitaire sur la facture')
-    is_frais                = fields.Monetary('Total des frais refacturables')
-    is_detail_frais         = fields.Boolean('Afficher le détail des frais',default=False)
-    is_date_encaissement    = fields.Date('Date encaissement')
-    is_montant_encaissement = fields.Float('Montant encaissement', digits=(14,2))
+    is_detail_activite      = fields.Boolean(u'Afficher le détail des activités',default=True)
+    is_phase                = fields.Boolean(u'Afficher les phases',default=True)
+    is_intervenant          = fields.Boolean(u'Afficher les intervenants sur la facture')
+    is_prix_unitaire        = fields.Boolean(u'Afficher les quantités et prix unitaire sur la facture')
+    is_frais                = fields.Monetary(u'Total des frais refacturables')
+    is_detail_frais         = fields.Boolean(u'Afficher le détail des frais',default=False)
+    is_date_encaissement    = fields.Date(u'Date encaissement')
+    is_montant_encaissement = fields.Float(u'Montant encaissement', digits=(14,2))
+    is_code_service         = fields.Char(u"Code service")
+    is_ref_engagement       = fields.Char(u"Réf engagement")
+    is_frais_commentaire    = fields.Char("Facturation des frais", compute='_is_frais_commentaire', readonly=True, store=False)
+
+#        $frais_reel_commentaire="Forfait Frais de déplacement";
+#        if ($nature_affaire=="Au réel") {
+#            $frais_reel_commentaire="Frais de déplacement : débours : cf justificatifs";
+#        }
+#        if ($nature_affaire=="Frais inclus") {
+#            $frais_reel_commentaire="Frais de déplacement inclus";
+#        }
+
+    def _is_frais_commentaire(self):
+        for obj in self:
+            x = False
+            if obj.is_affaire_id:
+                nature_frais = obj.is_affaire_id.nature_frais
+                if nature_frais=='au_reel' or nature_frais=='reel_plafonne':
+                    x = u"Frais de déplacement : débours : cf justificatifs"
+                if obj.is_affaire_id.nature_frais == 'frais_inclus':
+                    x = u"Frais de déplacement inclus"
+                if obj.is_affaire_id.nature_frais == 'forfait':
+                    x = u"Forfait Frais de déplacement"
+            obj.is_frais_commentaire = x
 
 
     @api.onchange('partner_id', 'company_id', 'is_affaire_id')
