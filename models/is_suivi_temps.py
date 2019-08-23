@@ -1,5 +1,67 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
+import datetime
+
+
+
+class IsSuiviTempsSimplifieWizard(models.TransientModel):
+    _name = 'is.suivi.temps.simplifie.wizard'
+    _description = u'Interface pour la saisie simplifiée du temps'
+
+
+    @api.multi
+    def _get_date_lundi(self):
+        date = datetime.date.today()
+        jour = date.weekday()
+        date = date - datetime.timedelta(days=jour) 
+        return date
+ 
+
+    intervenant_id = fields.Many2one('res.users', "Intervenant", required=True, default=lambda self: self.env.user)
+    date_semaine   = fields.Date("Lundi de la semaine à saisir" , required=True, default=lambda self: self._get_date_lundi())
+
+
+    @api.multi
+    def interface_simplifiee(self):
+        for obj in self:
+            date_semaine = obj.date_semaine
+            jour = date_semaine.weekday()
+            date_semaine = date_semaine - datetime.timedelta(days=jour) 
+            affaires = self.env['is.affaire'].search([('state', '=', 'affaire_gagnee')])
+            ids=[]
+            for affaire in affaires:
+                intervenants = affaire.intervenant_ids
+                for intervenant in intervenants:
+                    if obj.intervenant_id == intervenant.intervenant_id.is_consultant_id:
+                        activites = self.env['is.activite'].search([('affaire_id', '=', affaire.id),('state','=','brouillon')])
+                        for activite in activites:
+                            if activite.intervenant_id == intervenant:
+                                suivis = self.env['is.suivi.temps'].search([('activite_id', '=', activite.id),('date_activite','=',date_semaine)])
+                                suivi = False
+                                for s in suivis:
+                                    suivi = s
+                                if not suivi:
+                                    vals={
+                                        'activite_id'  : activite.id,
+                                        'affaire_id'   : affaire.id,
+                                        'type_activite': 'formation',
+                                        'date_activite': date_semaine,
+                                    }
+                                    suivi = self.env['is.suivi.temps'].create(vals)
+                                ids.append(suivi.id)
+            if ids:
+                return {
+                    'name': u'Suivi du temps '+obj.intervenant_id.name,
+                    'view_mode': 'tree',
+                    'view_type': 'form',
+                    'res_model': 'is.suivi.temps',
+                    'type': 'ir.actions.act_window',
+                    'view_id': self.env.ref('is_opta_s.is_suivi_temps_simplifie_tree').id,
+                    'domain': [
+                        ('id','in',ids),
+                    ],
+                    'limit': 1000,
+                }
 
 
 class IsSuiviTemps(models.Model):
@@ -31,7 +93,7 @@ class IsSuiviTemps(models.Model):
         ], u"Type d'activité", required=True)
     date_activite        = fields.Date("Date", index=True, required=True) # default=lambda self: self._get_date_activite()
     nb_stagiaires        = fields.Integer("Nombre de stagiaires")
-    nb_heures            = fields.Float("Nombre d'heures par jour", required=True)
+    nb_heures            = fields.Float("Nombre d'heures par jour", required=False)
     realise_st           = fields.Selection([
             ('oui', u'Oui'),
             ('non', u'Non'),

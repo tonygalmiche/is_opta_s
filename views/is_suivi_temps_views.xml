@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+
+    <!--is.suivi.temps.simplifie.wizard-->
+    <record id="is_suivi_temps_simplifie_wizard_form" model="ir.ui.view">
+        <field name="name">is_suivi_temps_simplifie_wizard_form</field>
+        <field name="model">is.suivi.temps.simplifie.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Interface simplifiée de suivi du temps">
+                <sheet>
+                    <group>
+                        <field name="intervenant_id"/>
+                        <field name="date_semaine"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string='Interface simplifiée de suivi du temps' name="interface_simplifiee" type="object" class="oe_highlight"/>
+                    <button string="Annuler" class="oe_link" special="cancel"/>
+                </footer>
+           </form>
+        </field>
+    </record>
+    <record id="is_suivi_temps_simplifie_wizard_action" model="ir.actions.act_window">
+        <field name="name">Interface simplifiée de suivi du temps</field>
+        <field name="res_model">is.suivi.temps.simplifie.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+       <field name="view_id" ref="is_suivi_temps_simplifie_wizard_form"/>
+       <field name="target">new</field>
+    </record>
+
+
     <!-- is.suivi.temps -->
     <record id="is_suivi_temps_form" model="ir.ui.view">
         <field name="name">is.suivi.temps.form</field>
@@ -139,6 +169,26 @@
         <field name="context">{'default_type_activite': 'back-office' }</field>
         <field name="domain">[('type_activite','=','back-office')]</field>
     </record>
+
+
+    <record id="is_suivi_temps_simplifie_tree" model="ir.ui.view">
+        <field name="name">is_suivi_temps_simplifie_tree</field>
+        <field name="model">is.suivi.temps</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="affaire_id"    readonly="1"/>
+                <field name="activite_id"   readonly="1"/>
+                <field name="type_activite"/>
+                <field name="date_activite" readonly="1" string="Lundi de la semaine"/>
+                <field name="nb_heures"         widget="float_time" sum="Total" string="Temps passé dans la semaine"/>
+                <field name="detail_activite"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+
 
 
 </odoo>

@@ -30,6 +30,7 @@
 
 
 
+    <!-- Suivi du temps -->
     <menuitem
         id="is_suivi_temps_main_menu"
         name="Suivi temps"
@@ -57,6 +58,16 @@
         sequence="30"
         action="is_suivi_temps_back_office_action"
     />
+    <menuitem
+        id="is_suivi_temps_simplifie_wizard_menu"
+        name="Interface simplifiée de suivi du temps"
+        parent="is_suivi_temps_main_menu"
+        sequence="40"
+        action="is_suivi_temps_simplifie_wizard_action"
+    />
+
+
+
 
 
     <menuitem
