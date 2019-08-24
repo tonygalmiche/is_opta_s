@@ -41,6 +41,23 @@ class IsInvoiceActivite(models.Model):
         cr , uid, context = self.env.args
         tools.drop_view_if_exists(cr, 'is_invoice_activite')
         cr.execute("""
+
+
+            CREATE OR REPLACE FUNCTION fsens(t text) RETURNS integer AS $$
+            BEGIN
+                RETURN (
+                    SELECT
+                    CASE
+                    WHEN t::text = ANY (ARRAY['out_refund'::character varying::text, 'in_refund'::character varying::text])
+                        THEN -1::int
+                        ELSE 1::int
+                    END
+                );
+            END;
+            $$ LANGUAGE plpgsql;
+
+
+
             CREATE OR REPLACE view is_invoice_activite AS (
                 select
                     ail.id,
@@ -48,7 +65,7 @@ class IsInvoiceActivite(models.Model):
                     pt.is_type_intervenant,
                     ail.is_activite_id,
                     ail.is_frais_id,
-                    ail.price_subtotal,
+                    fsens(ai.type)*ail.price_subtotal price_subtotal,
                     ail.invoice_id,
                     ai.is_affaire_id,
                     ai.partner_id,

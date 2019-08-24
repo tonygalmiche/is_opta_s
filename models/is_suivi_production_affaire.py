@@ -106,18 +106,20 @@ class IsSuiviProductionAffaire(models.Model):
 
 
             #** frais_a_deduire ************************************************
-            champ = 'affaire_id'
+            champ = 'if.affaire_id'
             if obj.regroupement_par=='consultant':
-                champ = 'createur_id'
+                champ = 'if.createur_id'
             SQL="""
-                select """+champ+""",sum(total_refacturable),sum(total_frais)
-                from is_frais
+                select """+champ+""",sum(if.total_refacturable),sum(if.total_frais)
+                from is_frais if inner join is_affaire  ia on if.affaire_id=ia.id
+                                 inner join res_partner rp on ia.partner_id=rp.id
                 where 
-                    date_creation>='"""+str(obj.date_debut)+"""' and
-                    date_creation<='"""+str(obj.date_fin)+"""'
+                    if.date_creation>='"""+str(obj.date_debut)+"""' and
+                    if.date_creation<='"""+str(obj.date_fin)+"""' and
+                    rp.name<>'OPTA-S' 
             """
             if obj.affaire_id:
-                SQL=SQL+" and affaire_id="""+str(obj.affaire_id.id)+" "
+                SQL=SQL+" and if.affaire_id="""+str(obj.affaire_id.id)+" "
             SQL=SQL+"group by "+champ
             cr.execute(SQL)
             result = cr.fetchall()
