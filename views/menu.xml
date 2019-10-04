@@ -69,14 +69,27 @@
 
 
 
-
     <menuitem
-        id="is_frais_menu"
+        id="is_frais_main_menu"
         name="Frais"
         parent="is_crm_main_menu"
         sequence="60"
+    />
+    <menuitem
+        id="is_frais_menu"
+        name="Frais"
+        parent="is_frais_main_menu"
+        sequence="10"
         action="is_frais_action"
     />
+    <menuitem
+        id="is_frais_lignes_view_menu"
+        name="Lignes des Frais"
+        parent="is_frais_main_menu"
+        sequence="20"
+        action="is_frais_lignes_view_action"
+    />
+
 
 
     <menuitem

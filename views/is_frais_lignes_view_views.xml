@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- is.frais.lignes.view -->
+    <record id="is_frais_lignes_view_form" model="ir.ui.view">
+        <field name="name">is.frais.lignes.view.form</field>
+        <field name="model">is.frais.lignes.view</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Entête">
+                            <field name="chrono"/>
+                            <field name="chrono_long"/>
+                            <field name="createur_id"/>
+                            <field name="login"/>
+                            <field name="date_creation"/>
+                            <field name="mois_creation"/>
+                            <field name="annee_creation"/>
+                            <field name="affaire_id"/>
+                            <field name="activite_id"/>
+                            <field name="type_activite"/>
+                            <field name="state"/>
+                        </group>
+                        <group string="Ligne">
+                            <field name="partner_id"/>
+                            <field name="product_id"/>
+                            <field name="effectuee_par_id"/>
+                            <field name="montant_ttc"/>
+                            <field name="montant_tva"/>
+                            <field name="refacturable"/>
+                            <field name="commentaire"/>
+                            <field name="justificatif_joint"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="is_frais_lignes_view_tree" model="ir.ui.view">
+        <field name="name">is.frais.lignes.view.tree</field>
+        <field name="model">is.frais.lignes.view</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="chrono_long"/>
+                <field name="date_creation"/>
+                <field name="affaire_id"/>
+                <field name="activite_id"/>
+                <field name="type_activite"/>
+                <field name="state"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="effectuee_par_id"/>
+                <field name="montant_ttc" sum="Total"/>
+                <field name="montant_tva" sum="Total"/>
+                <field name="refacturable"/>
+                <field name="commentaire"/>
+                <field name="justificatif_joint"/>
+            </tree>
+        </field>
+    </record>
+    <record id="is_frais_lignes_view_pivot" model="ir.ui.view">
+        <field name="name">is_frais_lignes_view_pivot</field>
+        <field name="model">is.frais.lignes.view</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="date_creation"    type="row" interval="year"/>
+                <field name="effectuee_par_id" type="col"/>
+                <field name="montant_ttc"      type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="is_frais_lignes_view_graph" model="ir.ui.view">
+        <field name="name">is_frais_lignes_view_graph</field>
+        <field name="model">is.frais.lignes.view</field>
+        <field name="arch" type="xml">
+            <graph type="bar" orientation="vertical" stacked="False">
+                <field name="date_creation" type="row" interval="year"/>
+                <field name="montant_ttc"   type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record id="is_frais_lignes_view_search" model="ir.ui.view">
+        <field name="name">is.frais.lignes.view.search</field>
+        <field name="model">is.frais.lignes.view</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="chrono_long"/>
+                <field name="affaire_id"/>
+                <field name="activite_id"/>
+                <field name="type_activite"/>
+                <field name="state"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="effectuee_par_id"/>
+                <field name="refacturable"/>
+                <field name="commentaire"/>
+                <field name="justificatif_joint"/>
+           </search>
+        </field>
+    </record>
+    <record  id="is_frais_lignes_view_action" model="ir.actions.act_window">
+        <field name="name">Lignes des Frais</field>
+        <field name="res_model">is.frais.lignes.view</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+    </record>
+</odoo>

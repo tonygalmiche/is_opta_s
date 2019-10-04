@@ -203,7 +203,7 @@
                                     nolabel="1"
                                     context="{'default_affaire_id': active_id}"
                                 >
-                                    <tree>
+                                    <tree default_order="date_debut desc">
                                         <button string="Activité" name="acceder_activite_action" type="object" icon="fa-search-plus"/>
                                         <field name="partner_id"/>
                                         <field name="phase_activite_id" />
