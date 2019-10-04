@@ -38,12 +38,19 @@ class IsActivite(models.Model):
             obj.intervenant_product_id=obj.intervenant_id.intervenant_id.id
 
 
+    @api.depends('affaire_id','affaire_id.responsable_id')
+    def _compute_responsable_id(self):
+        for obj in self:
+            obj.responsable_id = obj.affaire_id.responsable_id.id
+
+
     @api.onchange('affaire_id')
     def onchange_affaire_id(self):
         self.partner_id = self.affaire_id.partner_id.id
 
 
     affaire_id             = fields.Many2one('is.affaire', 'Affaire', required=True,index=True)
+    responsable_id         = fields.Many2one('res.users', "Responsable de l'affaire", compute='_compute_responsable_id', readonly=True, store=True)
     partner_id             = fields.Many2one('res.partner', "Client facturable", required=True, index=True, domain=[('customer','=',True)])
     phase_activite_id      = fields.Many2one('is.affaire.phase.activite', 'Sous-phase',index=True)
     nature_activite        = fields.Char("Nature de l'activité"     , required=True, index=True)
