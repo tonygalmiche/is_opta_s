@@ -28,3 +28,18 @@ class IsFactureST(models.Model):
     activite_id       = fields.Many2one('is.activite', 'Activité', required=True)
 
 
+
+    @api.multi
+    def acceder_facture_st_action(self, vals):
+        for obj in self:
+            res= {
+                'name': 'Facture ST',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'res_model': 'is.facture.st',
+                'res_id': obj.id,
+                'type': 'ir.actions.act_window',
+            }
+            return res
+
+

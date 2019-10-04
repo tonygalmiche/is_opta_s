@@ -375,6 +375,9 @@ class IsAffaire(models.Model):
     frais_ids          = fields.One2many('is.frais'   , 'affaire_id', u'Frais')
     suivi_temps_ids    = fields.One2many('is.suivi.temps', 'affaire_id', u'Suivi du temps')
     facture_ids        = fields.One2many('account.invoice', 'is_affaire_id', u'Factures')
+
+    facture_st_ids     = fields.One2many('is.facture.st', 'affaire_id', u'Factures ST')
+
     total_facture_ht   = fields.Float('Total facturé HT'  , digits=(14,2), compute='_compute_total_facure', readonly=True, store=False)
     total_facture_ttc  = fields.Float('Total facturé TTC' , digits=(14,2), compute='_compute_total_facure', readonly=True, store=False)
     total_encaissement = fields.Float('Total encaissement', digits=(14,2), compute='_compute_total_facure', readonly=True, store=False)

@@ -290,6 +290,24 @@
                                 <field name="reste_encaissement"/>
                             </group>
                         </page>
+
+
+                        <page string="Factures ST" states="affaire_gagnee,affaire_soldee">
+                            <group>
+                                <field name="facture_st_ids" nolabel="1" readonly="1">
+                                    <tree>
+                                        <button string="Facture ST" name="acceder_facture_st_action" type="object" icon="fa-search-plus"/>
+                                        <field name="name"/>
+                                        <field name="sous_traitant_id"/>
+                                        <field name="date_facture"/>
+                                        <field name="description"/>
+                                        <field name="montant_ht" sum="Total"/>
+                                        <field name="frais"      sum="Total"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
                     </notebook>
                     <group>
                         <field name="date_solde" readonly="True"/>
