@@ -51,7 +51,7 @@
                 <field name="state"/>
                 <field name="user_id"/>
                 <field name="repartition"/>
-                <field name="ca_previsionnel_reparti"/>
+                <field name="ca_previsionnel_reparti" sum="Total"/>
                 <field name="commentaire"/>
             </tree>
         </field>
