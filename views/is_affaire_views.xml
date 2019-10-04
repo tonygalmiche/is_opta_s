@@ -41,6 +41,12 @@
                         states="affaire_gagnee"
                     />
                     <button 
+                        name="de_affaire_soldee_vers_gagnee" 
+                        type="object"
+                        string="vers Affaire gagnée"
+                        states="affaire_soldee"
+                    />
+                    <button 
                         name="creation_activite" 
                         type="object"
                         string="Nouvelle activité"

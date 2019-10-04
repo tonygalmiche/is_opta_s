@@ -440,8 +440,9 @@ class IsAffaire(models.Model):
     @api.multi
     def vers_offre_en_cours(self, vals):
         for obj in self:
+            obj.sudo().write({'state': 'offre_en_cours'})
             self.creer_notification(u'Vers Offre en cours')
-            obj.state='offre_en_cours'
+
 
     @api.multi
     def vers_offre_perdue(self, vals):
@@ -454,6 +455,14 @@ class IsAffaire(models.Model):
         for obj in self:
             self.creer_notification(u'Vers Affaire soldée')
             obj.state='affaire_soldee'
+
+
+    @api.multi
+    def de_affaire_soldee_vers_gagnee(self, vals):
+        for obj in self:
+            obj.sudo().write({'state': 'affaire_gagnee'})
+            self.creer_notification(u'de Affaire soldée vers Affaire gagnée')
+
 
     @api.multi
     def creation_activite(self, vals):
