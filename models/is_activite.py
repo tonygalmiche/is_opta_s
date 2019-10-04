@@ -61,6 +61,7 @@ class IsActivite(models.Model):
     point_cle              = fields.Text("Points clés de l'activité réalisée")
     suivi_temps_ids        = fields.One2many('is.suivi.temps', 'activite_id', u'Suivi du temps')
     frais_ids              = fields.One2many('is.frais', 'activite_id', u'Frais')
+    pieces_jointes_ids     = fields.Many2many('ir.attachment', 'is_activite_pieces_jointes_rel', 'doc_id', 'file_id', u'Pièces jointes')
     invoice_id             = fields.Many2one('account.invoice', "Facture",index=True)
     state                  = fields.Selection([
             ('brouillon', u'Brouillon'),

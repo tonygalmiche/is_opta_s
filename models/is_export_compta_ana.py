@@ -105,17 +105,13 @@ class is_export_compta_ana(models.Model):
                         product_id = l.product_id.id
 
                         #** Recherche du compte général ************************
+
                         compte_general=''
                         if l.refacturable!='oui':
-                            compte_general = l.product_id.property_account_expense_id.code
+                            compte_general = (l.product_id.property_account_expense_id.code or '')
                         else:
                             compte_general = '467100'
-                        if not compte_general:
-                            anomalie.append("Compte non trouvé pour ce type de dépense")
                         #*******************************************************
-
-
-
 
 
                         #** Ligne HT *******************************************
@@ -131,6 +127,8 @@ class is_export_compta_ana(models.Model):
                         partner_id = l.partner_id.id
                         axe1=''
                         axe2=''
+                        if compte_general == '':
+                            anomalie.append("Compte général non trouvé pour ce type de dépense")
                         self.ajout_ligne(obj.id,journal,ct,'G',f.date_creation,compte_general,compte_auxilaire,'D',montant,piece,axe1,axe2,libelle,partner_id,anomalie,frais_id,product_id)
                         #*******************************************************
 
@@ -140,6 +138,8 @@ class is_export_compta_ana(models.Model):
                         ct=ct+1
                         axe1 = type_activite
                         axe2 = ''
+                        if compte_general == '':
+                            anomalie.append("Compte général non trouvé pour ce type de dépense")
                         self.ajout_ligne(obj.id,journal,ct,'A1',f.date_creation,compte_general,compte_auxilaire,'D',montant,piece,axe1,axe2,libelle,partner_id,anomalie,frais_id,product_id)
                         #*******************************************************
 
@@ -156,7 +156,10 @@ class is_export_compta_ana(models.Model):
                             consultant_id=product.id
                             axe2 = product.is_code_analytique
                         if not axe2:
-                            anomalie=["Code analytique de l'article associé au consultant non défini"]
+                            anomalie.append("Code analytique de l'article associé au consultant non défini")
+                        if compte_general == '':
+                            anomalie.append("Compte général non trouvé pour ce type de dépense")
+
                         self.ajout_ligne(obj.id,journal,ct,'A2',f.date_creation,compte_general,compte_auxilaire,'D',montant,piece,axe1,axe2,libelle,partner_id,anomalie,frais_id,product_id,consultant_id)
                         #*******************************************************
 
@@ -169,6 +172,8 @@ class is_export_compta_ana(models.Model):
                             libelle        = l.product_id.name
                             axe1 = ''
                             axe2 = ''
+                            if compte_general == '':
+                                anomalie.append("Compte général non trouvé pour ce type de dépense")
                             if montant:
                                 self.ajout_ligne(obj.id,journal,ct,'G',f.date_creation,compte_general,compte_auxilaire,'D',montant,piece,axe1,axe2,libelle,partner_id,anomalie,frais_id,product_id)
                         #*******************************************************
@@ -190,6 +195,8 @@ class is_export_compta_ana(models.Model):
                             compte_general = '531000'
                         if effectuee_par == 'ESPECES_ASSOCIE':
                             compte_general = '455111'
+                        if compte_general == '':
+                            anomalie.append("Compte général non trouvé pour ce type de dépense")
                         montant = l.montant_ttc
                         libelle = l.product_id.name
                         axe1    = ''
@@ -240,19 +247,24 @@ class is_export_compta_ana(models.Model):
                         if not line.is_frais_id:
                             #** Lignes G des activités HT **********************
                             ct=ct+1
+                            general = line.account_id.code
+                            anomalie=''
+                            if not general:
+                                anomalie=u'Compte général non défini'
                             vals={
                                 'export_compta_id': obj.id,
                                 'ligne'           : ct,
                                 'type_ecriture'   : 'G',
                                 'date_facture'    : invoice.date_invoice,
                                 'journal'         : journal,
-                                'general'         : line.account_id.code,
+                                'general'         : general,
                                 'sens'            : 'C',
                                 'montant'         : line.price_subtotal,
                                 'libelle'         : invoice.partner_id.name,
                                 'reference'       : invoice.number,
                                 'invoice_id'      : invoice.id,
                                 'partner_id'      : invoice.partner_id.id,
+                                'anomalie'        : anomalie,
                             }
                             self.env['is.export.compta.ana.ligne'].create(vals)
                             #***************************************************
@@ -264,13 +276,16 @@ class is_export_compta_ana(models.Model):
                             anomalie=''
                             if not axe1:
                                 anomalie='Code analytique non défini pour ce compte général'
+                            general = line.account_id.code
+                            if not general:
+                                anomalie=u'Compte général non défini'
                             vals={
                                 'export_compta_id': obj.id,
                                 'ligne'           : ct,
                                 'type_ecriture'   : 'A1',
                                 'date_facture'    : invoice.date_invoice,
                                 'journal'         : journal,
-                                'general'         : line.account_id.code,
+                                'general'         : general,
                                 'sens'            : 'C',
                                 'montant'         : line.price_subtotal,
                                 'libelle'         : invoice.partner_id.name,
@@ -293,13 +308,16 @@ class is_export_compta_ana(models.Model):
                             anomalie=''
                             if not axe2:
                                 anomalie='Code analytique non défini pour le consultant de cette activité'
+                            general = line.account_id.code
+                            if not general:
+                                anomalie=u'Compte général non défini'
                             vals={
                                 'export_compta_id': obj.id,
                                 'ligne'           : ct,
                                 'type_ecriture'   : 'A2',
                                 'date_facture'    : invoice.date_invoice,
                                 'journal'         : journal,
-                                'general'         : line.account_id.code,
+                                'general'         : general,
                                 'sens'            : 'C',
                                 'montant'         : line.price_subtotal,
                                 'libelle'         : invoice.partner_id.name,
@@ -337,7 +355,6 @@ class is_export_compta_ana(models.Model):
                             'invoice_id'      : invoice.id,
                             'partner_id'      : invoice.partner_id.id,
                         }
-                        print('Frais refacturés',invoice.number)
                         self.env['is.export.compta.ana.ligne'].create(vals)
                     #***********************************************************
 
@@ -389,13 +406,17 @@ class is_export_compta_ana(models.Model):
                     for line in invoice.tax_line_ids:
                         if line.amount_total:
                             ct=ct+1
+                            anomalie=''
+                            general = line.account_id.code
+                            if not general:
+                                anomalie=u'Compte général non défini'
                             vals={
                                 'export_compta_id': obj.id,
                                 'ligne'           : ct,
                                 'type_ecriture'   : 'G',
                                 'date_facture'    : invoice.date_invoice,
                                 'journal'         : journal,
-                                'general'         : line.account_id.code,
+                                'general'         : general,
                                 'auxilaire'       : '',
                                 'sens'            : 'C',
                                 'montant'         : line.amount_total,
@@ -403,7 +424,7 @@ class is_export_compta_ana(models.Model):
                                 'reference'       : invoice.number,
                                 'invoice_id'      : invoice.id,
                                 'partner_id'      : invoice.partner_id.id,
-                                'anomalie'        : '',
+                                'anomalie'        : anomalie,
                             }
                             self.env['is.export.compta.ana.ligne'].create(vals)
                     #***********************************************************
@@ -429,7 +450,7 @@ class is_export_compta_ana(models.Model):
                 f.write(row.type_ecriture+';')
                 f.write(date+';')
                 f.write(row.journal+';')
-                f.write(row.general+';')
+                f.write((row.general or '')+';')
                 f.write((row.auxilaire or '')+';')
                 f.write(row.sens+';')
                 f.write(montant+';')

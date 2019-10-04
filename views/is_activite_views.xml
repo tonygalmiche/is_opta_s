@@ -181,7 +181,9 @@
                             </form>
                         </field>
                     </group>
-
+                    <group>
+                        <field name="pieces_jointes_ids" widget="many2many_binary"/>
+                    </group>
                     <group>
                         <field name="invoice_id"/>
                         <field name="active" groups="base.group_system"/>

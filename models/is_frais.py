@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
+from odoo.addons import decimal_precision as dp
 
 
 class IsDepenseEffectueePar(models.Model):
@@ -19,8 +20,8 @@ class IsFraisLigne(models.Model):
     partner_id         = fields.Many2one('res.partner', 'Fournisseur', domain=[('supplier','=',True),('is_company','=',True)])
     product_id         = fields.Many2one('product.product', 'Type de dépense', required=True, domain=[('is_type_intervenant','=',False)])
     effectuee_par_id   = fields.Many2one('is.depense.effectuee.par', 'Dépense effectuée par', required=True)
-    montant_ttc        = fields.Float("Montant", digits=(14,2))
-    montant_tva        = fields.Float("Montant TVA récupérable", digits=(14,2))
+    montant_ttc        = fields.Float("Montant"                , digits=dp.get_precision('Product Price'))
+    montant_tva        = fields.Float("Montant TVA récupérable", digits=dp.get_precision('Product Price'))
     refacturable       = fields.Selection([
             ('oui', u'Oui'),
             ('non', u'Non'),
@@ -172,6 +173,21 @@ class IsFrais(models.Model):
 
 
     @api.multi
+    def creer_notification(self, subject):
+        for obj in self:
+            vals={
+                'subject'       : subject,
+                'body'          : subject, 
+                'body_html'     : subject, 
+                'model'         : self._name,
+                'res_id'        : obj.id,
+                'notification'  : True,
+                'message_type'  : 'comment',
+            }
+            email=self.env['mail.mail'].create(vals)
+
+
+    @api.multi
     def vers_diffuse(self, vals):
         for obj in self:
             subject=u'[Frais]['+obj.chrono_long+u'] '+obj.activite_id.nature_activite+u' Diffusé'
@@ -197,13 +213,15 @@ class IsFrais(models.Model):
     @api.multi
     def vers_valide(self, vals):
         for obj in self:
+            obj.creer_notification(u'Vers Validé')
             obj.state='valide'
 
 
     @api.multi
     def vers_brouillon(self, vals):
         for obj in self:
-            obj.state='brouillon'
+            obj.sudo().write({'state': 'brouillon'})
+            obj.creer_notification(u'Vers Brouillon')
 
 
     @api.multi
