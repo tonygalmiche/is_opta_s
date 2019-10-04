@@ -89,6 +89,13 @@
         sequence="20"
         action="is_frais_lignes_view_action"
     />
+    <menuitem
+        id="is_frais_a_rembourser_par_consultant_menu"
+        name="Frais mensuels à rembourser par consultant"
+        parent="is_frais_main_menu"
+        sequence="30"
+        action="is_frais_a_rembourser_par_consultant_action"
+    />
 
 
 
