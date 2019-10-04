@@ -9,14 +9,52 @@
 
 
     <menuitem
-        id="is_affaire_menu"
+        id="is_affaire_main_menu"
         name="Affaires"
         parent="is_crm_main_menu"
         sequence="10"
+    />
+    <menuitem
+        id="is_affaire_menu"
+        name="Affaires"
+        parent="is_affaire_main_menu"
+        sequence="10"
         action="is_affaire_action"
     />
-
-
+    <menuitem
+        id="is_affaire_vendue_par_view_menu"
+        name="CA vendu par consultant"
+        parent="is_affaire_main_menu"
+        sequence="20"
+    />
+    <menuitem
+        id="is_affaire_vendue_par_view_affaire_id_menu"
+        name="CA vendu par consultant et par affaire"
+        parent="is_affaire_vendue_par_view_menu"
+        sequence="10"
+        action="is_affaire_vendue_par_view_affaire_id_action"
+    />
+    <menuitem
+        id="is_affaire_vendue_par_view_partner_id_menu"
+        name="CA vendu par consultant et par client"
+        parent="is_affaire_vendue_par_view_menu"
+        sequence="20"
+        action="is_affaire_vendue_par_view_partner_id_action"
+    />
+    <menuitem
+        id="is_affaire_vendue_par_view_type_intervention_menu"
+        name="CA vendu par consultant et par type d'intervention"
+        parent="is_affaire_vendue_par_view_menu"
+        sequence="30"
+        action="is_affaire_vendue_par_view_type_intervention_action"
+    />
+    <menuitem
+        id="is_affaire_vendue_par_view_secteur_id_menu"
+        name="CA vendu par consultant et par secteur"
+        parent="is_affaire_vendue_par_view_menu"
+        sequence="40"
+        action="is_affaire_vendue_par_view_secteur_id_action"
+    />
 
 
 

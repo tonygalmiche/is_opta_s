@@ -18,3 +18,4 @@ from . import is_invoice_activite
 from . import is_suivi_production_affaire
 from . import is_google_agenda
 from . import is_frais_lignes_view
+from . import is_affaire_vendue_par_view

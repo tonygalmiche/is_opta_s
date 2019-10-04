@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- is.affaire.vendue.par.view -->
+    <record id="is_affaire_vendue_par_view_form" model="ir.ui.view">
+        <field name="name">is.affaire.vendue.par.view.form</field>
+        <field name="model">is.affaire.vendue.par.view</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Entête">
+                            <field name="affaire_id"/>
+                            <field name="partner_id"/>
+                            <field name="type_intervention_id"/>
+                            <field name="secteur_id"/>
+                            <field name="type_offre_id"/>
+                            <field name="date_creation"/>
+                            <field name="annee_creation"/>
+                            <field name="createur_id"/>
+                            <field name="cause_id"/>
+                            <field name="responsable_id"/>
+                            <field name="state"/>
+                        </group>
+                        <group string="Ligne">
+                            <field name="user_id"/>
+                            <field name="repartition"/>
+                            <field name="ca_previsionnel_reparti"/>
+                            <field name="commentaire"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="is_affaire_vendue_par_view_tree" model="ir.ui.view">
+        <field name="name">is.affaire.vendue.par.view.tree</field>
+        <field name="model">is.affaire.vendue.par.view</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="affaire_id"/>
+                <field name="partner_id"/>
+                <field name="type_intervention_id"/>
+                <field name="secteur_id"/>
+                <field name="type_offre_id"/>
+                <field name="date_creation"/>
+                <field name="annee_creation"/>
+                <field name="createur_id"/>
+                <field name="cause_id"/>
+                <field name="responsable_id"/>
+                <field name="state"/>
+                <field name="user_id"/>
+                <field name="repartition"/>
+                <field name="ca_previsionnel_reparti"/>
+                <field name="commentaire"/>
+            </tree>
+        </field>
+    </record>
+    <record id="is_affaire_vendue_par_view_search" model="ir.ui.view">
+        <field name="name">is.affaire.vendue.par.view.search</field>
+        <field name="model">is.affaire.vendue.par.view</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="affaire_id"/>
+                <field name="partner_id"/>
+                <field name="type_intervention_id"/>
+                <field name="secteur_id"/>
+                <field name="type_offre_id"/>
+                <field name="annee_creation"/>
+                <field name="createur_id"/>
+                <field name="cause_id"/>
+                <field name="responsable_id"/>
+                <field name="state"/>
+                <field name="user_id"/>
+                <field name="commentaire"/>
+                <filter name="2018" string="2018" domain="[('annee_creation','=','2018')]"/>
+                <filter name="2019" string="2019" domain="[('annee_creation','=','2019')]"/>
+           </search>
+        </field>
+    </record>
+
+    <record id="is_affaire_vendue_par_view_graph" model="ir.ui.view">
+        <field name="name">is_affaire_vendue_par_view_graph</field>
+        <field name="model">is.affaire.vendue.par.view</field>
+        <field name="arch" type="xml">
+            <graph type="bar" orientation="vertical" stacked="False">
+                <field name="user_id"                 type="row"/>
+                <field name="ca_previsionnel_reparti" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="is_affaire_vendue_par_view_affaire_id_pivot" model="ir.ui.view">
+        <field name="name">is_affaire_vendue_par_view_affaire_id_pivot</field>
+        <field name="model">is.affaire.vendue.par.view</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="affaire_id"              type="row"/>
+                <field name="login"                   type="col"/>
+                <field name="ca_previsionnel_reparti" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="is_affaire_vendue_par_view_partner_id_pivot" model="ir.ui.view">
+        <field name="name">is_affaire_vendue_par_view_partner_id_pivot</field>
+        <field name="model">is.affaire.vendue.par.view</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="partner_id"              type="row"/>
+                <field name="login"                   type="col"/>
+                <field name="ca_previsionnel_reparti" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="is_affaire_vendue_par_view_type_intervention_id_pivot" model="ir.ui.view">
+        <field name="name">is_affaire_vendue_par_view_type_intervention_id_pivot</field>
+        <field name="model">is.affaire.vendue.par.view</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="type_intervention_id"    type="row"/>
+                <field name="login"                   type="col"/>
+                <field name="ca_previsionnel_reparti" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="is_affaire_vendue_par_view_secteur_id_pivot" model="ir.ui.view">
+        <field name="name">is_affaire_vendue_par_view_secteur_id_pivot</field>
+        <field name="model">is.affaire.vendue.par.view</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="secteur_id"              type="row"/>
+                <field name="login"                   type="col"/>
+                <field name="ca_previsionnel_reparti" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+
+    <record  id="is_affaire_vendue_par_view_affaire_id_action" model="ir.actions.act_window">
+        <field name="name">CA vendu par consultant et par affaire</field>
+        <field name="res_model">is.affaire.vendue.par.view</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">pivot,tree,form,graph</field>
+        <field name="view_id" ref="is_affaire_vendue_par_view_affaire_id_pivot"/>
+        <field name="context">{"search_default_2019":1}</field>
+    </record>
+    <record  id="is_affaire_vendue_par_view_partner_id_action" model="ir.actions.act_window">
+        <field name="name">CA vendu par consultant et par client</field>
+        <field name="res_model">is.affaire.vendue.par.view</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">pivot,tree,form,graph</field>
+        <field name="view_id" ref="is_affaire_vendue_par_view_partner_id_pivot"/>
+        <field name="context">{"search_default_2019":1}</field>
+    </record>
+    <record  id="is_affaire_vendue_par_view_type_intervention_action" model="ir.actions.act_window">
+        <field name="name">CA vendu par consultant et par type d'intervention</field>
+        <field name="res_model">is.affaire.vendue.par.view</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">pivot,tree,form,graph</field>
+        <field name="view_id" ref="is_affaire_vendue_par_view_type_intervention_id_pivot"/>
+        <field name="context">{"search_default_2019":1}</field>
+    </record>
+    <record  id="is_affaire_vendue_par_view_secteur_id_action" model="ir.actions.act_window">
+        <field name="name">CA vendu par consultant et par secteur</field>
+        <field name="res_model">is.affaire.vendue.par.view</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">pivot,tree,form,graph</field>
+        <field name="view_id" ref="is_affaire_vendue_par_view_secteur_id_pivot"/>
+        <field name="context">{"search_default_2019":1}</field>
+    </record>
+
+</odoo>
