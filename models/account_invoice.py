@@ -272,7 +272,7 @@ class AccountInvoice(models.Model):
             html='<tr>'
             html+='<td class="text-left">' +line.name+'</td>'
             if obj.is_intervenant:
-                html+='<td class="text-left">'+line.is_activite_id.intervenant_id.intervenant_id.name+'</td>'
+                html+='<td class="text-left">'+(line.is_activite_id.intervenant_id.intervenant_id.name or '')+'</td>'
                 html+='<td class="text-left">'+(line.is_activite_id.dates_intervention or '')+'</td>'
 
             if obj.is_prix_unitaire:
