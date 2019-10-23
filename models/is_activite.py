@@ -181,7 +181,7 @@ class IsActivite(models.Model):
     @api.multi
     def vers_brouillon(self, vals):
         for obj in self:
-            obj.state='brouillon'
+            obj.sudo().state='brouillon'
 
     @api.multi
     def acceder_activite_action(self, vals):

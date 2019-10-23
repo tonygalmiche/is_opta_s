@@ -95,7 +95,7 @@
                     <group>
                         <field name="proposition_ids" widget="many2many_binary"/>
                     </group>
-                    <group states="offre_perdue">
+                    <group states="offre_en_cours,offre_perdue">
                         <field name="cause_id"/>
                         <field name="commentaire"/>
                     </group>
