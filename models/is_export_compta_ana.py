@@ -208,7 +208,6 @@ class is_export_compta_ana(models.Model):
             if obj.journal=='VE':
                 journal=company.is_journal_vente
 
-
                 invoices=self.env['account.invoice'].search([
                         ('date_invoice', '>=', obj.date_debut),
                         ('date_invoice', '<=', obj.date_fin),
@@ -223,6 +222,9 @@ class is_export_compta_ana(models.Model):
                     anomalie=''
                     if not auxilaire:
                         anomalie='Compte auxilaire non défini pour ce client'
+                    sens='D'
+                    if invoice.type=='out_refund':
+                        sens='C'
                     vals={
                         'export_compta_id': obj.id,
                         'ligne'           : ct,
@@ -231,7 +233,7 @@ class is_export_compta_ana(models.Model):
                         'journal'         : journal,
                         'general'         : '411000',
                         'auxilaire'       : auxilaire,
-                        'sens'            : 'D',
+                        'sens'            : sens,
                         'montant'         : invoice.amount_total,
                         'libelle'         : invoice.partner_id.name,
                         'reference'       : invoice.number,
@@ -242,7 +244,9 @@ class is_export_compta_ana(models.Model):
                     self.env['is.export.compta.ana.ligne'].create(vals)
                     #***********************************************************
 
-
+                    sens='C'
+                    if invoice.type=='out_refund':
+                        sens='D'
                     for line in invoice.invoice_line_ids:
                         if not line.is_frais_id:
                             #** Lignes G des activités HT **********************
@@ -258,7 +262,7 @@ class is_export_compta_ana(models.Model):
                                 'date_facture'    : invoice.date_invoice,
                                 'journal'         : journal,
                                 'general'         : general,
-                                'sens'            : 'C',
+                                'sens'            : sens,
                                 'montant'         : line.price_subtotal,
                                 'libelle'         : invoice.partner_id.name,
                                 'reference'       : invoice.number,
@@ -286,7 +290,7 @@ class is_export_compta_ana(models.Model):
                                 'date_facture'    : invoice.date_invoice,
                                 'journal'         : journal,
                                 'general'         : general,
-                                'sens'            : 'C',
+                                'sens'            : sens,
                                 'montant'         : line.price_subtotal,
                                 'libelle'         : invoice.partner_id.name,
                                 'reference'       : invoice.number,
@@ -318,7 +322,7 @@ class is_export_compta_ana(models.Model):
                                 'date_facture'    : invoice.date_invoice,
                                 'journal'         : journal,
                                 'general'         : general,
-                                'sens'            : 'C',
+                                'sens'            : sens,
                                 'montant'         : line.price_subtotal,
                                 'libelle'         : invoice.partner_id.name,
                                 'reference'       : invoice.number,
@@ -403,6 +407,9 @@ class is_export_compta_ana(models.Model):
 
 
                     #** Ligne G pour la TVA ************************************
+                    sens='C'
+                    if invoice.type=='out_refund':
+                        sens='D'
                     for line in invoice.tax_line_ids:
                         if line.amount_total:
                             ct=ct+1
@@ -418,7 +425,7 @@ class is_export_compta_ana(models.Model):
                                 'journal'         : journal,
                                 'general'         : general,
                                 'auxilaire'       : '',
-                                'sens'            : 'C',
+                                'sens'            : sens,
                                 'montant'         : line.amount_total,
                                 'libelle'         : invoice.partner_id.name,
                                 'reference'       : invoice.number,
