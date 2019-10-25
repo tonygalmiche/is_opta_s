@@ -96,7 +96,7 @@
                         <field 
                             name="is_activites"
                             nolabel="1" 
-                            domain="[('partner_id','=',partner_id),('affaire_id','=',is_affaire_id),('invoice_id','=',False),('state','=','valide')]"
+                            domain="[('partner_id','=',partner_id),('affaire_id','=',is_affaire_id),('invoice_id','=',False),('state','=','valide'),('non_facturable','=',False)]"
                             context="{'tree_view_ref': 'is_opta_s.is_activite_invoice_tree'}"
                         > 
                             <tree>

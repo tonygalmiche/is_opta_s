@@ -65,6 +65,7 @@ class IsActivite(models.Model):
     total_facturable       = fields.Float("Total facturable", compute='_compute', readonly=True, store=True, digits=(14,2))
     nb_stagiaires          = fields.Float("Nombre de stagiaires calculé", compute='_compute_nb_stagiaires', readonly=True, store=False, digits=(14,1))
     facture_sur_accompte   = fields.Boolean("Facture sur acompte")
+    non_facturable         = fields.Boolean("Activité non facturable", default=False, help="Si cette case est cochée, cette activité ne sera pas proposée à la facturation")
     point_cle              = fields.Text("Points clés de l'activité réalisée")
     suivi_temps_ids        = fields.One2many('is.suivi.temps', 'activite_id', u'Suivi du temps')
     frais_ids              = fields.One2many('is.frais', 'activite_id', u'Frais')

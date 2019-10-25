@@ -56,7 +56,7 @@ class IsAffaireTauxJournalier(models.Model):
             ('heure'        , u'Heure'),
             ('demie_journee', u'1/2 journée'),
             ('journee'      , u'Journée'),
-            ('forfait'      , u'Forfait'),
+            #('forfait'      , u'Forfait'),
             ('participant'  , u'Participant'),
         ], u"Unité",default='journee')
     montant = fields.Float("Montant intervention", digits=(14,2))
@@ -294,7 +294,16 @@ class IsAffaire(models.Model):
             jours_consommes=0
             for act in activites:
                 realise+=act.total_facturable
-                jours_consommes+=act.nb_facturable
+                unite = act.tarification_id.unite
+                if unite=='journee':
+                    jours_consommes+=act.nb_facturable
+                if unite=='demie_journee':
+                    jours_consommes+=act.nb_facturable/2
+                if unite=='heure':
+                    jours_consommes+=act.nb_facturable/7
+                #Pour les participants, il faut compter le nombre de lignes dans le suivi du temps
+                if unite=='participant':
+                    jours_consommes+=len(act.suivi_temps_ids)
             obj.montant_realise=realise
             obj.montant_restant=obj.ca_previsionnel-realise
             obj.jours_consommes=jours_consommes

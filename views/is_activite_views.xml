@@ -65,6 +65,7 @@
                             <field name="nb_facturable"/>
                             <field name="total_facturable"/>
                             <field name="facture_sur_accompte"/>
+                            <field name="non_facturable"/>
                             <field name="nb_stagiaires" attrs="{'invisible': [('nb_stagiaires','=', 0)]}"/>
                         </group>
                     </group>

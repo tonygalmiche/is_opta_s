@@ -208,7 +208,7 @@ class AccountInvoice(models.Model):
 
 
             #** Recherche article si frais au forfait **************************
-            products=self.env['product.product'].search([('name', '=', 'Frais au forfait')])
+            products=self.env['product.product'].search([('name', 'ilike', 'Frais au forfait')])
             product=False
             if products:
                 product=products[0]
