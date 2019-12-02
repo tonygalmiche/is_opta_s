@@ -83,8 +83,17 @@ class IsSuiviTemps(models.Model):
             obj.affaire_id=obj.activite_id.affaire_id.id
 
 
-    activite_id          = fields.Many2one('is.activite', 'Activité', required=True)
-    affaire_id           = fields.Many2one('is.affaire', compute='_compute_affaire_id', readonly=True, store=True)
+    @api.depends('activite_id')
+    def _compute_intervenant_id(self):
+        for obj in self:
+            obj.intervenant_product_id=obj.activite_id.intervenant_product_id.id
+
+
+    activite_id            = fields.Many2one('is.activite', 'Activité', required=True)
+    #intervenant_id         = fields.Many2one('is.affaire.intervenant', "Intervenant Affaire", compute='_compute_intervenant_id', readonly=True, store=True)
+    intervenant_product_id = fields.Many2one('product.product', "Intervenant", compute='_compute_intervenant_id', readonly=True, store=True)
+
+    affaire_id           = fields.Many2one('is.affaire', "Affaire", compute='_compute_affaire_id', readonly=True, store=True)
     type_activite        = fields.Selection([
             ('formation'  , u'Formation'),
             ('conseil'    , u'Conseil'),

@@ -64,6 +64,7 @@
                             <field name="nb_realise"/>
                             <field name="nb_facturable"/>
                             <field name="total_facturable"/>
+                            <field name="jours_consommes"/>
                             <field name="facture_sur_accompte"/>
                             <field name="non_facturable"/>
                             <field name="nb_stagiaires" attrs="{'invisible': [('nb_stagiaires','=', 0)]}"/>
@@ -217,6 +218,7 @@
                 <field name="nb_realise"       sum="Total"/>
                 <field name="nb_facturable"    sum="Total"/>
                 <field name="total_facturable" sum="Total"/>
+                <field name="jours_consommes"  sum="Total"/>
                 <field name="state"/>
                 <field name="invoice_id"/>
                 <field name="is_dynacase_ids" widget="many2many_tags" groups="base.group_system"/>

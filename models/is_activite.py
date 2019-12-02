@@ -44,6 +44,27 @@ class IsActivite(models.Model):
             obj.responsable_id = obj.affaire_id.responsable_id.id
 
 
+    def get_jours_consommes(self,act):
+        jours_consommes=0
+        unite = act.tarification_id.unite
+        if unite=='journee':
+            jours_consommes+=act.nb_facturable
+        if unite=='demie_journee':
+            jours_consommes+=act.nb_facturable/2
+        if unite=='heure':
+            jours_consommes+=act.nb_facturable/7
+        #Pour les participants, il faut compter le nombre de lignes dans le suivi du temps
+        if unite=='participant':
+            jours_consommes+=len(act.suivi_temps_ids)
+        return jours_consommes
+
+
+    def _compute_jours_consommes(self):
+        for act in self:
+            jours_consommes=self.get_jours_consommes(act)
+            act.jours_consommes=jours_consommes
+
+
     @api.onchange('affaire_id')
     def onchange_affaire_id(self):
         self.partner_id = self.affaire_id.partner_id.id
@@ -62,6 +83,7 @@ class IsActivite(models.Model):
     montant                = fields.Float("Montant unitaire", compute='_compute', readonly=True, store=True, digits=(14,2))
     nb_realise             = fields.Float("Nb unités réalisées"  , digits=(14,4))
     nb_facturable          = fields.Float("Nb unités facturables", digits=(14,4))
+    jours_consommes        = fields.Float("Nb jours consommés", digits=(14,2), compute='_compute_jours_consommes', readonly=True, store=False)
     total_facturable       = fields.Float("Total facturable", compute='_compute', readonly=True, store=True, digits=(14,2))
     nb_stagiaires          = fields.Float("Nombre de stagiaires calculé", compute='_compute_nb_stagiaires', readonly=True, store=False, digits=(14,1))
     facture_sur_accompte   = fields.Boolean("Facture sur acompte")
