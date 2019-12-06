@@ -59,6 +59,7 @@ class IsActivite(models.Model):
         return jours_consommes
 
 
+    @api.depends('suivi_temps_ids','nb_facturable','tarification_id')
     def _compute_jours_consommes(self):
         for act in self:
             jours_consommes=self.get_jours_consommes(act)
@@ -83,7 +84,7 @@ class IsActivite(models.Model):
     montant                = fields.Float("Montant unitaire", compute='_compute', readonly=True, store=True, digits=(14,2))
     nb_realise             = fields.Float("Nb unités réalisées"  , digits=(14,4))
     nb_facturable          = fields.Float("Nb unités facturables", digits=(14,4))
-    jours_consommes        = fields.Float("Nb jours consommés", digits=(14,2), compute='_compute_jours_consommes', readonly=True, store=False)
+    jours_consommes        = fields.Float("Nb jours consommés", digits=(14,2), compute='_compute_jours_consommes', readonly=True, store=True)
     total_facturable       = fields.Float("Total facturable", compute='_compute', readonly=True, store=True, digits=(14,2))
     nb_stagiaires          = fields.Float("Nombre de stagiaires calculé", compute='_compute_nb_stagiaires', readonly=True, store=False, digits=(14,1))
     facture_sur_accompte   = fields.Boolean("Facture sur acompte")

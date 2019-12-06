@@ -28,10 +28,11 @@ class IsAffaireActivite(models.Model):
     annee_mois_activite    = fields.Char("Année-Mois activité")
     mois_activite          = fields.Char("Mois activité")
     intervenant_product_id = fields.Many2one('product.product', "Intervenant")
-    montant                = fields.Float("Montant unitaire")
-    nb_realise             = fields.Float("Nb unités réalisées")
-    nb_facturable          = fields.Float("Nb unités facturables")
-    total_facturable       = fields.Float("Total facturable")
+    montant                = fields.Float(u"Montant unitaire")
+    nb_realise             = fields.Float(u"Nb unités réalisées")
+    nb_facturable          = fields.Float(u"Nb unités facturables")
+    jours_consommes        = fields.Float(u"Nb jours consommés")
+    total_facturable       = fields.Float(u"Total facturable")
     invoice_id             = fields.Many2one('account.invoice', "Facture")
     state                  = fields.Selection([
             ('brouillon', u'Brouillon'),
@@ -70,6 +71,7 @@ class IsAffaireActivite(models.Model):
                     act.montant,
                     act.nb_realise,
                     act.nb_facturable,
+                    act.jours_consommes,
                     act.total_facturable,
                     act.invoice_id,
                     act.state
