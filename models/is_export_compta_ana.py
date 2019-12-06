@@ -374,7 +374,8 @@ class is_export_compta_ana(models.Model):
                             axe2=line.is_activite_id.intervenant_id.intervenant_id.is_code_analytique
                             if axe2 not in frais_forfait:
                                 frais_forfait[axe2]=0
-                            frais_forfait[axe2]=+line.price_subtotal
+                            frais_forfait[axe2]+=line.price_subtotal
+
                     for axe2 in frais_forfait:
                         ct=ct+1
                         vals={
