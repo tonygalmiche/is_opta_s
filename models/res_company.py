@@ -22,3 +22,8 @@ class ResCompany(models.Model):
     is_mail_frais        = fields.Char("Mail diffusion frais")
     is_journal_achat     = fields.Char("Journal des achats", default='ACB')
     is_journal_vente     = fields.Char("Journal des ventes", default='VEB')
+    is_interface         = fields.Selection([
+            ('opta-s', u'Opta-S'),
+            ('sgp'   , u'SGP'),
+        ], u"Interface", default='opta-s', help=u"Utilisé en particulier pour la gestion du champ 'Nb unités réalisées' des activités")
+

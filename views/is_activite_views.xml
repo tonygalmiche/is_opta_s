@@ -61,7 +61,11 @@
                         <group>
                             <field name="tarification_id" domain="[('affaire_id','=',affaire_id)]" />
                             <field name="montant"/>
-                            <field name="nb_realise"/>
+
+                            <field name="nb_realise_vsb" invisible="1"/>
+                            <field name="nb_realise"      attrs="{'invisible': [('nb_realise_vsb','=',False)]}"/>
+                            <field name="nb_realise_auto" attrs="{'invisible': [('nb_realise_vsb','=',True)]}"/>
+
                             <field name="nb_facturable"/>
                             <field name="total_facturable"/>
                             <field name="jours_consommes"/>

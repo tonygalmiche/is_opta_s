@@ -216,6 +216,7 @@
                                         <field name="nb_facturable"    sum="Total"/>
                                         <field name="total_facturable" sum="Total"/>
                                         <field name="state" readonly="1"/>
+                                        <field name="facture_sur_accompte"/>
                                         <field name="invoice_id"/>
                                     </tree>
                                 </field>

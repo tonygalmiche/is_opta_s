@@ -58,12 +58,43 @@ class IsActivite(models.Model):
             jours_consommes+=len(act.suivi_temps_ids)
         return jours_consommes
 
-
     @api.depends('suivi_temps_ids','nb_facturable','tarification_id')
     def _compute_jours_consommes(self):
         for act in self:
             jours_consommes=self.get_jours_consommes(act)
             act.jours_consommes=jours_consommes
+
+
+    def get_nb_realise_auto(self,act):
+        nb_realise_auto=0
+        unite = act.tarification_id.unite
+        if unite=='journee':
+            nb_realise_auto+=act.nb_facturable
+        if unite=='demie_journee':
+            nb_realise_auto+=act.nb_facturable/2
+        if unite=='heure':
+            nb_realise_auto+=act.nb_facturable/7
+        #Pour les participants, il faut compter le nombre de lignes dans le suivi du temps
+        if unite=='participant':
+            nb_realise_auto+=len(act.suivi_temps_ids)
+        return nb_realise_auto
+
+    @api.depends('suivi_temps_ids','nb_facturable','tarification_id')
+    def _compute_nb_realise_auto(self):
+        for act in self:
+            nb_realise_auto=self.get_nb_realise_auto(act)
+            act.nb_realise_auto=nb_realise_auto
+
+
+    def _compute_nb_realise_vsb(self):
+        cr,uid,context = self.env.args
+        user = self.env['res.users'].browse(uid)
+        company  = user.company_id
+        for obj in self:
+            if company.is_interface=='sgp':
+                obj.nb_realise_vsb = False
+            else:
+                obj.nb_realise_vsb = True
 
 
     @api.onchange('affaire_id')
@@ -82,7 +113,11 @@ class IsActivite(models.Model):
     intervenant_product_id = fields.Many2one('product.product', "Intervenant", compute='_compute_product_id', readonly=True, store=True)
     tarification_id        = fields.Many2one('is.affaire.taux.journalier', "Tarification")
     montant                = fields.Float("Montant unitaire", compute='_compute', readonly=True, store=True, digits=(14,2))
+
     nb_realise             = fields.Float("Nb unités réalisées"  , digits=(14,4))
+    nb_realise_auto        = fields.Float("Nb unités réalisées (auto)", digits=(14,2), compute='_compute_nb_realise_auto', readonly=True, store=False)
+    nb_realise_vsb         = fields.Boolean("Nb unités réalisées visibility", compute='_compute_nb_realise_vsb', readonly=True, store=False)
+
     nb_facturable          = fields.Float("Nb unités facturables", digits=(14,4))
     jours_consommes        = fields.Float("Nb jours consommés", digits=(14,2), compute='_compute_jours_consommes', readonly=True, store=True)
     total_facturable       = fields.Float("Total facturable", compute='_compute', readonly=True, store=True, digits=(14,2))

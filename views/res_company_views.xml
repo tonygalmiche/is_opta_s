@@ -11,6 +11,7 @@
                 </field>
                 <xpath expr="//sheet" position="inside">
                     <group>
+                        <field name="is_interface"/>
                         <field name="is_mail_facture"/>
                         <field name="is_mail_frais"/>
                         <field name="is_num_formation"/>
