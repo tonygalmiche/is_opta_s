@@ -76,6 +76,7 @@
                 <field name="activite_id"/>
                 <filter name="2018" string="2018" domain="[('annee_facture','=','2018')]"/>
                 <filter name="2019" string="2019" domain="[('annee_facture','=','2019')]"/>
+                <filter name="2020" string="2020" domain="[('annee_facture','=','2020')]"/>
            </search>
         </field>
     </record>

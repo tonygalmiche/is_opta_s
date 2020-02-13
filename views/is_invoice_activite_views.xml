@@ -58,6 +58,7 @@
                 <field name="state"/>
                 <filter name="2018" string="2018" domain="[('annee_invoice','=','2018')]"/>
                 <filter name="2019" string="2019" domain="[('annee_invoice','=','2019')]"/>
+                <filter name="2020" string="2020" domain="[('annee_invoice','=','2020')]"/>
            </search>
         </field>
     </record>
@@ -88,7 +89,7 @@
         <field name="view_type">form</field>
         <field name="limit">200</field>
         <field name="view_mode">pivot,tree,form,graph</field>
-        <field name="context">{"search_default_2019":1}</field>
+        <field name="context">{"search_default_2020":1}</field>
 
     </record>
 </odoo>

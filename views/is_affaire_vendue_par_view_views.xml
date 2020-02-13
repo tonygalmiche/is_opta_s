@@ -75,6 +75,7 @@
                 <field name="commentaire"/>
                 <filter name="2018" string="2018" domain="[('annee_creation','=','2018')]"/>
                 <filter name="2019" string="2019" domain="[('annee_creation','=','2019')]"/>
+                <filter name="2020" string="2020" domain="[('annee_creation','=','2020')]"/>
            </search>
         </field>
     </record>
@@ -143,7 +144,7 @@
         <field name="limit">200</field>
         <field name="view_mode">pivot,tree,form,graph</field>
         <field name="view_id" ref="is_affaire_vendue_par_view_affaire_id_pivot"/>
-        <field name="context">{"search_default_2019":1}</field>
+        <field name="context">{"search_default_2020":1}</field>
     </record>
     <record  id="is_affaire_vendue_par_view_partner_id_action" model="ir.actions.act_window">
         <field name="name">CA vendu par consultant et par client</field>
@@ -152,7 +153,7 @@
         <field name="limit">200</field>
         <field name="view_mode">pivot,tree,form,graph</field>
         <field name="view_id" ref="is_affaire_vendue_par_view_partner_id_pivot"/>
-        <field name="context">{"search_default_2019":1}</field>
+        <field name="context">{"search_default_2020":1}</field>
     </record>
     <record  id="is_affaire_vendue_par_view_type_intervention_action" model="ir.actions.act_window">
         <field name="name">CA vendu par consultant et par type d'intervention</field>
@@ -161,7 +162,7 @@
         <field name="limit">200</field>
         <field name="view_mode">pivot,tree,form,graph</field>
         <field name="view_id" ref="is_affaire_vendue_par_view_type_intervention_id_pivot"/>
-        <field name="context">{"search_default_2019":1}</field>
+        <field name="context">{"search_default_2020":1}</field>
     </record>
     <record  id="is_affaire_vendue_par_view_secteur_id_action" model="ir.actions.act_window">
         <field name="name">CA vendu par consultant et par secteur</field>
@@ -170,7 +171,7 @@
         <field name="limit">200</field>
         <field name="view_mode">pivot,tree,form,graph</field>
         <field name="view_id" ref="is_affaire_vendue_par_view_secteur_id_pivot"/>
-        <field name="context">{"search_default_2019":1}</field>
+        <field name="context">{"search_default_2020":1}</field>
     </record>
 
 </odoo>

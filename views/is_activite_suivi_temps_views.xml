@@ -79,6 +79,7 @@
                 <field name="type_activite"/>
                 <filter name="2018" string="2018" domain="[('mois_activite','ilike','2018-')]"/>
                 <filter name="2019" string="2019" domain="[('mois_activite','ilike','2019-')]"/>
+                <filter name="2020" string="2020" domain="[('mois_activite','ilike','2020-')]"/>
            </search>
         </field>
     </record>
