@@ -88,6 +88,17 @@ class IsSuiviTemps(models.Model):
         for obj in self:
             obj.intervenant_product_id=obj.activite_id.intervenant_product_id.id
 
+    @api.depends('nb_stagiaires','nb_heures')
+    def _compute_total_heures(self):
+        for obj in self:
+            obj.total_heures = obj.nb_stagiaires * obj.nb_heures
+
+
+    @api.depends('activite_id','activite_id.total_facturable')
+    def _compute_total_facturable(self):
+        for obj in self:
+            obj.total_facturable = obj.activite_id.total_facturable
+
 
     activite_id            = fields.Many2one('is.activite', 'Activité', required=True)
     #intervenant_id         = fields.Many2one('is.affaire.intervenant', "Intervenant Affaire", compute='_compute_intervenant_id', readonly=True, store=True)
@@ -103,6 +114,8 @@ class IsSuiviTemps(models.Model):
     date_activite        = fields.Date("Date", index=True, required=True) # default=lambda self: self._get_date_activite()
     nb_stagiaires        = fields.Integer("Nombre de stagiaires")
     nb_heures            = fields.Float("Nombre d'heures par jour", required=False)
+    total_heures         = fields.Float("Total des heures", compute='_compute_total_heures'    , readonly=True, store=True)
+    total_facturable     = fields.Float("Total facturable", compute='_compute_total_facturable', readonly=True, store=True, digits=(14,2))
     realise_st           = fields.Selection([
             ('oui', u'Oui'),
             ('non', u'Non'),

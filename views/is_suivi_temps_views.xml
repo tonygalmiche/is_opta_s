@@ -144,13 +144,15 @@
                 <field name="intervenant_product_id"/>
                 <field name="date_activite"/>
                 <field name="nb_stagiaires" sum="Total"/>
-                <field name="nb_heures" sum="Total" widget="float_time"/>
+                <field name="nb_heures"    sum="Total" widget="float_time"/>
+                <field name="total_heures" sum="Total" widget="float_time"/>
                 <field name="realise_st"/>
                 <field name="aller_heure_depart"   widget="float_time"/>
                 <field name="aller_heure_arrivee"  widget="float_time"/>
                 <field name="retour_heure_depart"  widget="float_time"/>
                 <field name="retour_heure_arrivee" widget="float_time"/>
                 <field name="temps_deplacement"    widget="float_time" sum="Total"/>
+                <field name="total_facturable" sum="Total"/>
             </tree>
         </field>
     </record>
