@@ -97,7 +97,14 @@ class IsSuiviTemps(models.Model):
     @api.depends('activite_id','activite_id.total_facturable')
     def _compute_total_facturable(self):
         for obj in self:
-            obj.total_facturable = obj.activite_id.total_facturable
+            total_facturable = obj.activite_id.total_facturable
+            obj.total_facturable = total_facturable
+            if obj.activite_id.suivi_temps_ids:
+                id = obj.activite_id.suivi_temps_ids[0].id
+                x = 0
+                if obj.id==id:
+                    x = total_facturable
+                obj.total_facturable_ligne1 = x
 
 
     activite_id            = fields.Many2one('is.activite', 'Activité', required=True)
@@ -115,7 +122,10 @@ class IsSuiviTemps(models.Model):
     nb_stagiaires        = fields.Integer("Nombre de stagiaires")
     nb_heures            = fields.Float("Nombre d'heures par jour", required=False)
     total_heures         = fields.Float("Total des heures", compute='_compute_total_heures'    , readonly=True, store=True)
-    total_facturable     = fields.Float("Total facturable", compute='_compute_total_facturable', readonly=True, store=True, digits=(14,2))
+
+    total_facturable        = fields.Float("Total facturable"  , compute='_compute_total_facturable', readonly=True, store=True, digits=(14,2))
+    total_facturable_ligne1 = fields.Float("Facturable ligne 1", compute='_compute_total_facturable', readonly=True, store=True, digits=(14,2), help="Total facturable de l'activité mais uniquement sur la première ligne du suivi du temps")
+
     realise_st           = fields.Selection([
             ('oui', u'Oui'),
             ('non', u'Non'),

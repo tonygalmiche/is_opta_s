@@ -14,8 +14,12 @@ class IsActivite(models.Model):
     def _compute(self):
         for obj in self:
             if obj.tarification_id:
-                obj.montant=obj.tarification_id.montant
-                obj.total_facturable=obj.montant*obj.nb_facturable
+                obj.montant          = obj.tarification_id.montant
+                total_facturable     = obj.montant*obj.nb_facturable
+                obj.total_facturable = total_facturable
+                #for line in obj.suivi_temps_ids:
+                #    line.total_facturable_ligne1 = 123
+                #    total_facturable = 0
 
 
     def _compute_nb_stagiaires(self):
@@ -163,6 +167,12 @@ class IsActivite(models.Model):
                         """
                         self.envoi_mail(email_from,email_to,subject,body_html)
                 #***************************************************************
+
+#            total_facturable = obj.total_facturable
+#            for line in obj.suivi_temps_ids:
+#                print(line,total_facturable)
+#                line.total_facturable_ligne1 = total_facturable
+#                total_facturable = 0
 
         res = super(IsActivite, self).write(vals)
         return res

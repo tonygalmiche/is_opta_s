@@ -141,6 +141,7 @@
             <tree editable="top">
                 <field name="type_activite" readonly="1"/>
                 <field name="activite_id"/>
+                <field name="affaire_id"/>
                 <field name="intervenant_product_id"/>
                 <field name="date_activite"/>
                 <field name="nb_stagiaires" sum="Total"/>
@@ -152,7 +153,7 @@
                 <field name="retour_heure_depart"  widget="float_time"/>
                 <field name="retour_heure_arrivee" widget="float_time"/>
                 <field name="temps_deplacement"    widget="float_time" sum="Total"/>
-                <field name="total_facturable" sum="Total"/>
+                <field name="total_facturable_ligne1" sum="Total" readonly="1"/>
             </tree>
         </field>
     </record>
