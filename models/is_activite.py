@@ -90,6 +90,7 @@ class IsActivite(models.Model):
             act.nb_realise_auto=nb_realise_auto
 
 
+    @api.depends('affaire_id','tarification_id')
     def _compute_nb_realise_vsb(self):
         cr,uid,context = self.env.args
         user = self.env['res.users'].browse(uid)
