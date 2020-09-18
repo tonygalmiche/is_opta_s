@@ -38,7 +38,7 @@
                         name="creation_frais" 
                         type="object"
                         string="Nouvelle fiche de frais"
-                        states="diffuse"
+                        states="brouillon,diffuse"
                     />
                     <field 
                         name="state" 
