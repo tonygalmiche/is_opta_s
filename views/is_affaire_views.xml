@@ -186,7 +186,7 @@
                                         <field name="name"/>
                                         <field name="jours_prevus"    sum="Total"/>
                                         <field name="montant_vendu"/>
-                                        <field name="nb_unites"/>
+                                        <!--<field name="nb_unites"/>-->
                                         <field name="total_vendu"     sum="Total"/>
                                         <field name="nb_realise"      sum="Total"/>
                                         <field name="jours_consommes" sum="Total"/>

@@ -198,10 +198,11 @@ class IsAffairePhaseActivite(models.Model):
     _order='name'
 
 
-    @api.depends('montant_vendu','nb_unites')
+    @api.depends('montant_vendu','jours_prevus')
     def _compute(self):
         for obj in self:
-            obj.total_vendu=obj.montant_vendu*obj.nb_unites
+            #obj.total_vendu=obj.montant_vendu*obj.nb_unites
+            obj.total_vendu=obj.montant_vendu*obj.jours_prevus
 
 
     @api.depends('jours_prevus')
@@ -232,7 +233,7 @@ class IsAffairePhaseActivite(models.Model):
     name             = fields.Char(u"Sous-phase", required=True)
     jours_prevus     = fields.Float(u"Nb jours prévus"   , digits=(14,2))
     montant_vendu    = fields.Float(u"Montant vendu unitaire" , digits=(14,2))
-    nb_unites        = fields.Float(u"Nombre d'unités vendues", digits=(14,2))
+    nb_unites        = fields.Float(u"Nombre d'unités vendues (champ supprimé le 20/09/2020", digits=(14,2))
     total_vendu      = fields.Float(u"Total vendu"            , digits=(14,2), compute='_compute'        , readonly=True, store=True)
     nb_realise       = fields.Float(u"Nb unités réalisées"    , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
     jours_consommes  = fields.Float(u"Nb unités facturables"  , digits=(14,2), compute='_compute_realise', readonly=True, store=False,help="Jours facturables des activités")
