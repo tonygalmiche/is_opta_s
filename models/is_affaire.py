@@ -160,11 +160,14 @@ class IsAffairePhase(models.Model):
             activites=self.env['is.activite'].search([('phase_activite_id.affaire_phase_id', '=', obj.id)])
             realise=0
             jours_consommes=0
+            nb_realise=0
             for act in activites:
                 realise+=act.total_facturable
                 jours_consommes+=act.nb_facturable
+                nb_realise+=act.nb_realise
             obj.montant_realise=realise
             obj.jours_consommes=jours_consommes
+            obj.nb_realise=nb_realise
             sous_phases=self.env['is.affaire.phase.activite'].search([('affaire_phase_id', '=', obj.id)])
             vendu=0
             jours_prevus=0
@@ -183,12 +186,13 @@ class IsAffairePhase(models.Model):
 
     affaire_id      = fields.Many2one('is.affaire', 'Affaire', required=True, ondelete='cascade')
     name            = fields.Char(u"Phases")
-    jours_prevus    = fields.Float(u"Nb jours prévus"      , digits=(14,2), compute='_compute', readonly=True, store=False)
-    jours_consommes = fields.Float(u"Nb unités facturables", digits=(14,2), compute='_compute', readonly=True, store=False, help="Jours facturables des activités")
-    total_vendu     = fields.Float(u"Total vendu"          , digits=(14,2), compute='_compute', readonly=True, store=False)
-    montant_realise = fields.Float(u"Total facturable"     , digits=(14,2), compute='_compute', readonly=True, store=False)
-    montant_restant = fields.Float(u"Montant restant"      , digits=(14,2), compute='_compute', readonly=True, store=False)
-    avancement      = fields.Integer(u"Avancement"                        , compute='_compute', readonly=True, store=False)
+    jours_prevus    = fields.Float(u"Nb jours prévus"           , digits=(14,2), compute='_compute', readonly=True, store=False)
+    jours_consommes = fields.Float(u"Nb unités facturables"     , digits=(14,2), compute='_compute', readonly=True, store=False, help="Jours facturables des activités")
+    nb_realise      = fields.Float(u"Nb unités réalisées"       , digits=(14,2), compute='_compute', readonly=True, store=False)
+    total_vendu     = fields.Float(u"Total vendu"               , digits=(14,2), compute='_compute', readonly=True, store=False)
+    montant_realise = fields.Float(u"Total facturable"          , digits=(14,2), compute='_compute', readonly=True, store=False)
+    montant_restant = fields.Float(u"Montant facturable restant", digits=(14,2), compute='_compute', readonly=True, store=False)
+    avancement      = fields.Integer(u"Taux de consommation du budget", compute='_compute', readonly=True, store=False)
 
 
 
@@ -234,14 +238,13 @@ class IsAffairePhaseActivite(models.Model):
     jours_prevus     = fields.Float(u"Nb jours prévus"   , digits=(14,2))
     montant_vendu    = fields.Float(u"Montant vendu unitaire" , digits=(14,2))
     nb_unites        = fields.Float(u"Nombre d'unités vendues (champ supprimé le 20/09/2020", digits=(14,2))
-    total_vendu      = fields.Float(u"Total vendu"            , digits=(14,2), compute='_compute'        , readonly=True, store=True)
-    nb_realise       = fields.Float(u"Nb unités réalisées"    , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
-    jours_consommes  = fields.Float(u"Nb unités facturables"  , digits=(14,2), compute='_compute_realise', readonly=True, store=False,help="Jours facturables des activités")
-    total_realise    = fields.Float(u"Total réalisé"          , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
-    montant_realise  = fields.Float(u"Total facturable"       , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
-    montant_restant  = fields.Float(u"Montant restant"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
-    avancement       = fields.Integer(u"Avancement"           , compute='_compute_realise', readonly=True, store=False)
-
+    total_vendu      = fields.Float(u"Total vendu"               , digits=(14,2), compute='_compute'        , readonly=True, store=True)
+    nb_realise       = fields.Float(u"Nb unités réalisées"       , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
+    jours_consommes  = fields.Float(u"Nb unités facturables"     , digits=(14,2), compute='_compute_realise', readonly=True, store=False,help="Jours facturables des activités")
+    total_realise    = fields.Float(u"Total réalisé"             , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
+    montant_realise  = fields.Float(u"Total facturable"          , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
+    montant_restant  = fields.Float(u"Montant facturable restant", digits=(14,2), compute='_compute_realise', readonly=True, store=False)
+    avancement       = fields.Integer(u"Taux de consommation du budget", compute='_compute_realise', readonly=True, store=False)
 
 
     @api.multi
@@ -437,7 +440,9 @@ class IsAffaire(models.Model):
     def write(self, vals):
         res=super(IsAffaire, self).write(vals)
         if 'responsable_id' in vals:
-            if self.createur_id!=self.env.user:
+            res_model, res_id = self.env['ir.model.data'].get_object_reference('is_opta_s', 'is_administratif_group')
+            group = self.env[res_model].browse(res_id) 
+            if self.createur_id!=self.env.user and self.env.user not in group.users:
                 raise Warning(u"Il n'y a que le créateur de l'affaire qui est autorisé à modifier le responsable de l'affaire")
         return res
 

@@ -171,6 +171,7 @@
                                         <field name="jours_prevus"    sum="Total"/>
                                         <field name="total_vendu"     sum="Total"/>
                                         <field name="jours_consommes" sum="Total"/>
+                                        <field name="nb_realise"      sum="Total"/>
                                         <field name="montant_realise" sum="Total"/>
                                         <field name="montant_restant" sum="Total"/>
                                         <field name="avancement" widget="progressbar"/>
@@ -188,9 +189,9 @@
                                         <field name="montant_vendu"/>
                                         <!--<field name="nb_unites"/>-->
                                         <field name="total_vendu"     sum="Total"/>
-                                        <field name="nb_realise"      sum="Total"/>
                                         <field name="jours_consommes" sum="Total"/>
-                                        <field name="total_realise"   sum="Total"/>
+                                        <field name="nb_realise"      sum="Total"/>
+                                        <!--<field name="total_realise"   sum="Total"/>-->
                                         <field name="montant_realise" sum="Total"/>
                                         <field name="montant_restant" sum="Total"/>
                                         <field name="avancement" widget="progressbar"/>
