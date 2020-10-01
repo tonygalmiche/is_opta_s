@@ -301,6 +301,8 @@ class IsAffaire(models.Model):
                     ids.append(x)
             obj.consultant_ids=[(6,0,ids)]
 
+
+    @api.depends('activite_ids')
     def _compute_realise(self):
         for obj in self:
             activites=self.env['is.activite'].search([('affaire_id', '=', obj.id)])
@@ -308,7 +310,8 @@ class IsAffaire(models.Model):
             jours_consommes=0
             for act in activites:
                 realise+=act.total_facturable
-                jours_consommes+=act.get_jours_consommes(act)
+                #jours_consommes+=act.get_jours_consommes(act)
+                jours_consommes+=act.jours_consommes
                 #unite = act.tarification_id.unite
                 #if unite=='journee':
                 #    jours_consommes+=act.nb_facturable
