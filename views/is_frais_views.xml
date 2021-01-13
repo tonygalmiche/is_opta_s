@@ -160,6 +160,7 @@
                 <filter name="2018" string="2018" domain="[('annee_creation','=','2018')]"/>
                 <filter name="2019" string="2019" domain="[('annee_creation','=','2019')]"/>
                 <filter name="2020" string="2020" domain="[('annee_creation','=','2020')]"/>
+                <filter name="2021" string="2021" domain="[('annee_creation','=','2021')]"/>
            </search>
         </field>
     </record>
@@ -193,7 +194,7 @@
         <field name="limit">200</field>
         <field name="view_mode">pivot,tree,form,graph</field>
         <field name="view_id" ref="is_frais_a_rembourser_par_consultant_pivot"/>
-        <field name="context">{"search_default_2020":1}</field>
+        <field name="context">{"search_default_2021":1}</field>
     </record>
 
 
