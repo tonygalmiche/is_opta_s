@@ -8,6 +8,7 @@
         <field name="arch" type="xml">
             <field name="website" position="before">
                 <field name="is_type_societe_id" attrs="{'invisible': [('is_company','=', False)]}"/>
+                <field name="is_evaluation"      attrs="{'invisible': [('is_company','=', False)]}"/>
             </field>
             <field name="property_account_receivable_id" position="after">
                 <field name="is_compte_auxilaire_client"/>
@@ -26,6 +27,7 @@
         <field name="arch" type="xml">
             <field name="email" position="after">
                 <field name="is_type_societe_id"/>
+                <field name="is_evaluation"/>
                 <field name="property_account_receivable_id"/>
                 <field name="is_compte_auxilaire_client"/>
                 <field name="property_account_payable_id"/>
@@ -42,6 +44,7 @@
         <field name="arch" type="xml">
             <field name="user_id" position="before">
                 <field name="is_type_societe_id"/>
+                <field name="is_evaluation"/>
                 <field name="is_compte_auxilaire_client"/>
                 <field name="is_compte_auxilaire_fournisseur"/>
             </field>

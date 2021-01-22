@@ -17,5 +17,12 @@ class ResPartner(models.Model):
     is_compte_auxilaire_client      = fields.Char("Compte auxilaire client")
     is_compte_auxilaire_fournisseur = fields.Char("Compte auxilaire fournisseur")
     is_dynacase_ids                 = fields.Many2many('is.dynacase', 'res_partner_dynacase_rel', 'doc_id', 'dynacase_id', 'Ids Dynacase', readonly=True)
+    is_evaluation = fields.Selection([
+            ('tres_satisfaisant','Très satisfaisant'),
+            ('satisfaisant'     ,'Satisfaisant'),
+            ('a_surveiller'     ,'A surveiller'),
+        ], string='Évaluation')
+
+
 
 
