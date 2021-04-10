@@ -37,36 +37,18 @@
                     <t t-if="company.is_fax">
                         Fax : <span t-field="company.is_fax"/> - 
                     </t>
-                    <span t-field="company.email"/><br />
-
+                    <span t-field="company.email"/>
                     <t t-if="company.is_fax">
-                        <span t-field="company.company_registry"/> - 
-                    </t>
-                    SIRET : <span t-field="company.siret"/><br />
+                        <span t-field="company.company_registry"/>
+                    </t><br />
+                    SIRET : <span t-field="company.siret"/>
+                    <t t-if="company.is_siege_sociale">
+                         - Siège sociale : <span t-field="company.is_siege_sociale"/>
+                    </t><br />
                     APE : <span t-field="company.ape"/> - 
                     TVA intracommunautaire : <span t-field="company.vat"/> - 
                     Numéro d'activité de formation : <span t-field="company.is_num_formation"/><br />
                     Site internet : <span t-field="company.website"/><br />
-
-                    <!--
-                    <ul class="list-inline mb4">
-                        <li t-if="company.name"    class="list-inline-item"><span t-field="company.name"/></li>
-                        <li t-if="company.street"  class="list-inline-item">
-
-                        </li>
-
-
-                        <li t-if="company.phone" class="list-inline-item">Phone: <span t-field="company.phone"/></li>
-                        <li t-if="company.email" class="list-inline-item">Email: <span t-field="company.email"/></li>
-                        <li t-if="company.website" class="list-inline-item">Web: <span t-field="company.website"/></li>
-                        <li t-if="company.vat" class="list-inline-item"><t t-esc="company.country_id.vat_label or 'Tax ID'"/>: <span t-field="company.vat"/></li>
-                    </ul>
-                    <div t-if="report_type == 'pdf'" class="text-muted">
-                        Page: <span class="page"/> / <span class="topage"/>
-                    </div>
-                    -->
-
-
                 </div>
             </div>
         </xpath>

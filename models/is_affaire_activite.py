@@ -32,6 +32,7 @@ class IsAffaireActivite(models.Model):
     nb_realise             = fields.Float(u"Nb unités réalisées")
     nb_facturable          = fields.Float(u"Nb unités facturables")
     jours_consommes        = fields.Float(u"Nb jours consommés")
+    jours_realises         = fields.Float(u"Nb jours réalisés")
     total_facturable       = fields.Float(u"Total facturable")
     invoice_id             = fields.Many2one('account.invoice', "Facture")
     state                  = fields.Selection([
@@ -72,6 +73,7 @@ class IsAffaireActivite(models.Model):
                     act.nb_realise,
                     act.nb_facturable,
                     act.jours_consommes,
+                    act.jours_realises,
                     act.total_facturable,
                     act.invoice_id,
                     act.state

@@ -89,6 +89,7 @@
                             <field name="createur_id"/>
                             <field name="ca_previsionnel"/>
                             <field name="jours_prevus"/>
+                            <field name="jours_realises"/>
                             <field name="jours_consommes"/>
                         </group>
                     </group>

@@ -308,23 +308,16 @@ class IsAffaire(models.Model):
             activites=self.env['is.activite'].search([('affaire_id', '=', obj.id)])
             realise=0
             jours_consommes=0
+            jours_realises=0
             for act in activites:
                 realise+=act.total_facturable
-                #jours_consommes+=act.get_jours_consommes(act)
                 jours_consommes+=act.jours_consommes
-                #unite = act.tarification_id.unite
-                #if unite=='journee':
-                #    jours_consommes+=act.nb_facturable
-                #if unite=='demie_journee':
-                #    jours_consommes+=act.nb_facturable/2
-                #if unite=='heure':
-                #    jours_consommes+=act.nb_facturable/7
-                ##Pour les participants, il faut compter le nombre de lignes dans le suivi du temps
-                #if unite=='participant':
-                #    jours_consommes+=len(act.suivi_temps_ids)
+                jours_realises+=act.jours_realises
             obj.montant_realise=realise
             obj.montant_restant=obj.ca_previsionnel-realise
             obj.jours_consommes=jours_consommes
+            obj.jours_realises=jours_realises
+
 
     def _compute_total_facure(self):
         for obj in self:
@@ -363,6 +356,7 @@ class IsAffaire(models.Model):
     montant_restant      = fields.Float("Montant restant"        , digits=(14,2), compute='_compute_realise', readonly=True, store=False)
     jours_prevus         = fields.Float("Nb jours prévus"   , digits=(14,2), readonly=True, states={'offre_en_cours': [('readonly', False)]})
     jours_consommes      = fields.Float("Nb jours consommés", digits=(14,2), compute='_compute_realise', readonly=True, store=False,help="Jours facturables des activités")
+    jours_realises       = fields.Float("Nb jours réalisés" , digits=(14,2), compute='_compute_realise', readonly=True, store=False,help="Jours réalisés des activités")
     fiscal_position_id   = fields.Many2one('account.fiscal.position', "Position fiscale",
                                 readonly=True, states={'offre_en_cours': [('readonly', False)]})
     proposition_ids      = fields.Many2many('ir.attachment', 'is_affaire_propositions_rel', 'doc_id', 'file_id', 'Propositions commerciales')

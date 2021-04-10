@@ -31,6 +31,8 @@
                             <field name="nb_realise"/>
                             <field name="nb_facturable"/>
                             <field name="total_facturable"/>
+                            <field name="jours_realises"/>
+                            <field name="jours_consommes"/>
                             <field name="invoice_id"/>
                             <field name="state"/>
                         </group>
@@ -57,6 +59,7 @@
                 <field name="nb_realise"       sum="Total"/>
                 <field name="nb_facturable"    sum="Total"/>
                 <field name="total_facturable" sum="Total"/>
+                <field name="jours_realises"   sum="Total"/>
                 <field name="jours_consommes"  sum="Total"/>
                 <field name="invoice_id"/>
                 <field name="state"/>
