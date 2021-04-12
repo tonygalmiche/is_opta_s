@@ -43,7 +43,7 @@
                     </t><br />
                     SIRET : <span t-field="company.siret"/>
                     <t t-if="company.is_siege_sociale">
-                         - Siège sociale : <span t-field="company.is_siege_sociale"/>
+                         - Siège social : <span t-field="company.is_siege_sociale"/>
                     </t><br />
                     APE : <span t-field="company.ape"/> - 
                     TVA intracommunautaire : <span t-field="company.vat"/> - 
