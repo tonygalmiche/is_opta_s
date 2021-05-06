@@ -185,10 +185,12 @@ class IsActivite(models.Model):
                     nom   = user.name
                     if email_from!=email_to:
                         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-                        url=base_url+u'/web#id='+str(obj.id)+u'&view_type=form&model='+self._name
+                        url         = base_url+u'/web#id='+str(obj.id)+u'&view_type=form&model='+self._name
+                        url_affaire = base_url+u'/web#id='+str(obj.affaire_id.id)+u'&view_type=form&model='+obj.affaire_id._name
                         body_html=u"""
                             <p>Bonjour,</p>
                             <p>Pour information, """+nom+""" vient de modifier votre activité <a href='"""+url+"""'>"""+obj.nature_activite+"""</a>.</p>
+                            <p>Affaire : <a href='"""+url_affaire+"""'>"""+obj.affaire_id.name_get()[0][1]+"""</a>.</p>
                         """
                         self.envoi_mail(email_from,email_to,subject,body_html)
                 #***************************************************************
@@ -256,10 +258,12 @@ class IsActivite(models.Model):
             nom   = user.name
             if email_from!=email_to:
                 base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-                url=base_url+u'/web#id='+str(obj.id)+u'&view_type=form&model='+self._name
+                url         = base_url+u'/web#id='+str(obj.id)+u'&view_type=form&model='+self._name
+                url_affaire = base_url+u'/web#id='+str(obj.affaire_id.id)+u'&view_type=form&model='+obj.affaire_id._name
                 body_html=u"""
                     <p>Bonjour,</p>
                     <p>"""+nom+""" vient de passer l'activité <a href='"""+url+"""'>"""+obj.nature_activite+"""</a> à l'état 'Diffusé'.</p>
+                    <p>Affaire : <a href='"""+url_affaire+"""'>"""+obj.affaire_id.name_get()[0][1]+"""</a>.</p>
                     <p>Merci d'en prendre connaissance.</p>
                 """
                 self.envoi_mail(email_from,email_to,subject,body_html)
