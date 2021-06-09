@@ -295,10 +295,6 @@ class IsActivite(models.Model):
             return res
 
 
-
-
-
-
     @api.multi
     def creation_frais(self, vals):
         for obj in self:
@@ -315,5 +311,18 @@ class IsActivite(models.Model):
             }
             return res
 
+
+    @api.multi
+    def creation_activite(self, vals):
+        for obj in self:
+            res= {
+                'name': 'Activité',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'res_model': 'is.activite',
+                'type': 'ir.actions.act_window',
+                'context': {'default_affaire_id': obj.affaire_id.id }
+            }
+            return res
 
 

@@ -40,6 +40,11 @@
                         string="Nouvelle fiche de frais"
                         states="brouillon,diffuse"
                     />
+                    <button 
+                        name="creation_activite" 
+                        type="object"
+                        string="Nouvelle activité"
+                    />
                     <field 
                         name="state" 
                         widget="statusbar"
