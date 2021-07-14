@@ -2,8 +2,30 @@
 <odoo>
     <data>
 
+        <!-- account.payment --> 
+        <record id="is_view_account_payment_tree" model="ir.ui.view">
+            <field name="name">is_view_account_payment_tree</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_tree"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="communication"/>
+                </field>
+            </field>
+        </record>
+        <record id="is_view_account_payment_search" model="ir.ui.view">
+            <field name="name">is_view_account_payment_search</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_search"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="communication"/>
+                </field>
+            </field>
+        </record>
 
 
+        <!-- account.fiscal.position --> 
         <record id="is_view_account_position_form" model="ir.ui.view">
             <field name="name">is_view_account_position_form</field>
             <field name="model">account.fiscal.position</field>
@@ -16,7 +38,7 @@
         </record>
 
 
-
+        <!-- account.account --> 
        <record id="is_view_account_form" model="ir.ui.view">
             <field name="name">is_view_account_form</field>
             <field name="model">account.account</field>
@@ -29,6 +51,7 @@
         </record>
 
 
+        <!-- account.invoice --> 
         <record id="is_invoice_form" model="ir.ui.view">
             <field name="name">is_invoice_form</field>
             <field name="model">account.invoice</field>
@@ -129,9 +152,7 @@
 
             </field>
         </record>
-
-
-       <record id="is_invoice_tree" model="ir.ui.view">
+        <record id="is_invoice_tree" model="ir.ui.view">
             <field name="name">is_invoice_tree</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_tree" />
@@ -145,9 +166,6 @@
                 </field>
             </field>
         </record>
-
-
-
         <record id="is_view_account_invoice_filter" model="ir.ui.view">
             <field name="name">is_view_account_invoice_filter</field>
             <field name="model">account.invoice</field>
@@ -159,10 +177,6 @@
                 </field>
             </field>
         </record>
-
-
-
-
         <record  id="is_account_invoice_action" model="ir.actions.act_window">
             <field name="name">Factures</field>
             <field name="res_model">account.invoice</field>
@@ -187,7 +201,7 @@
         </record>
 
 
-
+        <!-- account.account --> 
         <record  id="is_account_account_action" model="ir.actions.act_window">
             <field name="name">Plan comptable</field>
             <field name="res_model">account.account</field>
@@ -200,8 +214,6 @@
             <field name="view_mode">tree,form</field>
             <field name="limit">200</field>
         </record>
-
-
 
     </data>
 </odoo>
