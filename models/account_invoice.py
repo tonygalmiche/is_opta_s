@@ -276,9 +276,9 @@ class AccountInvoice(models.Model):
                 html+='<td class="text-left">'+(line.is_activite_id.dates_intervention or '')+'</td>'
 
             if obj.is_prix_unitaire:
-                html+='<td class="text-right">'+f2(line.quantity)+'</td>'
-                html+='<td class="text-right">'+f2(line.price_unit)+' €</td>'
-            html+='<td class="text-right">'+f2(line.price_subtotal)+' €</td>'
+                html+='<td class="text-right" style="white-space: nowrap">'+f2(line.quantity)+'</td>'
+                html+='<td class="text-right" style="white-space: nowrap">'+f2(line.price_unit)+' €</td>'
+            html+='<td class="text-right"     style="white-space: nowrap">'+f2(line.price_subtotal)+' €</td>'
             html+='</tr>'
             return html
 
