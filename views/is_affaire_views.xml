@@ -14,6 +14,14 @@
         <field name="model">is.affaire</field>
         <field name="arch" type="xml">
             <form>
+                <style>
+                    .o_form_view .o_form_sheet_bg > .o_form_sheet{
+                        max-width: 1800px;
+                    }
+                    .o_form_label{
+                        white-space: nowrap;
+                    }
+                </style>
                 <header>
                     <button
                         name="vers_affaire_gagnee"
@@ -261,6 +269,7 @@
                                         <field name="nb_stagiaires"                            sum="Total"/>
                                         <field name="nb_heures"            widget="float_time" sum="Total"/>
                                         <field name="realise_st"/>
+                                        <field name="a_distance"/>
                                         <field name="aller_heure_depart"   widget="float_time"/>
                                         <field name="aller_heure_arrivee"  widget="float_time"/>
                                         <field name="retour_heure_depart"  widget="float_time"/>

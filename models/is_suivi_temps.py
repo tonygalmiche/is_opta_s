@@ -130,6 +130,7 @@ class IsSuiviTemps(models.Model):
             ('oui', u'Oui'),
             ('non', u'Non'),
         ], u"Réalisé en sous-traitance",default='non')
+    a_distance           = fields.Boolean("A distance", default=False)
     aller_heure_depart   = fields.Float("Aller - Heure de départ")
     aller_heure_arrivee  = fields.Float("Aller - Heure d'arrivée")
     retour_heure_depart  = fields.Float("Retour - Heure de départ")

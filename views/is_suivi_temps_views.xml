@@ -47,6 +47,7 @@
                             <field name="nb_stagiaires"/>
                             <field name="nb_heures"            widget="float_time"/>
                             <field name="realise_st"/>
+                            <field name="a_distance"/>
                         </group>
                         <group>
                             <field name="aller_heure_depart"   widget="float_time"/>
@@ -74,6 +75,7 @@
                 <field name="type_activite"/>
                 <field name="date_activite"/>
                 <field name="realise_st"/>
+                <field name="a_distance"/>
                 <field name="detail_activite"/>
            </search>
         </field>
@@ -115,6 +117,7 @@
                 <field name="nb_stagiaires"                            sum="Total"/>
                 <field name="nb_heures"            widget="float_time" sum="Total"/>
                 <field name="realise_st"/>
+                <field name="a_distance"/>
                 <field name="aller_heure_depart"   widget="float_time"/>
                 <field name="aller_heure_arrivee"  widget="float_time"/>
                 <field name="retour_heure_depart"  widget="float_time"/>
