@@ -560,4 +560,54 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+
+    <!-- is.affaire.taux.journalier -->
+    <record id="is_affaire_taux_journalier_form" model="ir.ui.view">
+        <field name="name">is.affaire.taux.journalier.form</field>
+        <field name="model">is.affaire.taux.journalier</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="montant"/>
+                            <field name="unite"/>
+                            <field name="commentaire"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="is_affaire_taux_journalier_tree" model="ir.ui.view">
+        <field name="name">is.affaire.taux.journalier.tree</field>
+        <field name="model">is.affaire.taux.journalier</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="montant"/>
+                <field name="unite"/>
+                <field name="commentaire"/>
+            </tree>
+        </field>
+    </record>
+    <record id="is_affaire_taux_journalier_search" model="ir.ui.view">
+        <field name="name">is.affaire.taux.journalier.search</field>
+        <field name="model">is.affaire.taux.journalier</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="montant"/>
+                <field name="unite"/>
+                <field name="commentaire"/>
+            </search>
+        </field>
+    </record>
+    <!-- <record  id="is_affaire_taux_journalier_action" model="ir.actions.act_window">
+        <field name="name">Causes</field>
+        <field name="res_model">is.affaire.taux.journalier</field>
+        <field name="view_type">form</field>
+        <field name="limit">200</field>
+        <field name="view_mode">tree,form</field>
+    </record> -->
+
+
 </odoo>
