@@ -26,9 +26,30 @@
 
         </xpath>
 
+        
 
-
+        <!-- 
+        Siège social : 14 B Rue Lafayette 25000 BESANCON - SIRET 48288392300039
+        Etablissement de la Réunion : 20 Rue Miranda 97434 SAINT GILLES LES BAINS – SIRET 48288392300047
+        Tél : 03 81 80 82 17 - contact@opta-s.fr
+        APE : 7022Z - TVA intracommunautaire : FR43482883923 - Numéro d'activité de formation : 43 25 02575 25
+        Site internet : https://www.opta-s.fr -->
+        
         <xpath expr="//div[hasclass('footer')]" position="replace">
+            <div class="footer o_standard_footer">
+                <div class="text-center" style="border-top: 1px solid black;font-size:10pt">
+                    <b><span t-field="company.name"/></b><br />
+                    Siège social : <span t-field="company.street"/> <span t-field="company.zip"/> <span t-field="company.city"/> - SIRET <span t-field="company.siret"/><br />
+                    Etablissement de la Réunion : 20 Rue Miranda 97434 SAINT GILLES LES BAINS – SIRET 48288392300047<br />
+                    Tél : <span t-field="company.phone"/> - <span t-field="company.email"/><br />
+                    APE : <span t-field="company.ape"/> - TVA intracommunautaire : <span t-field="company.vat"/> - Numéro d'activité de formation : <span t-field="company.is_num_formation"/><br />
+                    Site internet : <span t-field="company.website"/><br />
+                </div>
+            </div>
+        </xpath>
+
+
+        <!-- <xpath expr="//div[hasclass('footer')]" position="replace">
             <div class="footer o_standard_footer">
                 <div class="text-center" style="border-top: 1px solid black;font-size:10pt">
                     <span t-field="company.name"/> - 
@@ -51,7 +72,9 @@
                     Site internet : <span t-field="company.website"/><br />
                 </div>
             </div>
-        </xpath>
+        </xpath> -->
+
+
     </template>
 
 </odoo>
