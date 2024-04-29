@@ -40,7 +40,9 @@
                 <div class="text-center" style="border-top: 1px solid black;font-size:10pt">
                     <b><span t-field="company.name"/></b><br />
                     Siège social : <span t-field="company.street"/> <span t-field="company.zip"/> <span t-field="company.city"/> - SIRET <span t-field="company.siret"/><br />
-                    Etablissement de la Réunion : 20 Rue Miranda 97434 SAINT GILLES LES BAINS – SIRET 48288392300047<br />
+                    <t t-if="company.name=='Opta S'">
+                        Etablissement de la Réunion : 20 Rue Miranda 97434 SAINT GILLES LES BAINS – SIRET 48288392300047<br />
+                    </t>
                     Tél : <span t-field="company.phone"/> - <span t-field="company.email"/><br />
                     APE : <span t-field="company.ape"/> - TVA intracommunautaire : <span t-field="company.vat"/> - Numéro d'activité de formation : <span t-field="company.is_num_formation"/><br />
                     Site internet : <span t-field="company.website"/><br />
