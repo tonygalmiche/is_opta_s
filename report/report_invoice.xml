@@ -20,26 +20,6 @@
                             font-weight: bold;
                         }
                     </style>
-
-                    <!--
-                    <t t-set="colclass" t-value="('col-md-5' if report_type == 'html' else 'col-5') + ' ml-auto'"/>
-                    <div class="address row">
-                        <t t-if="information_block">
-                            <t t-set="colclass" t-value="'col-5 offset-1'"/>
-                            <div name="information_block" class="col-6">
-                                <t t-raw="information_block"/>
-                            </div>
-                        </t>
-
-                        <div name="address" t-att-class="colclass">
-                            <t t-raw="address"/>
-                        </div>
-                    </div>
-                    -->
-
-
-
-
                     <div class="address row">
                         <div class="col-5 offset-7">
                             <t t-if="o.partner_id.name"><span class="rs" t-field="o.partner_id.name"/><br /></t>
@@ -51,7 +31,7 @@
                     </div>
                     <div class="row">
                         <div class="col-7">
-                            <div t-if="o.partner_id.siret">SIRET : <span t-field="o.partner_id.siret"/></div>
+                            <div t-if="o.partner_id.siret">SIRET Client : <span t-field="o.partner_id.siret"/></div>
                             <div t-if="o.is_code_service">Code service : <span t-field="o.is_code_service"/></div>
                             <div t-if="o.is_ref_engagement">Réf engagement : <span t-field="o.is_ref_engagement"/></div>
                         </div>
@@ -70,20 +50,13 @@
                         <span t-if="o.type == 'in_invoice'">Facture fournisseur</span>
                         <span t-field="o.number"/>
                     </h2>
-
-
                     <p><b>Affaire : </b><span t-field="o.is_affaire_id.nature_affaire"/></p>
-
                     <t t-set="phases" t-value="o.get_invoice_line()"/>
                     <p t-raw="phases"/>
-
-
-
                     <div class="clearfix">
                         <div id="total" class="row">
                             <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
                                 <table class="table table-sm">
-
                                     <t t-if="o.is_frais">
                                         <tr class="border-black" style="border-bottom:1px solid #dddddd;">
                                             <td><strong><span t-field="o.is_frais_commentaire"/></strong></td>
@@ -123,8 +96,6 @@
                                             </tr>
                                         </t>
                                     </t>
-
-
                                     <tr class="border-black">
                                         <td><strong>Total TTC</strong></td>
                                         <td class="text-right">
@@ -141,7 +112,10 @@
                         <div style="text-align:center" t-field="o.fiscal_position_id.note"/>
                     </t>
                     <br />
-                    <p>En votre aimable règlement par virement sur le compte bancaire ouvert au nom de <span t-field="o.company_id.name"/></p>
+                    <p>
+                        <span>Date d'échéance du règlement : </span> <span t-field="o.date_due"/><br />
+                        <span>En votre aimable règlement par virement sur le compte bancaire ouvert au nom de : </span><span style="margin-left:2mm" t-field="o.company_id.name"/>
+                    </p>
                     <table t-attf-class="table table-sm">
                         <thead>
                             <tr>
@@ -159,13 +133,19 @@
                         </tbody>
                     </table>
 
+
+                    <!-- <t t-foreach="o._get_payments_vals()" t-as="payment">
+                        <div>Paiement éffectué le <span t-esc="payment['date'].strftime('%d/%m/%Y')"/></div>
+                    </t>
+ -->
+
+
                     <div style="font-size:7pt">
+                        Opérations exclusivement de prestations de services. TVA sur les encaissements<br />
                         En application des articles L441-3 et L441-6 du Code de commerce, tout retard de règlement donnera lieu de plein droit 
                         et sans qu’aucune mise en demeure ne soit nécessaire au paiement de pénalités de retard au taux de 3 fois le taux d'intérêt légal. 
                         Indemnité forfaitaire pour frais de recouvrement de 40€.
                     </div>
-
-
                     <t t-if="o.is_detail_frais">
                         <div style="page-break-after:always;" />
                         <h2>Justificatif des frais de déplacement de la facture <span t-field="o.number"/></h2>

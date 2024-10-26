@@ -79,6 +79,24 @@ class AccountInvoice(models.Model):
 #            $frais_reel_commentaire="Frais de déplacement inclus";
 #        }
 
+
+
+    # def get_detail_paiements(self):
+    #     for obj in self:
+    #         vals = obj._get_payments_vals()
+    #         print(vals)
+
+#[{
+# 'name': 'Paiement client: 2024-00185', 
+# 'journal_name': 'Banque', 
+# 'amount': 24750.0, 'currency': '€', 'digits': [69, 2], 
+# 'position': 'after', 
+# 'date': datetime.date(2024, 8, 19), 
+# 'payment_id': 3025586, 'account_payment_id': 324999, 
+# 'invoice_id': False, 'invoice_view_id': None, 'move_id': 657702, 'ref': 'BNK1/2024/0224 (2024-00185/88)'}]
+
+
+
     def _is_frais_commentaire(self):
         for obj in self:
             x = False

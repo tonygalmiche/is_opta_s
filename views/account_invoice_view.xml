@@ -89,6 +89,15 @@
                         class="oe_highlight o_invoice_validate" 
                         groups="account.group_account_invoice"
                     />
+
+                    <!-- <button
+                        name="get_detail_paiements"
+                        type="object" 
+                        string="get_detail_paiements"
+                    /> -->
+
+
+
                 </xpath>
 
                 <field name="payment_term_id" position="after">
