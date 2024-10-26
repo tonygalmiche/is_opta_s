@@ -43,7 +43,7 @@
                     <t t-if="company.name=='Opta S'">
                         Etablissement de la Réunion : 20 Rue Miranda 97434 SAINT GILLES LES BAINS – SIRET 48288392300047<br />
                     </t>
-                    Tél : <span t-field="company.phone"/> - <span t-field="company.email"/><br />
+                    Tél : <span t-field="company.phone"/> - <span t-field="company.email"/> - <span t-field="company.company_registry"/><br />
                     APE : <span t-field="company.ape"/> - TVA intracommunautaire : <span t-field="company.vat"/> - Numéro d'activité de formation : <span t-field="company.is_num_formation"/><br />
                     Site internet : <span t-field="company.website"/><br />
                 </div>
