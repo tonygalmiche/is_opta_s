@@ -32,6 +32,7 @@
                     <div class="row">
                         <div class="col-7">
                             <div t-if="o.partner_id.siret">SIRET Client : <span t-field="o.partner_id.siret"/></div>
+                            <div t-if="o.partner_id.vat">TVA Client : <span t-field="o.partner_id.vat"/></div>
                             <div t-if="o.is_code_service">Code service : <span t-field="o.is_code_service"/></div>
                             <div t-if="o.is_ref_engagement">Réf engagement : <span t-field="o.is_ref_engagement"/></div>
                         </div>
